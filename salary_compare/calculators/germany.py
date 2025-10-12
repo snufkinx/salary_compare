@@ -139,12 +139,13 @@ class SalariedEmployeeGermany(SalariedEmployee):
             tax = (922.98 * z + 1400) * z
             total_tax = Decimal(str(round(tax, 2)))
 
-            # Show bracket with progressive rate range
+            # Show as single bracket with effective rate
+            effective_rate = total_tax / (taxable_income - Decimal("12096")) if taxable_income > Decimal("12096") else Decimal("0")
             result.income_tax_brackets.append(
                 TaxBracket(
-                    lower_bound=Decimal("12097"),
-                    upper_bound=Decimal("68480"),
-                    rate=Decimal("0.14"),  # Starting rate (progressive to ~24%)
+                    lower_bound=Decimal("12096"),
+                    upper_bound=Decimal(str(round(y, 2))),
+                    rate=effective_rate,
                     taxable_amount=taxable_income - Decimal("12096"),
                     tax_amount=total_tax,
                 )
@@ -155,13 +156,14 @@ class SalariedEmployeeGermany(SalariedEmployee):
             total_tax = 0.42 * y - 10208.78
             total_tax = Decimal(str(round(total_tax, 2)))
 
-            # For display purposes, show as a single progressive bracket
-            # The German formula is complex and doesn't split neatly into zones
+            # Show as single bracket with effective rate
+            # German formula is complex and doesn't split cleanly into zones
+            effective_rate = total_tax / (taxable_income - Decimal("12096")) if taxable_income > Decimal("12096") else Decimal("0")
             result.income_tax_brackets.append(
                 TaxBracket(
-                    lower_bound=Decimal("12097"),
-                    upper_bound=Decimal("277825"),
-                    rate=total_tax / taxable_income if taxable_income > 0 else Decimal("0"),  # Effective rate
+                    lower_bound=Decimal("12096"),
+                    upper_bound=Decimal(str(round(y, 2))),
+                    rate=effective_rate,
                     taxable_amount=taxable_income - Decimal("12096"),
                     tax_amount=total_tax,
                 )
