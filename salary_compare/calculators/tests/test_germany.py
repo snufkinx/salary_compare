@@ -38,10 +38,10 @@ class TestSalariedEmployeeGermany:
         calculator = SalariedEmployeeGermany(Decimal("100000"))
         result = calculator.calculate_net_salary()
 
-        # With updated rates and ceilings: €100,000 gross → ~€62,320 net
-        # Closer to online calculator results (€58,296)
-        expected_net_min = Decimal("60000")
-        expected_net_max = Decimal("64000")
+        # With corrected formula: €100,000 gross → ~€56,954 net
+        # Very close to online calculator results (€58,296)
+        expected_net_min = Decimal("56000")
+        expected_net_max = Decimal("59000")
 
         assert (
             expected_net_min <= result.net_salary <= expected_net_max

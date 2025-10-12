@@ -150,35 +150,20 @@ class SalariedEmployeeGermany(SalariedEmployee):
                 )
             )
         elif y <= 277825:
-            # Zone 3: Progressive formula (~24% to 42%)
-            # Calculate tax for zone 2 first
-            z2 = (68480 - 12096) / 10000
-            tax_zone2 = (922.98 * z2 + 1400) * z2
+            # Zone 3: Linear formula (42%)
+            # In 2024, zone 3 uses a linear formula: 0.42 * y - constant
+            total_tax = 0.42 * y - 10208.78
+            total_tax = Decimal(str(round(total_tax, 2)))
 
-            # Calculate tax for zone 3
-            z3 = (y - 68480) / 10000
-            tax_zone3 = (181.19 * z3 + 2397) * z3 + 15694.52
-            total_tax = Decimal(str(round(tax_zone3, 2)))
-
-            # Show zone 2 bracket
+            # For display purposes, show as a single progressive bracket
+            # The German formula is complex and doesn't split neatly into zones
             result.income_tax_brackets.append(
                 TaxBracket(
                     lower_bound=Decimal("12097"),
-                    upper_bound=Decimal("68480"),
-                    rate=Decimal("0.14"),  # Starting rate
-                    taxable_amount=Decimal("68480") - Decimal("12096"),
-                    tax_amount=Decimal(str(round(tax_zone2, 2))),
-                )
-            )
-
-            # Show zone 3 bracket
-            result.income_tax_brackets.append(
-                TaxBracket(
-                    lower_bound=Decimal("68481"),
                     upper_bound=Decimal("277825"),
-                    rate=Decimal("0.42"),  # Top rate of zone
-                    taxable_amount=taxable_income - Decimal("68480"),
-                    tax_amount=total_tax - Decimal(str(round(tax_zone2, 2))),
+                    rate=total_tax / taxable_income if taxable_income > 0 else Decimal("0"),  # Effective rate
+                    taxable_amount=taxable_income - Decimal("12096"),
+                    tax_amount=total_tax,
                 )
             )
         else:
@@ -194,14 +179,19 @@ class SalariedEmployeeGermany(SalariedEmployee):
             tax = 0.45 * y - 8394.14
             total_tax = Decimal(str(round(tax, 2)))
 
+            # Tax in each zone
+            tax_in_zone2 = Decimal(str(round(tax_zone2, 2)))
+            tax_in_zone3 = Decimal(str(round(tax_zone3 - tax_zone2, 2)))
+            tax_in_zone4 = total_tax - Decimal(str(round(tax_zone3, 2)))
+
             # Show zone 2 bracket
             result.income_tax_brackets.append(
                 TaxBracket(
                     lower_bound=Decimal("12097"),
                     upper_bound=Decimal("68480"),
-                    rate=Decimal("0.14"),
+                    rate=Decimal("0.14"),  # Starting rate (progressive to ~24%)
                     taxable_amount=Decimal("68480") - Decimal("12096"),
-                    tax_amount=Decimal(str(round(tax_zone2, 2))),
+                    tax_amount=tax_in_zone2,
                 )
             )
 
@@ -210,9 +200,9 @@ class SalariedEmployeeGermany(SalariedEmployee):
                 TaxBracket(
                     lower_bound=Decimal("68481"),
                     upper_bound=Decimal("277825"),
-                    rate=Decimal("0.42"),
+                    rate=Decimal("0.42"),  # Top rate of zone
                     taxable_amount=Decimal("277825") - Decimal("68480"),
-                    tax_amount=Decimal(str(round(tax_zone3 - tax_zone2, 2))),
+                    tax_amount=tax_in_zone3,
                 )
             )
 
@@ -223,7 +213,7 @@ class SalariedEmployeeGermany(SalariedEmployee):
                     upper_bound=Decimal("999999999"),
                     rate=Decimal("0.45"),
                     taxable_amount=taxable_income - Decimal("277825"),
-                    tax_amount=total_tax - Decimal(str(round(tax_zone3, 2))),
+                    tax_amount=tax_in_zone4,
                 )
             )
 
