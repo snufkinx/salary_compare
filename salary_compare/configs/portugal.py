@@ -119,12 +119,17 @@ def create_portugal_freelancer_config() -> TaxRegimeConfig:
         Portugal Freelancer Tax Regime (Simplified Regime - Recibos Verdes):
 
         This applies to freelancers under the simplified tax regime (not NHR or special schemes).
+        
+        IMPORTANT: This calculation uses coefficient 0.75 for SERVICES (IT, consulting, liberal professions).
+        - Services/Liberal professions: 75% deemed expenses → 25% taxable
+        - Commercial activities would have: 25% deemed expenses → 75% taxable
+        - Industrial activities would have: 50% deemed expenses → 50% taxable
 
-        Key Features:
-        - 75% deemed expenses for IT/consulting activities
-        - Only 25% of income is taxable
-        - Progressive IRS tax applied to taxable portion
-        - Social security at 21.4% on 70% of income
+        Key Features (for IT/Consulting/Services):
+        - 75% deemed expenses automatically deducted
+        - Only 25% of income is subject to IRS (income tax)
+        - Progressive IRS tax applied to 25% taxable portion
+        - Social security at 21.4% on 70% of gross income
 
         Tax Calculation (Simplified Regime for IT/Consulting):
         - Deemed expenses: 75% of income (automatic deduction)
