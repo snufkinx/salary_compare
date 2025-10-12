@@ -174,7 +174,7 @@ class CappedPercentageDeduction(DeductionStrategy):
 
 
 class PercentageOfTaxBaseDeduction(DeductionStrategy):
-    """Deduction calculated as percentage of a portion of tax base (Czech social on 50% of taxable)."""
+    """Deduction calculated as percentage of a portion of base amount (e.g., 50% of taxable, or 70% of gross)."""
 
     def __init__(self, config: DeductionConfig, base_multiplier: Decimal):
         """
@@ -182,14 +182,18 @@ class PercentageOfTaxBaseDeduction(DeductionStrategy):
 
         Args:
             config: Deduction configuration
-            base_multiplier: Multiplier for tax base (e.g., 0.50 for 50% of tax base)
+            base_multiplier: Multiplier for the base amount (e.g., 0.50 for 50% of tax base, or 0.70 for 70% of gross)
         """
         self.config = config
         self.base_multiplier = base_multiplier
 
     def get_base_amount(self, gross_salary: Decimal, tax_base: Decimal, context: Dict) -> Decimal:
-        """Get base amount (tax base multiplied by base_multiplier)."""
-        return tax_base * self.base_multiplier
+        """Get base amount based on applies_to, then multiply by base_multiplier."""
+        if self.config.applies_to == DeductionBase.GROSS:
+            return gross_salary * self.base_multiplier
+        elif self.config.applies_to in (DeductionBase.TAXABLE, DeductionBase.TAX_BASE):
+            return tax_base * self.base_multiplier
+        return gross_salary * self.base_multiplier
 
     def calculate(self, base_amount: Decimal, context: Dict) -> Deduction:
         """Calculate deduction on modified base."""
