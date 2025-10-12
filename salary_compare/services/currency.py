@@ -43,6 +43,8 @@ class CurrencyConverter:
             "ILS": "₪",
             "USD": "$",
             "GBP": "£",
+            "RON": "lei",
+            "BGN": "лв",
         }
         return symbols.get(self.to_currency, self.to_currency)
 
@@ -82,7 +84,14 @@ class CurrencyConverter:
                 return eur_amount * Decimal(str(target_rate))
 
         # Fallback to default rates
-        fallback_rates = {"CZK": 25.0, "ILS": 4.0, "USD": 1.1, "GBP": 0.85}
+        fallback_rates = {
+            "CZK": 25.0,
+            "ILS": 4.0,
+            "USD": 1.1,
+            "GBP": 0.85,
+            "RON": 4.97,  # 1 EUR ≈ 4.97 RON
+            "BGN": 1.9558,  # 1 EUR = 1.95583 BGN (fixed)
+        }
         if self.from_currency == "EUR":
             return Decimal(str(fallback_rates.get(self.to_currency, 1.0)))
         elif self.to_currency == "EUR":

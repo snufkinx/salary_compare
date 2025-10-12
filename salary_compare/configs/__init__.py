@@ -1,12 +1,23 @@
 """Tax regime configurations for all countries."""
 
+from .bulgaria import BULGARIA_FREELANCER
 from .czechia import CZECHIA_FREELANCER, CZECHIA_SALARIED
 from .germany import GERMANY_SALARIED
 from .israel import ISRAEL_SALARIED
+from .portugal import PORTUGAL_FREELANCER, PORTUGAL_SALARIED
+from .romania import ROMANIA_FREELANCER_MICRO
+from .spain import SPAIN_BARCELONA, SPAIN_MADRID, SPAIN_VALENCIA
 
 __all__ = [
     "GERMANY_SALARIED",
     "CZECHIA_SALARIED",
     "CZECHIA_FREELANCER",
     "ISRAEL_SALARIED",
+    "SPAIN_MADRID",
+    "SPAIN_BARCELONA",
+    "SPAIN_VALENCIA",
+    "ROMANIA_FREELANCER_MICRO",
+    "BULGARIA_FREELANCER",
+    "PORTUGAL_SALARIED",
+    "PORTUGAL_FREELANCER",
 ]

@@ -11,6 +11,8 @@ class Currency(str, Enum):
     ILS = "ILS"
     USD = "USD"
     GBP = "GBP"
+    RON = "RON"  # Romanian Leu
+    BGN = "BGN"  # Bulgarian Lev
 
 
 class DeductionBase(str, Enum):
@@ -37,5 +39,9 @@ class Country(str, Enum):
     GERMANY = "Germany"
     CZECHIA = "Czechia"
     ISRAEL = "Israel"
+    SPAIN = "Spain"
+    ROMANIA = "Romania"
+    BULGARIA = "Bulgaria"
+    PORTUGAL = "Portugal"
     USA = "USA"
     UK = "UK"

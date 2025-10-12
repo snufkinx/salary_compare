@@ -372,6 +372,10 @@ class HTMLOutput:
                                         {% set currency_symbol = "Kč" %}
                                     {% elif result.local_currency == "ILS" %}
                                         {% set currency_symbol = "₪" %}
+                                    {% elif result.local_currency == "RON" %}
+                                        {% set currency_symbol = "lei" %}
+                                    {% elif result.local_currency == "BGN" %}
+                                        {% set currency_symbol = "лв" %}
                                     {% else %}
                                         {% set currency_symbol = result.local_currency %}
                                     {% endif %}

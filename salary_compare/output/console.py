@@ -81,9 +81,12 @@ class ConsoleOutput:
                 net_monthly_local = monthly_net * result.local_currency_rate
 
                 # Get currency symbol
-                currency_symbol = {"CZK": "Kč", "ILS": "₪"}.get(
-                    result.local_currency, result.local_currency
-                )
+                currency_symbol = {
+                    "CZK": "Kč",
+                    "ILS": "₪",
+                    "RON": "lei",
+                    "BGN": "лв",
+                }.get(result.local_currency, result.local_currency)
 
                 gross_str = f"{result.gross_salary:,.2f}\n[dim green]({gross_local:,.0f} {currency_symbol})[/dim green]"
                 net_annual_str = f"{result.net_salary:,.2f}\n[dim green]({net_annual_local:,.0f} {currency_symbol})[/dim green]"
