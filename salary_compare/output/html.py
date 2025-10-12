@@ -720,24 +720,23 @@ class HTMLOutput:
         for result in results:
             calculator_name = f"{result.country} {result.employment_type}"
 
-            # Get the calculator class based on country and employment type
-            from ..calculators import (
-                SalariedEmployeeCzechia,
-                FreelancerCzechia,
-                SalariedEmployeeGermany,
-                SalariedEmployeeIsrael,
-            )
+            # Get the regime configuration
+            from ..registry import TaxRegimeRegistry
+            from ..universal_calculator import UniversalTaxCalculator
 
-            calculator_map = {
-                ("Czechia", "Salaried Employee"): SalariedEmployeeCzechia,
-                ("Czechia", "Freelancer"): FreelancerCzechia,
-                ("Germany", "Salaried Employee"): SalariedEmployeeGermany,
-                ("Israel", "Salaried Employee"): SalariedEmployeeIsrael,
-            }
+            # Find regime by matching country and employment type
+            regime_key = None
+            for key in TaxRegimeRegistry.get_keys():
+                regime = TaxRegimeRegistry.get(key)
+                if (
+                    regime.country.value == result.country
+                    and regime.employment_type.value == result.employment_type
+                ):
+                    regime_key = key
+                    break
 
-            calculator_class = calculator_map.get((result.country, result.employment_type))
-
-            if calculator_class:
+            if regime_key:
+                regime = TaxRegimeRegistry.get(regime_key)
                 # Calculate net salary for each x value
                 y_values = []
                 for x in x_values:
@@ -745,7 +744,7 @@ class HTMLOutput:
                         y_values.append(0)
                     else:
                         try:
-                            calc = calculator_class(Decimal(str(x)))
+                            calc = UniversalTaxCalculator(Decimal(str(x)), regime)
                             calc_result = calc.calculate_net_salary()
                             y_values.append(float(calc_result.net_salary))
                         except Exception:

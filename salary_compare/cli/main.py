@@ -1,25 +1,13 @@
 """Main CLI interface for salary calculations."""
 
 from decimal import Decimal
-from typing import List, Tuple, Union
+from typing import Tuple, Union
 
 import click
 
-from ..calculators import (
-    FreelancerCzechia,
-    SalariedEmployeeCzechia,
-    SalariedEmployeeGermany,
-    SalariedEmployeeIsrael,
-)
 from ..output import ConsoleOutput, CSVOutput, HTMLOutput
-
-# Registry of available calculators
-CALCULATORS = {
-    "germany-salaried": SalariedEmployeeGermany,
-    "czechia-salaried": SalariedEmployeeCzechia,
-    "czechia-freelancer": FreelancerCzechia,
-    "israel-salaried": SalariedEmployeeIsrael,
-}
+from ..registry import TaxRegimeRegistry
+from ..universal_calculator import UniversalTaxCalculator
 
 
 def parse_calculation_input(calc_input: str, salary: str) -> Tuple[str, Decimal]:
@@ -37,12 +25,11 @@ def parse_calculation_input(calc_input: str, salary: str) -> Tuple[str, Decimal]
 
 def get_calculator(calc_type: str, salary: Decimal):
     """Get calculator instance for the given type and salary."""
-    if calc_type not in CALCULATORS:
-        available = ", ".join(CALCULATORS.keys())
-        raise click.ClickException(f"Unknown calculation type: {calc_type}. Available: {available}")
-
-    calculator_class = CALCULATORS[calc_type]
-    return calculator_class(salary)
+    try:
+        regime = TaxRegimeRegistry.get(calc_type)
+        return UniversalTaxCalculator(salary, regime)
+    except KeyError as e:
+        raise click.ClickException(str(e))
 
 
 @click.group()
@@ -106,7 +93,7 @@ def calculate(calc_type: str, salary: str, output_format: str, output_file: str)
     help="Output format",
 )
 @click.option("--output-file", "-f", type=str, help="Output file path (optional)")
-def compare(salary: str, calc_types: List[str], output_format: str, output_file: str):
+def compare(salary: str, calc_types: tuple, output_format: str, output_file: str):
     """Compare net salaries across multiple countries and employment types using a single salary.
 
     Format: salary compare <salary> <calc_type1> <calc_type2> ...
@@ -124,15 +111,12 @@ def compare(salary: str, calc_types: List[str], output_format: str, output_file:
         # Calculate for each type
         results = []
         for calc_type in calc_types:
-            if calc_type not in CALCULATORS:
-                available = ", ".join(CALCULATORS.keys())
-                raise click.ClickException(
-                    f"Unknown calculation type: {calc_type}. Available: {available}"
-                )
-
-            calculator = get_calculator(calc_type, salary_decimal)
-            result = calculator.calculate_net_salary()
-            results.append(result)
+            try:
+                calculator = get_calculator(calc_type, salary_decimal)
+                result = calculator.calculate_net_salary()
+                results.append(result)
+            except KeyError as e:
+                raise click.ClickException(str(e))
 
         # Output based on format
         output: Union[HTMLOutput, CSVOutput, ConsoleOutput]
@@ -154,10 +138,19 @@ def compare(salary: str, calc_types: List[str], output_format: str, output_file:
 def list_types():
     """List all available calculation types."""
     click.echo("Available calculation types:")
-    for calc_type, calculator_class in CALCULATORS.items():
-        # Create a temporary instance to get description
-        temp_calc = calculator_class(Decimal("100000"))
-        description = temp_calc.get_description().strip().split("\n")[1].strip()
+    for calc_type in TaxRegimeRegistry.get_keys():
+        regime = TaxRegimeRegistry.get(calc_type)
+        # Get first meaningful line of description
+        description_lines = [
+            line.strip() for line in regime.description.strip().split("\n") if line.strip()
+        ]
+        description = (
+            description_lines[0]
+            if description_lines
+            else f"{regime.country.value} {regime.employment_type.value}"
+        )
+        # Remove trailing colon if present
+        description = description.rstrip(":")
         click.echo(f"  {calc_type:<20} - {description}")
 
 
