@@ -64,19 +64,22 @@ class ConsoleOutput:
         table.add_column("Gross Salary", style="white", justify="right")
         table.add_column("Tax Base", style="white", justify="right")
         table.add_column("Total Deductions", style="red", justify="right")
-        table.add_column("Net Salary", style="green", justify="right")
+        table.add_column("Net Salary (Annual)", style="green", justify="right")
+        table.add_column("Net Salary (Monthly)", style="green", justify="right")
         table.add_column("Net %", style="yellow", justify="right")
 
         for result in results:
             net_percentage = (
                 (result.net_salary / result.gross_salary) * 100 if result.gross_salary > 0 else 0
             )
+            monthly_net = result.net_salary / 12
             table.add_row(
                 f"{result.country} {result.employment_type}",
                 f"{result.gross_salary:,.2f}",
                 f"{result.tax_base:,.2f}",
                 f"{result.total_deductions:,.2f}",
                 f"{result.net_salary:,.2f}",
+                f"{monthly_net:,.2f}",
                 f"{net_percentage:.1f}%",
             )
 

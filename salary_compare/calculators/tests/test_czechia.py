@@ -2,7 +2,6 @@
 
 from decimal import Decimal
 
-
 from ..czechia import FreelancerCzechia, SalariedEmployeeCzechia
 
 

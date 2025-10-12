@@ -80,7 +80,8 @@ class CSVOutput:
                     "Gross Salary",
                     "Tax Base",
                     "Total Deductions",
-                    "Net Salary",
+                    "Net Salary (Annual)",
+                    "Net Salary (Monthly)",
                     "Net %",
                 ]
             )
@@ -91,6 +92,7 @@ class CSVOutput:
                     if result.gross_salary > 0
                     else 0
                 )
+                monthly_net = result.net_salary / 12
                 writer.writerow(
                     [
                         f"{result.country} {result.employment_type}",
@@ -98,6 +100,7 @@ class CSVOutput:
                         f"{result.tax_base:.2f}",
                         f"{result.total_deductions:.2f}",
                         f"{result.net_salary:.2f}",
+                        f"{monthly_net:.2f}",
                         f"{net_percentage:.1f}",
                     ]
                 )

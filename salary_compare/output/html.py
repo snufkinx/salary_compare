@@ -246,19 +246,22 @@ class HTMLOutput:
                             <th class="number-header">Gross Salary</th>
                             <th class="number-header">Tax Base</th>
                             <th class="number-header">Total Deductions</th>
-                            <th class="number-header">Net Salary</th>
+                            <th class="number-header">Net Salary (Annual)</th>
+                            <th class="number-header">Net Salary (Monthly)</th>
                             <th class="number-header">Net %</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for result in results %}
                         {% set net_percentage = (result.net_salary / result.gross_salary * 100) if result.gross_salary > 0 else 0 %}
+                        {% set monthly_net = result.net_salary / 12 %}
                         <tr>
                             <td>{{ result.country }} {{ result.employment_type }}</td>
                             <td class="number">{{ "{:,.2f}".format(result.gross_salary) }} €</td>
                             <td class="number">{{ "{:,.2f}".format(result.tax_base) }} €</td>
                             <td class="number negative">{{ "{:,.2f}".format(result.total_deductions) }} €</td>
                             <td class="number positive">{{ "{:,.2f}".format(result.net_salary) }} €</td>
+                            <td class="number positive">{{ "{:,.2f}".format(monthly_net) }} €</td>
                             <td class="number">{{ "%.1f"|format(net_percentage) }}%</td>
                         </tr>
                         {% endfor %}
