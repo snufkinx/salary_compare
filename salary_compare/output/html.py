@@ -22,6 +22,7 @@ class HTMLOutput:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salary Calculation Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -98,6 +99,24 @@ class HTMLOutput:
             color: #2d7a3e;
             margin-top: 4px;
             font-weight: normal;
+        }
+        .chart-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .chart-container h3 {
+            margin-top: 0;
+            color: #495057;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
         }
         .detail-section {
             margin: 30px 0;
@@ -291,6 +310,15 @@ class HTMLOutput:
 
             {% else %}
                 <h2>Comparison Results</h2>
+
+                <!-- Salary Comparison Chart -->
+                <div class="chart-container">
+                    <h3>Net Salary vs Gross Salary</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="salaryChart"></canvas>
+                    </div>
+                </div>
+
                 <table class="comparison-table">
                     <thead>
                         <tr>
@@ -454,6 +482,139 @@ class HTMLOutput:
                 popup.style.display = 'none';
             }
         }
+
+        // Generate salary comparison chart
+        {% if results|length > 1 %}
+        (function() {
+            // Get the maximum gross salary from results
+            var maxGrossSalary = Math.max({% for result in results %}{{ result.gross_salary }}{% if not loop.last %}, {% endif %}{% endfor %});
+
+            // X-axis: 0 to 2x max gross salary in 10k increments
+            var maxX = maxGrossSalary * 2;
+            var step = 10000;
+            var xValues = [];
+            for (var x = 0; x <= maxX; x += step) {
+                xValues.push(x);
+            }
+
+            // Define colors for each calculation type
+            var colors = [
+                'rgb(102, 126, 234)',  // Purple
+                'rgb(255, 99, 132)',   // Red
+                'rgb(54, 162, 235)',   // Blue
+                'rgb(255, 206, 86)',   // Yellow
+                'rgb(75, 192, 192)',   // Teal
+                'rgb(153, 102, 255)',  // Violet
+                'rgb(255, 159, 64)',   // Orange
+            ];
+
+            // Prepare datasets for each calculation type
+            var datasets = [];
+            {% for result in results %}
+            {% set result_idx = loop.index0 %}
+            (function() {
+                var calculatorType = '{{ result.country }} {{ result.employment_type }}';
+                var color = colors[{{ result_idx }} % colors.length];
+
+                // Calculate net salary for each x value
+                var yValues = xValues.map(function(grossSalary) {
+                    // Use the same calculator logic to estimate net salary
+                    // For now, we'll use a linear approximation based on the current result
+                    var currentGross = {{ result.gross_salary }};
+                    var currentNet = {{ result.net_salary }};
+                    var netPercentage = currentNet / currentGross;
+
+                    // Simple linear approximation (not perfect but reasonable for visualization)
+                    return grossSalary * netPercentage;
+                });
+
+                datasets.push({
+                    label: calculatorType,
+                    data: yValues,
+                    borderColor: color,
+                    backgroundColor: color.replace('rgb', 'rgba').replace(')', ', 0.1)'),
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.1,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
+                });
+            })();
+            {% endfor %}
+
+            // Create the chart
+            var ctx = document.getElementById('salaryChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: xValues,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    var label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += '€' + context.parsed.y.toLocaleString('en-US', {maximumFractionDigits: 0});
+                                    return label;
+                                },
+                                title: function(context) {
+                                    return 'Gross: €' + context[0].parsed.x.toLocaleString('en-US', {maximumFractionDigits: 0});
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: {
+                                display: true,
+                                text: 'Gross Salary (€)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '€' + (value / 1000) + 'k';
+                                }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Net Salary (€)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '€' + (value / 1000) + 'k';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        })();
+        {% endif %}
     </script>
 </body>
 </html>
