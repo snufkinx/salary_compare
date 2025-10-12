@@ -5,7 +5,12 @@ from typing import List, Tuple, Union
 
 import click
 
-from ..calculators import FreelancerCzechia, SalariedEmployeeCzechia, SalariedEmployeeGermany
+from ..calculators import (
+    FreelancerCzechia,
+    SalariedEmployeeCzechia,
+    SalariedEmployeeGermany,
+    SalariedEmployeeIsrael,
+)
 from ..output import ConsoleOutput, CSVOutput, HTMLOutput
 
 # Registry of available calculators
@@ -13,6 +18,7 @@ CALCULATORS = {
     "germany-salaried": SalariedEmployeeGermany,
     "czechia-salaried": SalariedEmployeeCzechia,
     "czechia-freelancer": FreelancerCzechia,
+    "israel-salaried": SalariedEmployeeIsrael,
 }
 
 

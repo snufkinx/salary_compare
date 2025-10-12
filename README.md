@@ -21,6 +21,7 @@ A command-line tool for calculating net salaries across different countries and 
 
 - **Germany**: Salaried Employee (Tax Class 1)
 - **Czechia**: Salaried Employee, Freelancer (60/40 rule)
+- **Israel**: Salaried Employee
 
 ## Installation
 
@@ -126,3 +127,11 @@ poetry run pytest --cov=salary_compare
 - Income tax: 15% on taxable income (40% of gross)
 - Social security: 29.2% on 50% of gross income
 - Health insurance: 13.5% on 50% of gross income
+
+### Israel (Salaried Employee)
+- Progressive income tax with 7 brackets (10% to 50%)
+- National Insurance (Bituach Leumi): ~4%
+- Health Tax (Mas Briut): ~5%
+- Pension (Gemel Pensia): 6% employee contribution
+- Keren Hishtalmut (Advanced Training Fund): 2.5% employee contribution
+- Note: Employers also contribute to pension (6.5%) and Keren Hishtalmut (7.5%)
