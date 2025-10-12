@@ -27,9 +27,18 @@ A command-line tool for calculating net salaries across different countries and 
 
 ## Supported Countries and Employment Types
 
+### Western & Central Europe
 - **Germany**: Salaried Employee (Tax Class 1)
 - **Czechia**: Salaried Employee, Freelancer (60/40 rule)
+- **Spain**: Salaried Employee in Madrid, Barcelona, Valencia (regional rates)
+
+### Southern Europe
+- **Portugal**: Salaried Employee, Freelancer (Simplified Regime with 75% deemed expenses)
 - **Israel**: Salaried Employee
+
+### Eastern Europe (Low-Tax Freelancer Havens)
+- **Romania**: Freelancer (Microenterprise 1% revenue tax)
+- **Bulgaria**: Freelancer (10% flat income tax)
 
 ## Installation
 
@@ -64,6 +73,12 @@ poetry run salary calculate czechia-freelancer 100,000 -o HTML
 ```bash
 # Compare different employment types with a single salary
 poetry run salary compare 100,000 czechia-freelancer germany-salaried
+
+# Compare low-tax freelancer regimes
+poetry run salary compare 100,000 romania-freelancer-micro portugal-freelancer bulgaria-freelancer czechia-freelancer
+
+# Compare Spanish regional rates
+poetry run salary compare 100,000 spain-madrid spain-barcelona spain-valencia
 
 # Compare multiple scenarios
 poetry run salary compare 100,000 czechia-freelancer czechia-salaried germany-salaried
