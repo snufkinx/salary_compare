@@ -74,7 +74,7 @@ class ConsoleOutput:
             )
             monthly_net = result.net_salary / 12
 
-            # Add local currency in brackets if not EUR
+            # Add local currency on separate line with darker green color if not EUR
             if result.local_currency != "EUR":
                 gross_local = result.gross_salary * result.local_currency_rate
                 net_annual_local = result.net_salary * result.local_currency_rate
@@ -85,13 +85,9 @@ class ConsoleOutput:
                     result.local_currency, result.local_currency
                 )
 
-                gross_str = f"{result.gross_salary:,.2f}\n({gross_local:,.0f} {currency_symbol})"
-                net_annual_str = (
-                    f"{result.net_salary:,.2f}\n({net_annual_local:,.0f} {currency_symbol})"
-                )
-                net_monthly_str = (
-                    f"{monthly_net:,.2f}\n({net_monthly_local:,.0f} {currency_symbol})"
-                )
+                gross_str = f"{result.gross_salary:,.2f}\n[dim green]({gross_local:,.0f} {currency_symbol})[/dim green]"
+                net_annual_str = f"{result.net_salary:,.2f}\n[dim green]({net_annual_local:,.0f} {currency_symbol})[/dim green]"
+                net_monthly_str = f"{monthly_net:,.2f}\n[dim green]({net_monthly_local:,.0f} {currency_symbol})[/dim green]"
             else:
                 gross_str = f"{result.gross_salary:,.2f}"
                 net_annual_str = f"{result.net_salary:,.2f}"

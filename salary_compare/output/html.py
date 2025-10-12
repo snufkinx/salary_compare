@@ -92,6 +92,13 @@ class HTMLOutput:
             color: #dc3545;
             font-weight: 600;
         }
+        .local-currency {
+            display: block;
+            font-size: 0.85em;
+            color: #2d7a3e;
+            margin-top: 4px;
+            font-weight: normal;
+        }
         .detail-section {
             margin: 30px 0;
             padding: 20px;
@@ -300,32 +307,52 @@ class HTMLOutput:
                         {% for result in results %}
                         {% set net_percentage = (result.net_salary / result.gross_salary * 100) if result.gross_salary > 0 else 0 %}
                         {% set monthly_net = result.net_salary / 12 %}
-                        {% if result.local_currency != "EUR" %}
-                            {% set gross_local = result.gross_salary * result.local_currency_rate %}
-                            {% set net_annual_local = result.net_salary * result.local_currency_rate %}
-                            {% set net_monthly_local = monthly_net * result.local_currency_rate %}
-                            {% if result.local_currency == "CZK" %}
-                                {% set currency_symbol = "Kč" %}
-                            {% elif result.local_currency == "ILS" %}
-                                {% set currency_symbol = "₪" %}
-                            {% else %}
-                                {% set currency_symbol = result.local_currency %}
-                            {% endif %}
-                            {% set gross_display = "{:,.2f}".format(result.gross_salary) + " € (" + "{:,.0f}".format(gross_local) + " " + currency_symbol + ")" %}
-                            {% set net_annual_display = "{:,.2f}".format(result.net_salary) + " € (" + "{:,.0f}".format(net_annual_local) + " " + currency_symbol + ")" %}
-                            {% set net_monthly_display = "{:,.2f}".format(monthly_net) + " € (" + "{:,.0f}".format(net_monthly_local) + " " + currency_symbol + ")" %}
-                        {% else %}
-                            {% set gross_display = "{:,.2f}".format(result.gross_salary) + " €" %}
-                            {% set net_annual_display = "{:,.2f}".format(result.net_salary) + " €" %}
-                            {% set net_monthly_display = "{:,.2f}".format(monthly_net) + " €" %}
-                        {% endif %}
                         <tr>
                             <td>{{ result.country }} {{ result.employment_type }}</td>
-                            <td class="number">{{ gross_display }}</td>
+                            <td class="number">
+                                {{ "{:,.2f}".format(result.gross_salary) }} €
+                                {% if result.local_currency != "EUR" %}
+                                    {% set gross_local = result.gross_salary * result.local_currency_rate %}
+                                    {% if result.local_currency == "CZK" %}
+                                        {% set currency_symbol = "Kč" %}
+                                    {% elif result.local_currency == "ILS" %}
+                                        {% set currency_symbol = "₪" %}
+                                    {% else %}
+                                        {% set currency_symbol = result.local_currency %}
+                                    {% endif %}
+                                    <span class="local-currency">({{ "{:,.0f}".format(gross_local) }} {{ currency_symbol }})</span>
+                                {% endif %}
+                            </td>
                             <td class="number">{{ "{:,.2f}".format(result.tax_base) }} €</td>
                             <td class="number negative">{{ "{:,.2f}".format(result.total_deductions) }} €</td>
-                            <td class="number positive">{{ net_annual_display }}</td>
-                            <td class="number positive">{{ net_monthly_display }}</td>
+                            <td class="number positive">
+                                {{ "{:,.2f}".format(result.net_salary) }} €
+                                {% if result.local_currency != "EUR" %}
+                                    {% set net_annual_local = result.net_salary * result.local_currency_rate %}
+                                    {% if result.local_currency == "CZK" %}
+                                        {% set currency_symbol = "Kč" %}
+                                    {% elif result.local_currency == "ILS" %}
+                                        {% set currency_symbol = "₪" %}
+                                    {% else %}
+                                        {% set currency_symbol = result.local_currency %}
+                                    {% endif %}
+                                    <span class="local-currency">({{ "{:,.0f}".format(net_annual_local) }} {{ currency_symbol }})</span>
+                                {% endif %}
+                            </td>
+                            <td class="number positive">
+                                {{ "{:,.2f}".format(monthly_net) }} €
+                                {% if result.local_currency != "EUR" %}
+                                    {% set net_monthly_local = monthly_net * result.local_currency_rate %}
+                                    {% if result.local_currency == "CZK" %}
+                                        {% set currency_symbol = "Kč" %}
+                                    {% elif result.local_currency == "ILS" %}
+                                        {% set currency_symbol = "₪" %}
+                                    {% else %}
+                                        {% set currency_symbol = result.local_currency %}
+                                    {% endif %}
+                                    <span class="local-currency">({{ "{:,.0f}".format(net_monthly_local) }} {{ currency_symbol }})</span>
+                                {% endif %}
+                            </td>
                             <td class="number">{{ "%.1f"|format(net_percentage) }}%</td>
                         </tr>
                         {% endfor %}
