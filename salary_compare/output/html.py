@@ -400,12 +400,12 @@ class HTMLOutput:
         function toggleBrackets(groupId) {
             var brackets = document.querySelectorAll('[data-group="' + groupId + '"]');
             var icon = event.target;
-            
+
             // Check if brackets exist
             if (brackets.length === 0) {
                 return;
             }
-            
+
             var isExpanded = brackets[0].classList.contains('expanded');
 
             brackets.forEach(function(bracket) {

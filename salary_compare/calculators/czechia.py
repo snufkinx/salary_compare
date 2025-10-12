@@ -13,12 +13,12 @@ class SalariedEmployeeCzechia(SalariedEmployee):
     def __init__(self, gross_salary: Decimal):
         super().__init__(gross_salary, "Czechia")
 
-        # Get current exchange rate
-        converter = get_currency_converter()
+        # Initialize currency converter (CZK to EUR)
+        self.currency_converter = get_currency_converter(from_currency="CZK", to_currency="EUR")
 
         # 2024 Czechia tax rates (original in CZK, converted to EUR dynamically)
         # Original threshold: CZK 1,867,728
-        self.income_tax_threshold = converter.convert_czk_to_eur(Decimal("1867728"))
+        self.income_tax_threshold = self.currency_converter.convert(Decimal("1867728"))
         self.income_tax_rate_low = Decimal("0.15")  # 15% on income up to threshold
         self.income_tax_rate_high = Decimal("0.23")  # 23% on income above threshold
 
@@ -30,10 +30,9 @@ class SalariedEmployeeCzechia(SalariedEmployee):
         """Calculate net salary for Czech salaried employee."""
         result = self._create_base_result()
 
-        # Set local currency info
-        converter = get_currency_converter()
+        # Set local currency info from converter
         result.local_currency = "CZK"
-        result.local_currency_rate = converter.get_eur_to_czk_rate()
+        result.local_currency_rate = Decimal("1") / self.currency_converter.rate
 
         # Calculate social security and health insurance (on gross salary)
         social_security = self.gross_salary * self.social_security_rate
@@ -156,8 +155,8 @@ class FreelancerCzechia(Freelancer):
     def __init__(self, gross_salary: Decimal):
         super().__init__(gross_salary, "Czechia")
 
-        # Get current exchange rate
-        converter = get_currency_converter()
+        # Initialize currency converter (CZK to EUR)
+        self.currency_converter = get_currency_converter(from_currency="CZK", to_currency="EUR")
 
         # 60/40 rule: 60% expenses, 40% taxable income
         self.expense_rate = Decimal("0.60")
@@ -165,7 +164,7 @@ class FreelancerCzechia(Freelancer):
 
         # Tax rates on taxable income (40% of gross)
         # Same threshold as salaried employees: CZK 1,867,728
-        self.income_tax_threshold = converter.convert_czk_to_eur(Decimal("1867728"))
+        self.income_tax_threshold = self.currency_converter.convert(Decimal("1867728"))
         self.income_tax_rate_low = Decimal("0.15")  # 15% on taxable income up to threshold
         self.income_tax_rate_high = Decimal("0.23")  # 23% on taxable income above threshold
 
@@ -175,16 +174,15 @@ class FreelancerCzechia(Freelancer):
         self.health_insurance_rate = Decimal("0.135")  # 13.5%
 
         # Standard taxpayer discount (original: CZK 30,840, converted to EUR dynamically)
-        self.taxpayer_discount = converter.convert_czk_to_eur(Decimal("30840"))
+        self.taxpayer_discount = self.currency_converter.convert(Decimal("30840"))
 
     def calculate_net_salary(self) -> TaxResult:
         """Calculate net salary for Czech freelancer using 60/40 rule."""
         result = self._create_base_result()
 
-        # Set local currency info
-        converter = get_currency_converter()
+        # Set local currency info from converter
         result.local_currency = "CZK"
-        result.local_currency_rate = converter.get_eur_to_czk_rate()
+        result.local_currency_rate = Decimal("1") / self.currency_converter.rate
 
         # Calculate taxable income using 60/40 rule
         taxable_income = self.gross_salary * self.taxable_rate
@@ -235,9 +233,6 @@ class FreelancerCzechia(Freelancer):
         # Add tax bracket information (same brackets as salaried, but applied to 40% of gross)
         # Note: The discount is applied to the total tax, not per bracket
         if taxable_income > 0:
-            # Calculate tax before discount for bracket display
-            tax_before_discount = income_tax_before_discount
-
             # First bracket: 15% up to threshold
             amount_in_low_bracket = min(taxable_income, self.income_tax_threshold)
             if amount_in_low_bracket > 0:

@@ -99,13 +99,13 @@ class CSVOutput:
                     gross_local = result.gross_salary * result.local_currency_rate
                     net_annual_local = result.net_salary * result.local_currency_rate
                     net_monthly_local = monthly_net * result.local_currency_rate
-                    
-                    # Get currency symbol
-                    currency_symbol = {"CZK": "Kč", "ILS": "₪"}.get(result.local_currency, result.local_currency)
 
-                    gross_str = (
-                        f"{result.gross_salary:.2f} ({gross_local:.0f} {currency_symbol})"
+                    # Get currency symbol
+                    currency_symbol = {"CZK": "Kč", "ILS": "₪"}.get(
+                        result.local_currency, result.local_currency
                     )
+
+                    gross_str = f"{result.gross_salary:.2f} ({gross_local:.0f} {currency_symbol})"
                     net_annual_str = (
                         f"{result.net_salary:.2f} ({net_annual_local:.0f} {currency_symbol})"
                     )
