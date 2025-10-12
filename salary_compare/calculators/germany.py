@@ -3,8 +3,7 @@
 from decimal import Decimal
 
 from ..models.employee import SalariedEmployee
-from ..models.tax_result import Deduction, TaxResult
-from .german_tax_formula import GermanTaxFormula
+from ..models.tax_result import Deduction, TaxBracket, TaxResult
 
 
 class SalariedEmployeeGermany(SalariedEmployee):
@@ -14,8 +13,22 @@ class SalariedEmployeeGermany(SalariedEmployee):
         super().__init__(gross_salary, "Germany")
         self.tax_class = tax_class
 
-        # Initialize German tax formula calculator
-        self.tax_formula = GermanTaxFormula()
+        # Tax-free allowance
+        self.tax_free_allowance = Decimal("12096")
+
+        # Progressive tax brackets (simplified, in 10k increments)
+        # Based on 2024 German tax formula with higher marginal rates
+        self.tax_brackets = [
+            (0, 12096, 0.00),  # 0% up to tax-free allowance
+            (12096, 22096, 0.24),  # ~24% marginal rate
+            (22096, 32096, 0.32),  # ~32% marginal rate
+            (32096, 42096, 0.37),  # ~37% marginal rate
+            (42096, 52096, 0.40),  # ~40% marginal rate
+            (52096, 62096, 0.41),  # ~41% marginal rate
+            (62096, 68480, 0.42),  # ~42% marginal rate (approaching flat 42%)
+            (68480, 277825, 0.42),  # 42% flat rate
+            (277825, float("inf"), 0.45),  # 45% top rate
+        ]
 
         # Solidarity surcharge threshold
         self.solidarity_surcharge_threshold = Decimal("1000")
@@ -76,9 +89,8 @@ class SalariedEmployeeGermany(SalariedEmployee):
         taxable_income = self.gross_salary - total_social_security
         result.tax_base = taxable_income
 
-        # Calculate income tax using German tax formula
-        income_tax, tax_brackets = self.tax_formula.calculate_tax(taxable_income)
-        result.income_tax_brackets = tax_brackets
+        # Calculate progressive income tax using brackets
+        income_tax = self._calculate_progressive_tax(taxable_income, result)
 
         # Add income tax as deduction
         result.add_deduction(
@@ -87,7 +99,7 @@ class SalariedEmployeeGermany(SalariedEmployee):
                 amount=income_tax,
                 rate=income_tax / taxable_income if taxable_income > 0 else Decimal("0"),
                 description="Progressive income tax",
-                calculation_details=f"German tax formula applied: {income_tax:,.0f} €",
+                calculation_details=f"Total tax from all applicable brackets = {income_tax:,.0f}",
             )
         )
 
@@ -118,6 +130,40 @@ class SalariedEmployeeGermany(SalariedEmployee):
 
         return result
 
+    def _calculate_progressive_tax(self, taxable_income: Decimal, result: TaxResult) -> Decimal:
+        """Calculate progressive income tax and populate tax brackets."""
+        total_tax = Decimal("0")
+        remaining_income = taxable_income
+
+        for lower, upper, rate in self.tax_brackets:
+            if remaining_income <= 0:
+                break
+
+            lower_bound = Decimal(str(lower))
+            upper_bound = Decimal(str(upper)) if upper != float("inf") else taxable_income
+            bracket_rate = Decimal(str(rate))
+
+            # Calculate taxable amount in this bracket
+            taxable_in_bracket = min(remaining_income, upper_bound - lower_bound)
+
+            if taxable_in_bracket > 0:
+                tax_in_bracket = taxable_in_bracket * bracket_rate
+                total_tax += tax_in_bracket
+
+                # Add bracket to result
+                bracket = TaxBracket(
+                    lower_bound=lower_bound,
+                    upper_bound=upper_bound,
+                    rate=bracket_rate,
+                    taxable_amount=taxable_in_bracket,
+                    tax_amount=tax_in_bracket,
+                )
+                result.income_tax_brackets.append(bracket)
+
+                remaining_income -= taxable_in_bracket
+
+        return total_tax
+
     def get_description(self) -> str:
         """Get description of German tax regime."""
         return """
@@ -131,11 +177,16 @@ class SalariedEmployeeGermany(SalariedEmployee):
         - Solidarity surcharge (5.5%) on income tax above €19,450
         - Social security contributions are deducted from gross salary before income tax calculation
 
-        Tax Brackets (2024/2025):
+        Tax Brackets (2024/2025, approximate marginal rates in 10k increments):
         - 0% on income up to €12,096 (tax-free allowance)
-        - 14% on income €12,097 - €68,480
-        - 42% on income €68,481 - €277,825
-        - 45% on income above €277,826
+        - 24% on income €12,096 - €22,096
+        - 32% on income €22,096 - €32,096
+        - 37% on income €32,096 - €42,096
+        - 40% on income €42,096 - €52,096
+        - 41% on income €52,096 - €62,096
+        - 42% on income €62,096 - €68,480
+        - 42% on income €68,480 - €277,825
+        - 45% on income above €277,825
 
         Social Security Rates (Employee Portion, 2024):
         - Pension Insurance: 9.3% (capped at €96,000)
