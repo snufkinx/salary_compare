@@ -184,6 +184,36 @@ class HTMLOutput:
             margin: 15px 0;
             border-left: 4px solid #ffc107;
         }
+        .expand-icon {
+            cursor: pointer;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 16px;
+            margin-right: 5px;
+            user-select: none;
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+        }
+        .expand-icon:hover {
+            color: #764ba2;
+        }
+        .bracket-row {
+            display: none;
+            background-color: #f8f9fa;
+        }
+        .bracket-row.expanded {
+            display: table-row;
+        }
+        .bracket-row td {
+            padding: 8px 12px 8px 40px;
+            font-size: 12px;
+            color: #6c757d;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .bracket-label {
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -220,11 +250,26 @@ class HTMLOutput:
                         <tbody>
                             {% for deduction in result.deductions %}
                             <tr class="clickable" onclick="showPopup('{{ deduction.name }}', '{{ deduction.calculation_details }}')">
-                                <td>{{ deduction.name }}</td>
+                                <td>
+                                    {% if deduction.name == "Income Tax" and result.income_tax_brackets|length > 0 %}
+                                    <span class="expand-icon" onclick="event.stopPropagation(); toggleBrackets('single-brackets')">+</span>
+                                    {% endif %}
+                                    {{ deduction.name }}
+                                </td>
                                 <td class="number">{{ "{:,.2f}".format(deduction.amount) }} €</td>
                                 <td class="number">{{ "%.1f"|format(deduction.rate * 100) }}%</td>
                                 <td>{{ deduction.description }}</td>
                             </tr>
+                            {% if deduction.name == "Income Tax" and result.income_tax_brackets|length > 0 %}
+                                {% for bracket in result.income_tax_brackets %}
+                                <tr class="bracket-row" data-group="single-brackets">
+                                    <td class="bracket-label">↳ Bracket: {{ "{:,.0f}".format(bracket.lower_bound) }} - {{ "{:,.0f}".format(bracket.upper_bound) }} €</td>
+                                    <td class="number">{{ "{:,.2f}".format(bracket.tax_amount) }} €</td>
+                                    <td class="number">{{ "%.1f"|format(bracket.rate * 100) }}%</td>
+                                    <td>Taxable: {{ "{:,.2f}".format(bracket.taxable_amount) }} €</td>
+                                </tr>
+                                {% endfor %}
+                            {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>
@@ -283,11 +328,26 @@ class HTMLOutput:
                         <tbody>
                             {% for deduction in result.deductions %}
                             <tr class="clickable" onclick="showPopup('{{ deduction.name }}', '{{ deduction.calculation_details }}')">
-                                <td>{{ deduction.name }}</td>
+                                <td>
+                                    {% if deduction.name == "Income Tax" and result.income_tax_brackets|length > 0 %}
+                                    <span class="expand-icon" onclick="event.stopPropagation(); toggleBrackets('brackets-{{ loop.index0 }}')">+</span>
+                                    {% endif %}
+                                    {{ deduction.name }}
+                                </td>
                                 <td class="number">{{ "{:,.2f}".format(deduction.amount) }} €</td>
                                 <td class="number">{{ "%.1f"|format(deduction.rate * 100) }}%</td>
                                 <td>{{ deduction.description }}</td>
                             </tr>
+                            {% if deduction.name == "Income Tax" and result.income_tax_brackets|length > 0 %}
+                                {% for bracket in result.income_tax_brackets %}
+                                <tr class="bracket-row" data-group="brackets-{{ loop.index0 }}">
+                                    <td class="bracket-label">↳ Bracket: {{ "{:,.0f}".format(bracket.lower_bound) }} - {{ "{:,.0f}".format(bracket.upper_bound) }} €</td>
+                                    <td class="number">{{ "{:,.2f}".format(bracket.tax_amount) }} €</td>
+                                    <td class="number">{{ "%.1f"|format(bracket.rate * 100) }}%</td>
+                                    <td>Taxable: {{ "{:,.2f}".format(bracket.taxable_amount) }} €</td>
+                                </tr>
+                                {% endfor %}
+                            {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>
@@ -315,6 +375,23 @@ class HTMLOutput:
 
         function closePopup() {
             document.getElementById('popup').style.display = 'none';
+        }
+
+        function toggleBrackets(groupId) {
+            var brackets = document.querySelectorAll('[data-group="' + groupId + '"]');
+            var icon = event.target;
+            var isExpanded = brackets[0].classList.contains('expanded');
+
+            brackets.forEach(function(bracket) {
+                if (isExpanded) {
+                    bracket.classList.remove('expanded');
+                } else {
+                    bracket.classList.add('expanded');
+                }
+            });
+
+            // Toggle icon
+            icon.textContent = isExpanded ? '+' : '−';
         }
 
         // Close popup when clicking outside
