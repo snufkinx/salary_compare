@@ -22,7 +22,7 @@ class HTMLOutput:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salary Calculation Report</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -485,7 +485,7 @@ class HTMLOutput:
 
         // Generate salary comparison chart
         {% if results|length > 1 %}
-        (function() {
+        window.addEventListener('DOMContentLoaded', function() {
             // Get the maximum gross salary from results
             var maxGrossSalary = Math.max({% for result in results %}{{ result.gross_salary }}{% if not loop.last %}, {% endif %}{% endfor %});
 
@@ -613,7 +613,7 @@ class HTMLOutput:
                     }
                 }
             });
-        })();
+        });
         {% endif %}
     </script>
 </body>
