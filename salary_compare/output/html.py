@@ -314,6 +314,7 @@ class HTMLOutput:
                 </table>
 
                 {% for result in results %}
+                {% set result_idx = loop.index0 %}
                 <div class="detail-section">
                     <h3>{{ result.country }} {{ result.employment_type }}</h3>
                     <table class="detail-table">
@@ -330,7 +331,7 @@ class HTMLOutput:
                             <tr class="clickable" onclick="showPopup('{{ deduction.name }}', '{{ deduction.calculation_details }}')">
                                 <td>
                                     {% if deduction.name == "Income Tax" and result.income_tax_brackets|length > 0 %}
-                                    <span class="expand-icon" onclick="event.stopPropagation(); toggleBrackets('brackets-{{ loop.index0 }}')">+</span>
+                                    <span class="expand-icon" onclick="event.stopPropagation(); toggleBrackets('result-{{ result_idx }}-brackets')">+</span>
                                     {% endif %}
                                     {{ deduction.name }}
                                 </td>
@@ -340,7 +341,7 @@ class HTMLOutput:
                             </tr>
                             {% if deduction.name == "Income Tax" and result.income_tax_brackets|length > 0 %}
                                 {% for bracket in result.income_tax_brackets %}
-                                <tr class="bracket-row" data-group="brackets-{{ loop.index0 }}">
+                                <tr class="bracket-row" data-group="result-{{ result_idx }}-brackets">
                                     <td class="bracket-label">↳ Bracket: {{ "{:,.0f}".format(bracket.lower_bound) }} - {{ "{:,.0f}".format(bracket.upper_bound) }} €</td>
                                     <td class="number">{{ "{:,.2f}".format(bracket.tax_amount) }} €</td>
                                     <td class="number">{{ "%.1f"|format(bracket.rate * 100) }}%</td>
@@ -380,6 +381,12 @@ class HTMLOutput:
         function toggleBrackets(groupId) {
             var brackets = document.querySelectorAll('[data-group="' + groupId + '"]');
             var icon = event.target;
+            
+            // Check if brackets exist
+            if (brackets.length === 0) {
+                return;
+            }
+            
             var isExpanded = brackets[0].classList.contains('expanded');
 
             brackets.forEach(function(bracket) {
