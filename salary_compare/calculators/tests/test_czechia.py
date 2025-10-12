@@ -139,34 +139,38 @@ class TestFreelancerCzechia:
         ), f"Net salary {result.net_salary} not within expected range {expected_net_min}-{expected_net_max}"
 
     def test_100000_euro_salary(self):
-        """Test calculation for €100,000 gross salary."""
+        """Test calculation for €100,000 gross salary (above expense cap)."""
         calculator = FreelancerCzechia(Decimal("100000"))
         result = calculator.calculate_net_salary()
 
-        # Taxable income should be 40% of gross
-        expected_taxable = Decimal("100000") * Decimal("0.40")
-        assert (
-            result.tax_base == expected_taxable
-        ), f"Tax base should be 40% of gross: {expected_taxable}"
+        # At €100k, we're above the €80k cap, so taxable income is:
+        # (€80k × 40%) + (€100k - €80k) = €32k + €20k = €52k (approximately)
+        # The exact cap is CZK 2,000,000 / 25 = €80,000
+        expense_cap = calculator.expense_cap_eur
+        income_above_cap = Decimal("100000") - expense_cap
+        expected_taxable = (expense_cap * Decimal("0.40")) + income_above_cap
+
+        assert abs(result.tax_base - expected_taxable) < Decimal(
+            "1"
+        ), f"Tax base should account for expense cap: expected ~{expected_taxable}, got {result.tax_base}"
 
         # Should have income tax with discount applied
         income_tax = next(
             (d.amount for d in result.deductions if d.name == "Income Tax"), Decimal("0")
         )
 
-        # Calculate expected income tax (actual discount from currency converter)
+        # Calculate expected income tax
         expected_tax_before_discount = expected_taxable * Decimal("0.15")
-        # Use a tolerance since the exact conversion might vary slightly
-        actual_discount = expected_tax_before_discount - income_tax
+        # Account for taxpayer discount
         expected_tax_after_discount = max(
-            Decimal("0"), expected_tax_before_discount - actual_discount
+            Decimal("0"), expected_tax_before_discount - calculator.taxpayer_discount
         )
 
         assert abs(income_tax - expected_tax_after_discount) < Decimal(
             "1"
         ), f"Income tax should be {expected_tax_after_discount}, got {income_tax}"
 
-        # Verify social security and health insurance are calculated on 50% of gross
+        # Verify social security and health insurance are calculated on 50% of taxable income
         social_security = next(
             (d.amount for d in result.deductions if d.name == "Social Security"), Decimal("0")
         )
@@ -281,17 +285,53 @@ class TestFreelancerCzechia:
         assert result.net_salary < result.gross_salary, "Net salary should be less than gross"
 
     def test_edge_case_high_salary(self):
-        """Test edge case with very high salary."""
+        """Test edge case with very high salary (well above expense cap)."""
         calculator = FreelancerCzechia(Decimal("200000"))
         result = calculator.calculate_net_salary()
 
-        # Taxable income should still be 40% of gross
-        expected_taxable = Decimal("200000") * Decimal("0.40")
-        assert (
-            result.tax_base == expected_taxable
-        ), "Taxable income should remain 40% even for high income"
+        # At €200k, we're well above the cap, so taxable income is:
+        # (€80k × 40%) + (€200k - €80k) = €32k + €120k = €152k (approximately)
+        expense_cap = calculator.expense_cap_eur
+        income_above_cap = Decimal("200000") - expense_cap
+        expected_taxable = (expense_cap * Decimal("0.40")) + income_above_cap
 
-        # Should have reasonable deductions (lower with corrected calculation)
-        assert result.total_deductions > Decimal("25000"), "Should have reasonable deductions"
+        assert abs(result.tax_base - expected_taxable) < Decimal(
+            "1"
+        ), f"Taxable income should account for expense cap: expected ~{expected_taxable}, got {result.tax_base}"
+
+        # Should have substantial deductions due to high taxable income
+        assert result.total_deductions > Decimal(
+            "45000"
+        ), "Should have substantial deductions for high income"
         assert result.net_salary > Decimal("100000"), "Net salary should still be substantial"
         assert result.net_salary < result.gross_salary, "Net salary should be less than gross"
+
+    def test_expense_cap_at_threshold(self):
+        """Test that expense cap is correctly applied at the CZK 2M threshold."""
+        calculator = FreelancerCzechia(Decimal("100000"))
+
+        # Test income below cap (should use full 60/40 rule)
+        calc_below = FreelancerCzechia(Decimal("70000"))
+        result_below = calc_below.calculate_net_salary()
+        expected_taxable_below = Decimal("70000") * Decimal("0.40")
+        assert (
+            result_below.tax_base == expected_taxable_below
+        ), "Below cap: should use full 60/40 rule"
+
+        # Test income at cap (should use full 60/40 rule)
+        expense_cap = calculator.expense_cap_eur
+        calc_at_cap = FreelancerCzechia(expense_cap)
+        result_at_cap = calc_at_cap.calculate_net_salary()
+        expected_taxable_at_cap = expense_cap * Decimal("0.40")
+        assert (
+            result_at_cap.tax_base == expected_taxable_at_cap
+        ), "At cap: should use full 60/40 rule"
+
+        # Test income above cap (should apply cap)
+        calc_above = FreelancerCzechia(Decimal("100000"))
+        result_above = calc_above.calculate_net_salary()
+        income_above_cap = Decimal("100000") - expense_cap
+        expected_taxable_above = (expense_cap * Decimal("0.40")) + income_above_cap
+        assert abs(result_above.tax_base - expected_taxable_above) < Decimal(
+            "1"
+        ), "Above cap: should apply expense cap correctly"

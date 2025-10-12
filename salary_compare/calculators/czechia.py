@@ -162,6 +162,11 @@ class FreelancerCzechia(Freelancer):
         self.expense_rate = Decimal("0.60")
         self.taxable_rate = Decimal("0.40")
 
+        # Cap for flat-rate expenses: CZK 2,000,000
+        # Income above this cap is 100% taxable (no expense deduction)
+        self.expense_cap_czk = Decimal("2000000")
+        self.expense_cap_eur = self.currency_converter.convert(self.expense_cap_czk)
+
         # Tax rates on taxable income (40% of gross)
         # Same threshold as salaried employees: CZK 1,867,728
         self.income_tax_threshold = self.currency_converter.convert(Decimal("1867728"))
@@ -176,16 +181,39 @@ class FreelancerCzechia(Freelancer):
         # Standard taxpayer discount (original: CZK 30,840, converted to EUR dynamically)
         self.taxpayer_discount = self.currency_converter.convert(Decimal("30840"))
 
+    def _calculate_taxable_income(self, gross_salary: Decimal) -> tuple[Decimal, Decimal]:
+        """
+        Calculate taxable income with expense cap.
+
+        Returns:
+            tuple: (taxable_income, deductible_expenses)
+        """
+        if gross_salary <= self.expense_cap_eur:
+            # Below cap: apply 60/40 rule
+            deductible_expenses = gross_salary * self.expense_rate
+            taxable_income = gross_salary * self.taxable_rate
+        else:
+            # Above cap: 60/40 rule applies only up to cap, rest is 100% taxable
+            # Income up to cap: 40% taxable
+            taxable_up_to_cap = self.expense_cap_eur * self.taxable_rate
+            # Income above cap: 100% taxable
+            income_above_cap = gross_salary - self.expense_cap_eur
+            taxable_income = taxable_up_to_cap + income_above_cap
+            # Deductible expenses only on income up to cap
+            deductible_expenses = self.expense_cap_eur * self.expense_rate
+
+        return taxable_income, deductible_expenses
+
     def calculate_net_salary(self) -> TaxResult:
-        """Calculate net salary for Czech freelancer using 60/40 rule."""
+        """Calculate net salary for Czech freelancer using 60/40 rule with expense cap."""
         result = self._create_base_result()
 
         # Set local currency info from converter
         result.local_currency = "CZK"
         result.local_currency_rate = Decimal("1") / self.currency_converter.rate
 
-        # Calculate taxable income using 60/40 rule
-        taxable_income = self.gross_salary * self.taxable_rate
+        # Calculate taxable income using 60/40 rule (with cap at 2M CZK)
+        taxable_income, deductible_expenses = self._calculate_taxable_income(self.gross_salary)
         result.tax_base = taxable_income
 
         # Calculate income tax on taxable income (always 15% for freelancers under threshold)
@@ -265,41 +293,55 @@ class FreelancerCzechia(Freelancer):
         result.net_salary = self.gross_salary - result.total_deductions
 
         # Add calculation explanations
+        if self.gross_salary <= self.expense_cap_eur:
+            expense_explanation = (
+                f"60% of gross income ({deductible_expenses:,.0f}) considered as business expenses"
+            )
+            tax_base_explanation = f"Taxable income = Gross salary × 40% = {self.gross_salary:,.0f} × {self.taxable_rate:.1%} = {taxable_income:,.0f}"
+        else:
+            cap_czk = self.expense_cap_czk
+            income_above_cap = self.gross_salary - self.expense_cap_eur
+            expense_explanation = f"60% expense deduction capped at €{self.expense_cap_eur:,.0f} (CZK {cap_czk:,.0f}). Income above cap (€{income_above_cap:,.0f}) is 100% taxable"
+            tax_base_explanation = f"Taxable income = (€{self.expense_cap_eur:,.0f} × 40%) + €{income_above_cap:,.0f} = {taxable_income:,.0f}"
+
         result.calculation_explanations = {
-            "tax_base": f"Taxable income = Gross salary × 40% = {self.gross_salary:,.0f} × {self.taxable_rate:.1%} = {taxable_income:,.0f}",
+            "tax_base": tax_base_explanation,
             "income_tax": f"15% tax on taxable income with standard taxpayer discount of €{self.taxpayer_discount:,.0f}",
             "social_security": f"29.2% on 50% of taxable income = {taxable_income:,.0f} × {self.social_base_rate:.1%} × {self.social_security_rate:.1%}",
             "health_insurance": f"13.5% on 50% of taxable income = {taxable_income:,.0f} × {self.social_base_rate:.1%} × {self.health_insurance_rate:.1%}",
-            "expenses": f"60% of gross income ({self.gross_salary * self.expense_rate:,.0f}) considered as business expenses",
+            "expenses": expense_explanation,
         }
 
         return result
 
     def get_description(self) -> str:
         """Get description of Czech freelancer tax regime."""
-        return """
+        return f"""
         Czechia Freelancer Tax Regime (60/40 Rule):
 
         This calculation applies to freelancers in the Czech Republic using the 60/40 tax method.
 
         Key Features:
-        - 60% of gross income considered as business expenses
-        - 40% of gross income is taxable income
+        - 60% of gross income considered as business expenses (up to CZK 2,000,000)
+        - 40% of gross income is taxable income (for income up to cap)
+        - Income above CZK 2,000,000 (~€{self.expense_cap_eur:,.0f}) is 100% taxable
         - Standard taxpayer discount of €1,268 (CZK 30,840)
-        - Social security and health insurance calculated on 50% of taxable income (40% of gross)
+        - Social security and health insurance calculated on 50% of taxable income
 
         Tax Calculation:
-        - Taxable income: 40% of gross income
+        - Taxable income: 40% of gross income (up to CZK 2M cap)
+        - Income above cap: 100% taxable (no expense deduction)
         - Income tax: 15% on taxable income
         - Standard taxpayer discount: €1,268 (CZK 30,840, reduces income tax)
 
         Mandatory Contributions:
-        - Social Security: 29.2% on 50% of taxable income (40% of gross)
-        - Health Insurance: 13.5% on 50% of taxable income (40% of gross)
+        - Social Security: 29.2% on 50% of taxable income
+        - Health Insurance: 13.5% on 50% of taxable income
 
         Business Expenses:
         - 60% of gross income is automatically considered as business expenses
         - No need to provide receipts for expenses up to this amount
+        - Expense deduction capped at CZK 2,000,000 annually
 
         This method is popular among freelancers as it simplifies tax filing and provides
         significant tax savings compared to the standard tax regime.
