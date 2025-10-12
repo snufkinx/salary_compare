@@ -1,19 +1,21 @@
 """Console output formatter."""
 
 from typing import List
+
 from rich.console import Console
-from rich.table import Table
 from rich.panel import Panel
+from rich.table import Table
 from rich.text import Text
+
 from ..models.tax_result import TaxResult
 
 
 class ConsoleOutput:
     """Console output formatter using Rich library."""
-    
+
     def __init__(self):
         self.console = Console()
-    
+
     def render_single(self, result: TaxResult):
         """Render single calculation result."""
         # Main result table
@@ -22,36 +24,38 @@ class ConsoleOutput:
         table.add_column("Amount", style="green", justify="right")
         table.add_column("Rate", style="yellow", justify="right")
         table.add_column("Details", style="white")
-        
+
         # Add basic info
         table.add_row("Gross Salary", f"{result.gross_salary:,.2f}", "", "")
         table.add_row("Tax Base", f"{result.tax_base:,.2f}", "", "")
-        
+
         # Add deductions
         for deduction in result.deductions:
             table.add_row(
                 deduction.name,
                 f"{deduction.amount:,.2f}",
                 f"{deduction.rate:.1%}" if deduction.rate > 0 else "",
-                deduction.description
+                deduction.description,
             )
-        
+
         # Add total deductions and net salary
         table.add_row("", "", "", "", style="bold")
-        table.add_row("Total Deductions", f"{result.total_deductions:,.2f}", "", "", style="bold red")
+        table.add_row(
+            "Total Deductions", f"{result.total_deductions:,.2f}", "", "", style="bold red"
+        )
         table.add_row("Net Salary", f"{result.net_salary:,.2f}", "", "", style="bold green")
-        
+
         self.console.print(table)
-        
+
         # Add description panel
         if result.description:
             description_panel = Panel(
                 Text(result.description.strip()),
                 title="Tax Regime Description",
-                border_style="blue"
+                border_style="blue",
             )
             self.console.print(description_panel)
-    
+
     def render_comparison(self, results: List[TaxResult]):
         """Render comparison of multiple calculations."""
         # Summary comparison table
@@ -62,36 +66,40 @@ class ConsoleOutput:
         table.add_column("Total Deductions", style="red", justify="right")
         table.add_column("Net Salary", style="green", justify="right")
         table.add_column("Net %", style="yellow", justify="right")
-        
+
         for result in results:
-            net_percentage = (result.net_salary / result.gross_salary) * 100 if result.gross_salary > 0 else 0
+            net_percentage = (
+                (result.net_salary / result.gross_salary) * 100 if result.gross_salary > 0 else 0
+            )
             table.add_row(
                 f"{result.country} {result.employment_type}",
                 f"{result.gross_salary:,.2f}",
                 f"{result.tax_base:,.2f}",
                 f"{result.total_deductions:,.2f}",
                 f"{result.net_salary:,.2f}",
-                f"{net_percentage:.1f}%"
+                f"{net_percentage:.1f}%",
             )
-        
+
         self.console.print(table)
-        
+
         # Detailed breakdown for each result
         for i, result in enumerate(results):
-            self.console.print(f"\n[bold blue]Detailed Breakdown {i+1}: {result.country} {result.employment_type}[/bold blue]")
-            
+            self.console.print(
+                f"\n[bold blue]Detailed Breakdown {i+1}: {result.country} {result.employment_type}[/bold blue]"
+            )
+
             detail_table = Table()
             detail_table.add_column("Deduction", style="cyan")
             detail_table.add_column("Amount", style="green", justify="right")
             detail_table.add_column("Rate", style="yellow", justify="right")
             detail_table.add_column("Description", style="white")
-            
+
             for deduction in result.deductions:
                 detail_table.add_row(
                     deduction.name,
                     f"{deduction.amount:,.2f}",
                     f"{deduction.rate:.1%}" if deduction.rate > 0 else "",
-                    deduction.description
+                    deduction.description,
                 )
-            
+
             self.console.print(detail_table)

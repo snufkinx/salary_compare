@@ -1,17 +1,18 @@
 """HTML output formatter with interactive elements."""
 
-import os
 from typing import List, Optional
+
 from jinja2 import Template
+
 from ..models.tax_result import TaxResult
 
 
 class HTMLOutput:
     """HTML output formatter with interactive elements."""
-    
+
     def __init__(self):
         self.template = self._load_template()
-    
+
     def _load_template(self) -> Template:
         """Load HTML template."""
         template_content = """
@@ -191,7 +192,7 @@ class HTMLOutput:
             <h1>Salary Calculation Report</h1>
             <p>Comprehensive tax analysis and net salary calculation</p>
         </div>
-        
+
         <div class="content">
             {% if results|length == 1 %}
                 {% set result = results[0] %}
@@ -204,7 +205,7 @@ class HTMLOutput:
                     <p><strong>Net Salary:</strong> {{ "{:,.2f}".format(result.net_salary) }} €</p>
                     <p><strong>Total Deductions:</strong> {{ "{:,.2f}".format(result.total_deductions) }} €</p>
                 </div>
-                
+
                 <div class="detail-section">
                     <h3>Detailed Breakdown</h3>
                     <table class="detail-table">
@@ -228,14 +229,14 @@ class HTMLOutput:
                         </tbody>
                     </table>
                 </div>
-                
+
                 {% if result.description %}
                 <div class="description">
                     <h4>Tax Regime Description</h4>
                     {{ result.description }}
                 </div>
                 {% endif %}
-                
+
             {% else %}
                 <h2>Comparison Results</h2>
                 <table class="comparison-table">
@@ -263,7 +264,7 @@ class HTMLOutput:
                         {% endfor %}
                     </tbody>
                 </table>
-                
+
                 {% for result in results %}
                 <div class="detail-section">
                     <h3>{{ result.country }} {{ result.employment_type }}</h3>
@@ -292,7 +293,7 @@ class HTMLOutput:
             {% endif %}
         </div>
     </div>
-    
+
     <!-- Popup Modal -->
     <div id="popup" class="popup">
         <div class="popup-content">
@@ -301,18 +302,18 @@ class HTMLOutput:
             <p id="popup-content"></p>
         </div>
     </div>
-    
+
     <script>
         function showPopup(title, content) {
             document.getElementById('popup-title').textContent = title;
             document.getElementById('popup-content').textContent = content;
             document.getElementById('popup').style.display = 'block';
         }
-        
+
         function closePopup() {
             document.getElementById('popup').style.display = 'none';
         }
-        
+
         // Close popup when clicking outside
         window.onclick = function(event) {
             var popup = document.getElementById('popup');
@@ -325,26 +326,26 @@ class HTMLOutput:
 </html>
         """
         return Template(template_content)
-    
+
     def render_single(self, result: TaxResult, output_file: Optional[str] = None):
         """Render single calculation result to HTML."""
         html_content = self.template.render(results=[result])
         self._write_html(html_content, output_file)
-    
+
     def render_comparison(self, results: List[TaxResult], output_file: Optional[str] = None):
         """Render comparison of multiple calculations to HTML."""
         html_content = self.template.render(results=results)
         self._write_html(html_content, output_file)
-    
+
     def _write_html(self, html_content: str, output_file: Optional[str] = None):
         """Write HTML content to file."""
         if output_file:
-            with open(output_file, 'w', encoding='utf-8') as f:
+            with open(output_file, "w", encoding="utf-8") as f:
                 f.write(html_content)
             print(f"HTML report saved to: {output_file}")
         else:
             # Default filename
             filename = "salary_report.html"
-            with open(filename, 'w', encoding='utf-8') as f:
+            with open(filename, "w", encoding="utf-8") as f:
                 f.write(html_content)
             print(f"HTML report saved to: {filename}")

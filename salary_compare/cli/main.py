@@ -1,17 +1,18 @@
 """Main CLI interface for salary calculations."""
 
-import click
 from decimal import Decimal
-from typing import List, Tuple
-from ..calculators import SalariedEmployeeGermany, SalariedEmployeeCzechia, FreelancerCzechia
-from ..output import ConsoleOutput, HTMLOutput, CSVOutput
+from typing import List, Tuple, Union
 
+import click
+
+from ..calculators import FreelancerCzechia, SalariedEmployeeCzechia, SalariedEmployeeGermany
+from ..output import ConsoleOutput, CSVOutput, HTMLOutput
 
 # Registry of available calculators
 CALCULATORS = {
-    'germany-salaried': SalariedEmployeeGermany,
-    'czechia-salaried': SalariedEmployeeCzechia,
-    'czechia-freelancer': FreelancerCzechia,
+    "germany-salaried": SalariedEmployeeGermany,
+    "czechia-salaried": SalariedEmployeeCzechia,
+    "czechia-freelancer": FreelancerCzechia,
 }
 
 
@@ -19,19 +20,21 @@ def parse_calculation_input(calc_input: str, salary: str) -> Tuple[str, Decimal]
     """Parse calculation input string into country-employment type and salary."""
     try:
         # Remove commas from salary input for thousands separators
-        salary_clean = salary.replace(',', '')
+        salary_clean = salary.replace(",", "")
         salary_decimal = Decimal(salary_clean)
         return calc_input, salary_decimal
-    except Exception as e:
-        raise click.ClickException(f"Invalid salary amount: {salary}. Expected format: 100000 or 100,000")
+    except Exception:
+        raise click.ClickException(
+            f"Invalid salary amount: {salary}. Expected format: 100000 or 100,000"
+        )
 
 
 def get_calculator(calc_type: str, salary: Decimal):
     """Get calculator instance for the given type and salary."""
     if calc_type not in CALCULATORS:
-        available = ', '.join(CALCULATORS.keys())
+        available = ", ".join(CALCULATORS.keys())
         raise click.ClickException(f"Unknown calculation type: {calc_type}. Available: {available}")
-    
+
     calculator_class = CALCULATORS[calc_type]
     return calculator_class(salary)
 
@@ -44,15 +47,20 @@ def cli():
 
 
 @cli.command()
-@click.argument('calc_type', type=str)
-@click.argument('salary', type=str)
-@click.option('-o', '--output', 'output_format', 
-              type=click.Choice(['console', 'HTML', 'CSV'], case_sensitive=False),
-              default='console', help='Output format')
-@click.option('--output-file', '-f', type=str, help='Output file path (optional)')
+@click.argument("calc_type", type=str)
+@click.argument("salary", type=str)
+@click.option(
+    "-o",
+    "--output",
+    "output_format",
+    type=click.Choice(["console", "HTML", "CSV"], case_sensitive=False),
+    default="console",
+    help="Output format",
+)
+@click.option("--output-file", "-f", type=str, help="Output file path (optional)")
 def calculate(calc_type: str, salary: str, output_format: str, output_file: str):
     """Calculate net salary for a specific country and employment type.
-    
+
     Examples:
     salary czechia-freelancer 100000
     salary czechia-freelancer 100,000
@@ -63,34 +71,40 @@ def calculate(calc_type: str, salary: str, output_format: str, output_file: str)
         calc_type, salary_decimal = parse_calculation_input(calc_type, salary)
         calculator = get_calculator(calc_type, salary_decimal)
         result = calculator.calculate_net_salary()
-        
+
         # Output based on format
-        if output_format.upper() == 'HTML':
+        output: Union[HTMLOutput, CSVOutput, ConsoleOutput]
+        if output_format.upper() == "HTML":
             output = HTMLOutput()
             output.render_single(result, output_file)
-        elif output_format.upper() == 'CSV':
+        elif output_format.upper() == "CSV":
             output = CSVOutput()
             output.render_single(result, output_file)
         else:
             output = ConsoleOutput()
             output.render_single(result)
-            
+
     except Exception as e:
         raise click.ClickException(str(e))
 
 
 @cli.command()
-@click.argument('salary', type=str)
-@click.argument('calc_types', nargs=-1, required=True)
-@click.option('-o', '--output', 'output_format', 
-              type=click.Choice(['console', 'HTML', 'CSV'], case_sensitive=False),
-              default='console', help='Output format')
-@click.option('--output-file', '-f', type=str, help='Output file path (optional)')
+@click.argument("salary", type=str)
+@click.argument("calc_types", nargs=-1, required=True)
+@click.option(
+    "-o",
+    "--output",
+    "output_format",
+    type=click.Choice(["console", "HTML", "CSV"], case_sensitive=False),
+    default="console",
+    help="Output format",
+)
+@click.option("--output-file", "-f", type=str, help="Output file path (optional)")
 def compare(salary: str, calc_types: List[str], output_format: str, output_file: str):
     """Compare net salaries across multiple countries and employment types using a single salary.
-    
+
     Format: salary compare <salary> <calc_type1> <calc_type2> ...
-    
+
     Examples:
     salary compare 100000 czechia-freelancer germany-salaried
     salary compare 100,000 czechia-freelancer czechia-salaried germany-salaried
@@ -98,31 +112,34 @@ def compare(salary: str, calc_types: List[str], output_format: str, output_file:
     """
     try:
         # Parse salary once
-        salary_clean = salary.replace(',', '')
+        salary_clean = salary.replace(",", "")
         salary_decimal = Decimal(salary_clean)
-        
+
         # Calculate for each type
         results = []
         for calc_type in calc_types:
             if calc_type not in CALCULATORS:
-                available = ', '.join(CALCULATORS.keys())
-                raise click.ClickException(f"Unknown calculation type: {calc_type}. Available: {available}")
-            
+                available = ", ".join(CALCULATORS.keys())
+                raise click.ClickException(
+                    f"Unknown calculation type: {calc_type}. Available: {available}"
+                )
+
             calculator = get_calculator(calc_type, salary_decimal)
             result = calculator.calculate_net_salary()
             results.append(result)
-        
+
         # Output based on format
-        if output_format.upper() == 'HTML':
+        output: Union[HTMLOutput, CSVOutput, ConsoleOutput]
+        if output_format.upper() == "HTML":
             output = HTMLOutput()
             output.render_comparison(results, output_file)
-        elif output_format.upper() == 'CSV':
+        elif output_format.upper() == "CSV":
             output = CSVOutput()
             output.render_comparison(results, output_file)
         else:
             output = ConsoleOutput()
             output.render_comparison(results)
-            
+
     except Exception as e:
         raise click.ClickException(str(e))
 
@@ -133,8 +150,8 @@ def list_types():
     click.echo("Available calculation types:")
     for calc_type, calculator_class in CALCULATORS.items():
         # Create a temporary instance to get description
-        temp_calc = calculator_class(Decimal('100000'))
-        description = temp_calc.get_description().strip().split('\n')[1].strip()
+        temp_calc = calculator_class(Decimal("100000"))
+        description = temp_calc.get_description().strip().split("\n")[1].strip()
         click.echo(f"  {calc_type:<20} - {description}")
 
 
@@ -143,5 +160,5 @@ def main():
     cli()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

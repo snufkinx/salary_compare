@@ -1,6 +1,6 @@
 """Tax calculators for different countries and employment types."""
 
+from .czechia import FreelancerCzechia, SalariedEmployeeCzechia
 from .germany import SalariedEmployeeGermany
-from .czechia import SalariedEmployeeCzechia, FreelancerCzechia
 
 __all__ = ["SalariedEmployeeGermany", "SalariedEmployeeCzechia", "FreelancerCzechia"]
