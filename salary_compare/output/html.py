@@ -300,13 +300,25 @@ class HTMLOutput:
                         {% for result in results %}
                         {% set net_percentage = (result.net_salary / result.gross_salary * 100) if result.gross_salary > 0 else 0 %}
                         {% set monthly_net = result.net_salary / 12 %}
+                        {% if result.local_currency != "EUR" %}
+                            {% set gross_local = result.gross_salary * result.local_currency_rate %}
+                            {% set net_annual_local = result.net_salary * result.local_currency_rate %}
+                            {% set net_monthly_local = monthly_net * result.local_currency_rate %}
+                            {% set gross_display = "{:,.2f}".format(result.gross_salary) + " € (" + "{:,.0f}".format(gross_local) + " " + result.local_currency + ")" %}
+                            {% set net_annual_display = "{:,.2f}".format(result.net_salary) + " € (" + "{:,.0f}".format(net_annual_local) + " " + result.local_currency + ")" %}
+                            {% set net_monthly_display = "{:,.2f}".format(monthly_net) + " € (" + "{:,.0f}".format(net_monthly_local) + " " + result.local_currency + ")" %}
+                        {% else %}
+                            {% set gross_display = "{:,.2f}".format(result.gross_salary) + " €" %}
+                            {% set net_annual_display = "{:,.2f}".format(result.net_salary) + " €" %}
+                            {% set net_monthly_display = "{:,.2f}".format(monthly_net) + " €" %}
+                        {% endif %}
                         <tr>
                             <td>{{ result.country }} {{ result.employment_type }}</td>
-                            <td class="number">{{ "{:,.2f}".format(result.gross_salary) }} €</td>
+                            <td class="number">{{ gross_display }}</td>
                             <td class="number">{{ "{:,.2f}".format(result.tax_base) }} €</td>
                             <td class="number negative">{{ "{:,.2f}".format(result.total_deductions) }} €</td>
-                            <td class="number positive">{{ "{:,.2f}".format(result.net_salary) }} €</td>
-                            <td class="number positive">{{ "{:,.2f}".format(monthly_net) }} €</td>
+                            <td class="number positive">{{ net_annual_display }}</td>
+                            <td class="number positive">{{ net_monthly_display }}</td>
                             <td class="number">{{ "%.1f"|format(net_percentage) }}%</td>
                         </tr>
                         {% endfor %}

@@ -54,6 +54,8 @@ class TaxResult:
     employment_type: str = ""
     description: str = ""
     calculation_explanations: Dict[str, str] = field(default_factory=dict)
+    local_currency: str = "EUR"  # Local currency code (EUR, CZK, ILS, etc.)
+    local_currency_rate: Decimal = Decimal("1.0")  # Conversion rate from EUR to local
 
     def __post_init__(self):
         """Convert numeric types to Decimal."""

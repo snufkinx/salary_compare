@@ -73,13 +73,34 @@ class ConsoleOutput:
                 (result.net_salary / result.gross_salary) * 100 if result.gross_salary > 0 else 0
             )
             monthly_net = result.net_salary / 12
+
+            # Add local currency in brackets if not EUR
+            if result.local_currency != "EUR":
+                gross_local = result.gross_salary * result.local_currency_rate
+                net_annual_local = result.net_salary * result.local_currency_rate
+                net_monthly_local = monthly_net * result.local_currency_rate
+
+                gross_str = (
+                    f"{result.gross_salary:,.2f}\n({gross_local:,.0f} {result.local_currency})"
+                )
+                net_annual_str = (
+                    f"{result.net_salary:,.2f}\n({net_annual_local:,.0f} {result.local_currency})"
+                )
+                net_monthly_str = (
+                    f"{monthly_net:,.2f}\n({net_monthly_local:,.0f} {result.local_currency})"
+                )
+            else:
+                gross_str = f"{result.gross_salary:,.2f}"
+                net_annual_str = f"{result.net_salary:,.2f}"
+                net_monthly_str = f"{monthly_net:,.2f}"
+
             table.add_row(
                 f"{result.country} {result.employment_type}",
-                f"{result.gross_salary:,.2f}",
+                gross_str,
                 f"{result.tax_base:,.2f}",
                 f"{result.total_deductions:,.2f}",
-                f"{result.net_salary:,.2f}",
-                f"{monthly_net:,.2f}",
+                net_annual_str,
+                net_monthly_str,
                 f"{net_percentage:.1f}%",
             )
 

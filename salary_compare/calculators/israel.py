@@ -52,6 +52,10 @@ class SalariedEmployeeIsrael(SalariedEmployee):
         """Calculate net salary for Israeli salaried employee."""
         result = self._create_base_result()
 
+        # Set local currency info
+        result.local_currency = "ILS"
+        result.local_currency_rate = self.eur_to_ils
+
         # Calculate National Insurance (Bituach Leumi)
         national_insurance = self.gross_salary * self.national_insurance_rate
         result.add_deduction(
@@ -92,8 +96,12 @@ class SalariedEmployeeIsrael(SalariedEmployee):
         # Cap is ₪188,544 annually (~€47,136)
         keren_base = min(self.gross_salary, self.keren_hishtalmut_cap)
         keren_hishtalmut = keren_base * self.keren_hishtalmut_rate
-        
-        cap_note = f" (capped at €{self.keren_hishtalmut_cap:,.0f})" if self.gross_salary > self.keren_hishtalmut_cap else ""
+
+        cap_note = (
+            f" (capped at €{self.keren_hishtalmut_cap:,.0f})"
+            if self.gross_salary > self.keren_hishtalmut_cap
+            else ""
+        )
         result.add_deduction(
             Deduction(
                 name="Keren Hishtalmut",

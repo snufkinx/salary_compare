@@ -30,6 +30,11 @@ class SalariedEmployeeCzechia(SalariedEmployee):
         """Calculate net salary for Czech salaried employee."""
         result = self._create_base_result()
 
+        # Set local currency info
+        converter = get_currency_converter()
+        result.local_currency = "CZK"
+        result.local_currency_rate = converter.get_eur_to_czk_rate()
+
         # Calculate social security and health insurance (on gross salary)
         social_security = self.gross_salary * self.social_security_rate
         health_insurance = self.gross_salary * self.health_insurance_rate
@@ -175,6 +180,11 @@ class FreelancerCzechia(Freelancer):
     def calculate_net_salary(self) -> TaxResult:
         """Calculate net salary for Czech freelancer using 60/40 rule."""
         result = self._create_base_result()
+
+        # Set local currency info
+        converter = get_currency_converter()
+        result.local_currency = "CZK"
+        result.local_currency_rate = converter.get_eur_to_czk_rate()
 
         # Calculate taxable income using 60/40 rule
         taxable_income = self.gross_salary * self.taxable_rate
