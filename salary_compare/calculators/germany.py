@@ -3,7 +3,8 @@
 from decimal import Decimal
 
 from ..models.employee import SalariedEmployee
-from ..models.tax_result import Deduction, TaxBracket, TaxResult
+from ..models.tax_result import Deduction, TaxResult
+from .german_tax_formula import GermanTaxFormula
 
 
 class SalariedEmployeeGermany(SalariedEmployee):
@@ -13,19 +14,11 @@ class SalariedEmployeeGermany(SalariedEmployee):
         super().__init__(gross_salary, "Germany")
         self.tax_class = tax_class
 
-        # 2024/2025 Germany tax rates and thresholds
-        self.tax_free_allowance = Decimal("12096")  # Grundfreibetrag
-        self.solidarity_surcharge_threshold = Decimal(
-            "1000"
-        )  # Solidaritätszuschlag threshold (on income tax)
+        # Initialize German tax formula calculator
+        self.tax_formula = GermanTaxFormula()
 
-        # Progressive tax brackets (2024/2025)
-        self.tax_brackets = [
-            (Decimal("0"), Decimal("12096"), Decimal("0.00")),  # Tax-free allowance
-            (Decimal("12097"), Decimal("68480"), Decimal("0.14")),  # 14% bracket
-            (Decimal("68481"), Decimal("277825"), Decimal("0.42")),  # 42% bracket
-            (Decimal("277826"), Decimal("999999999"), Decimal("0.45")),  # 45% bracket
-        ]
+        # Solidarity surcharge threshold
+        self.solidarity_surcharge_threshold = Decimal("1000")
 
         # Social security rates (employee portion) and ceilings for 2024
         self.social_security_rates = {
@@ -83,8 +76,20 @@ class SalariedEmployeeGermany(SalariedEmployee):
         taxable_income = self.gross_salary - total_social_security
         result.tax_base = taxable_income
 
-        # Calculate income tax using progressive brackets
-        income_tax = self._calculate_progressive_tax(taxable_income, result)
+        # Calculate income tax using German tax formula
+        income_tax, tax_brackets = self.tax_formula.calculate_tax(taxable_income)
+        result.income_tax_brackets = tax_brackets
+
+        # Add income tax as deduction
+        result.add_deduction(
+            Deduction(
+                name="Income Tax",
+                amount=income_tax,
+                rate=income_tax / taxable_income if taxable_income > 0 else Decimal("0"),
+                description="Progressive income tax",
+                calculation_details=f"German tax formula applied: {income_tax:,.0f} €",
+            )
+        )
 
         # Calculate solidarity surcharge
         solidarity_surcharge = Decimal("0")
@@ -112,125 +117,6 @@ class SalariedEmployeeGermany(SalariedEmployee):
         }
 
         return result
-
-    def _calculate_progressive_tax(self, taxable_income: Decimal, result: TaxResult) -> Decimal:
-        """Calculate progressive income tax using German tax formula (2024/2025)."""
-        # Convert to float for calculation, then back to Decimal
-        y = float(taxable_income)
-        total_tax = Decimal("0")
-
-        # German tax formula for 2024/2025
-        # Show all brackets up to the income level for consistency
-        if y <= 12096:
-            # Zone 1: Tax-free allowance
-            total_tax = Decimal("0")
-            result.income_tax_brackets.append(
-                TaxBracket(
-                    lower_bound=Decimal("0"),
-                    upper_bound=Decimal("12096"),
-                    rate=Decimal("0"),
-                    taxable_amount=taxable_income,
-                    tax_amount=Decimal("0"),
-                )
-            )
-        elif y <= 68480:
-            # Zone 2: Progressive formula (14% to ~24%)
-            z = (y - 12096) / 10000
-            tax = (922.98 * z + 1400) * z
-            total_tax = Decimal(str(round(tax, 2)))
-
-            # Show as single bracket with effective rate
-            effective_rate = total_tax / (taxable_income - Decimal("12096")) if taxable_income > Decimal("12096") else Decimal("0")
-            result.income_tax_brackets.append(
-                TaxBracket(
-                    lower_bound=Decimal("12096"),
-                    upper_bound=Decimal(str(round(y, 2))),
-                    rate=effective_rate,
-                    taxable_amount=taxable_income - Decimal("12096"),
-                    tax_amount=total_tax,
-                )
-            )
-        elif y <= 277825:
-            # Zone 3: Linear formula (42%)
-            # In 2024, zone 3 uses a linear formula: 0.42 * y - constant
-            total_tax = 0.42 * y - 10208.78
-            total_tax = Decimal(str(round(total_tax, 2)))
-
-            # Show as single bracket with effective rate
-            # German formula is complex and doesn't split cleanly into zones
-            effective_rate = total_tax / (taxable_income - Decimal("12096")) if taxable_income > Decimal("12096") else Decimal("0")
-            result.income_tax_brackets.append(
-                TaxBracket(
-                    lower_bound=Decimal("12096"),
-                    upper_bound=Decimal(str(round(y, 2))),
-                    rate=effective_rate,
-                    taxable_amount=taxable_income - Decimal("12096"),
-                    tax_amount=total_tax,
-                )
-            )
-        else:
-            # Zone 4: Top rate 45%
-            # Calculate tax for zones 2 and 3
-            z2 = (68480 - 12096) / 10000
-            tax_zone2 = (922.98 * z2 + 1400) * z2
-
-            z3 = (277825 - 68480) / 10000
-            tax_zone3 = (181.19 * z3 + 2397) * z3 + 15694.52
-
-            # Calculate total tax
-            tax = 0.45 * y - 8394.14
-            total_tax = Decimal(str(round(tax, 2)))
-
-            # Tax in each zone
-            tax_in_zone2 = Decimal(str(round(tax_zone2, 2)))
-            tax_in_zone3 = Decimal(str(round(tax_zone3 - tax_zone2, 2)))
-            tax_in_zone4 = total_tax - Decimal(str(round(tax_zone3, 2)))
-
-            # Show zone 2 bracket
-            result.income_tax_brackets.append(
-                TaxBracket(
-                    lower_bound=Decimal("12097"),
-                    upper_bound=Decimal("68480"),
-                    rate=Decimal("0.14"),  # Starting rate (progressive to ~24%)
-                    taxable_amount=Decimal("68480") - Decimal("12096"),
-                    tax_amount=tax_in_zone2,
-                )
-            )
-
-            # Show zone 3 bracket
-            result.income_tax_brackets.append(
-                TaxBracket(
-                    lower_bound=Decimal("68481"),
-                    upper_bound=Decimal("277825"),
-                    rate=Decimal("0.42"),  # Top rate of zone
-                    taxable_amount=Decimal("277825") - Decimal("68480"),
-                    tax_amount=tax_in_zone3,
-                )
-            )
-
-            # Show zone 4 bracket
-            result.income_tax_brackets.append(
-                TaxBracket(
-                    lower_bound=Decimal("277826"),
-                    upper_bound=Decimal("999999999"),
-                    rate=Decimal("0.45"),
-                    taxable_amount=taxable_income - Decimal("277825"),
-                    tax_amount=tax_in_zone4,
-                )
-            )
-
-        # Add total income tax as deduction
-        result.add_deduction(
-            Deduction(
-                name="Income Tax",
-                amount=total_tax,
-                rate=total_tax / taxable_income if taxable_income > 0 else Decimal("0"),
-                description="Progressive income tax",
-                calculation_details=f"German tax formula applied: {total_tax:,.0f} €",
-            )
-        )
-
-        return total_tax
 
     def get_description(self) -> str:
         """Get description of German tax regime."""
