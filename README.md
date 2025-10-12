@@ -2,6 +2,14 @@
 
 A command-line tool for calculating net salaries across different countries and employment types.
 
+## Preview
+
+### Console Output
+![CLI Output Example](docs/images/cli.png)
+
+### HTML Report with Interactive Charts
+<img src="docs/images/html.png" alt="HTML Report with Charts" width="800"/>
+
 ## Features
 
 - Calculate net salary for various employment types (Salaried Employee, Freelancer)
