@@ -38,6 +38,9 @@ class SalariedEmployeeIsrael(SalariedEmployee):
 
         # Keren Hishtalmut (Advanced Training Fund) - common benefit
         self.keren_hishtalmut_rate = Decimal("0.025")  # 2.5% employee contribution
+        # Tax-advantaged cap: ₪188,544 annually (₪15,712 monthly)
+        # Convert to EUR: ₪188,544 / 4 = €47,136
+        self.keren_hishtalmut_cap = Decimal("47136")  # Annual cap in EUR
 
         # National Insurance (Bituach Leumi) - employee portion
         self.national_insurance_rate = Decimal("0.04")  # ~4% (varies by income)
@@ -85,15 +88,19 @@ class SalariedEmployeeIsrael(SalariedEmployee):
             )
         )
 
-        # Calculate Keren Hishtalmut contribution
-        keren_hishtalmut = self.gross_salary * self.keren_hishtalmut_rate
+        # Calculate Keren Hishtalmut contribution (capped for tax advantages)
+        # Cap is ₪188,544 annually (~€47,136)
+        keren_base = min(self.gross_salary, self.keren_hishtalmut_cap)
+        keren_hishtalmut = keren_base * self.keren_hishtalmut_rate
+        
+        cap_note = f" (capped at €{self.keren_hishtalmut_cap:,.0f})" if self.gross_salary > self.keren_hishtalmut_cap else ""
         result.add_deduction(
             Deduction(
                 name="Keren Hishtalmut",
                 amount=keren_hishtalmut,
                 rate=self.keren_hishtalmut_rate,
                 description="Advanced training fund contribution (Keren Hishtalmut)",
-                calculation_details=f"{self.gross_salary:,.0f} × {self.keren_hishtalmut_rate:.1%} = {keren_hishtalmut:,.0f}",
+                calculation_details=f"{keren_base:,.0f} × {self.keren_hishtalmut_rate:.1%} = {keren_hishtalmut:,.0f}{cap_note}",
             )
         )
 
@@ -189,8 +196,10 @@ class SalariedEmployeeIsrael(SalariedEmployee):
         - National Insurance: ~4% of gross salary
         - Health Tax: ~5% of gross salary
         - Pension: 6% of gross salary
-        - Keren Hishtalmut: 2.5% of gross salary
+        - Keren Hishtalmut: 2.5% of gross salary (capped at €47,136 / ₪188,544 annually)
 
-        Note: Employers also contribute to pension (6.5%) and Keren Hishtalmut (7.5%).
-        These calculations use approximate EUR/ILS conversion (1 EUR = 4 ILS).
+        Note: 
+        - Employers also contribute to pension (6.5%) and Keren Hishtalmut (7.5%)
+        - Keren Hishtalmut contributions above the cap are subject to income tax
+        - These calculations use approximate EUR/ILS conversion (1 EUR = 4 ILS)
         """
