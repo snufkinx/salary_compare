@@ -159,7 +159,10 @@ class FreelancerCzechia(Freelancer):
         self.taxable_rate = Decimal("0.40")
 
         # Tax rates on taxable income (40% of gross)
-        self.income_tax_rate = Decimal("0.15")  # 15% on taxable income
+        # Same threshold as salaried employees: CZK 1,867,728
+        self.income_tax_threshold = converter.convert_czk_to_eur(Decimal("1867728"))
+        self.income_tax_rate_low = Decimal("0.15")  # 15% on taxable income up to threshold
+        self.income_tax_rate_high = Decimal("0.23")  # 23% on taxable income above threshold
 
         # Social security and health insurance calculated on 50% of taxable income (40% of gross)
         self.social_base_rate = Decimal("0.50")  # 50% of taxable income as base
@@ -177,8 +180,9 @@ class FreelancerCzechia(Freelancer):
         taxable_income = self.gross_salary * self.taxable_rate
         result.tax_base = taxable_income
 
-        # Calculate income tax on taxable income
-        income_tax_before_discount = taxable_income * self.income_tax_rate
+        # Calculate income tax on taxable income (always 15% for freelancers under threshold)
+        # For simplicity, freelancers typically stay in the 15% bracket
+        income_tax_before_discount = taxable_income * self.income_tax_rate_low
         income_tax = max(Decimal("0"), income_tax_before_discount - self.taxpayer_discount)
 
         result.add_deduction(
@@ -218,16 +222,39 @@ class FreelancerCzechia(Freelancer):
             )
         )
 
-        # Add tax bracket information (single bracket for 60/40 rule)
+        # Add tax bracket information (same brackets as salaried, but applied to 40% of gross)
+        # Note: The discount is applied to the total tax, not per bracket
         if taxable_income > 0:
-            bracket = TaxBracket(
-                lower_bound=Decimal("0"),
-                upper_bound=taxable_income,
-                rate=self.income_tax_rate,
-                taxable_amount=taxable_income,
-                tax_amount=income_tax,
-            )
-            result.income_tax_brackets.append(bracket)
+            # Calculate tax before discount for bracket display
+            tax_before_discount = income_tax_before_discount
+
+            # First bracket: 15% up to threshold
+            amount_in_low_bracket = min(taxable_income, self.income_tax_threshold)
+            if amount_in_low_bracket > 0:
+                tax_from_low_bracket = amount_in_low_bracket * self.income_tax_rate_low
+
+                bracket1 = TaxBracket(
+                    lower_bound=Decimal("0"),
+                    upper_bound=self.income_tax_threshold,
+                    rate=self.income_tax_rate_low,
+                    taxable_amount=amount_in_low_bracket,
+                    tax_amount=tax_from_low_bracket,
+                )
+                result.income_tax_brackets.append(bracket1)
+
+            # Second bracket: 23% above threshold (if applicable)
+            if taxable_income > self.income_tax_threshold:
+                amount_in_high_bracket = taxable_income - self.income_tax_threshold
+                tax_from_high_bracket = amount_in_high_bracket * self.income_tax_rate_high
+
+                bracket2 = TaxBracket(
+                    lower_bound=self.income_tax_threshold,
+                    upper_bound=Decimal("999999999"),
+                    rate=self.income_tax_rate_high,
+                    taxable_amount=amount_in_high_bracket,
+                    tax_amount=tax_from_high_bracket,
+                )
+                result.income_tax_brackets.append(bracket2)
 
         # Calculate final net salary
         result.net_salary = self.gross_salary - result.total_deductions
