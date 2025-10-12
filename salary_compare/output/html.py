@@ -1,6 +1,7 @@
 """HTML output formatter with interactive elements."""
 
-from typing import List, Optional
+from decimal import Decimal
+from typing import Dict, List, Optional
 
 from jinja2 import Template
 
@@ -484,18 +485,10 @@ class HTMLOutput:
         }
 
         // Generate salary comparison chart
-        {% if results|length > 1 %}
+        {% if results|length > 1 and chart_data %}
         window.addEventListener('DOMContentLoaded', function() {
-            // Get the maximum gross salary from results
-            var maxGrossSalary = Math.max({% for result in results %}{{ result.gross_salary }}{% if not loop.last %}, {% endif %}{% endfor %});
-
-            // X-axis: 0 to 2x max gross salary in 10k increments
-            var maxX = maxGrossSalary * 2;
-            var step = 10000;
-            var xValues = [];
-            for (var x = 0; x <= maxX; x += step) {
-                xValues.push(x);
-            }
+            // Use pre-calculated accurate chart data
+            var xValues = {{ chart_data.x_values | tojson }};
 
             // Define colors for each calculation type
             var colors = [
@@ -508,38 +501,21 @@ class HTMLOutput:
                 'rgb(255, 159, 64)',   // Orange
             ];
 
-            // Prepare datasets for each calculation type
+            // Prepare datasets from pre-calculated data
             var datasets = [];
-            {% for result in results %}
-            {% set result_idx = loop.index0 %}
-            (function() {
-                var calculatorType = '{{ result.country }} {{ result.employment_type }}';
-                var color = colors[{{ result_idx }} % colors.length];
-
-                // Calculate net salary for each x value
-                var yValues = xValues.map(function(grossSalary) {
-                    // Use the same calculator logic to estimate net salary
-                    // For now, we'll use a linear approximation based on the current result
-                    var currentGross = {{ result.gross_salary }};
-                    var currentNet = {{ result.net_salary }};
-                    var netPercentage = currentNet / currentGross;
-
-                    // Simple linear approximation (not perfect but reasonable for visualization)
-                    return grossSalary * netPercentage;
-                });
-
-                datasets.push({
-                    label: calculatorType,
-                    data: yValues,
-                    borderColor: color,
-                    backgroundColor: color.replace('rgb', 'rgba').replace(')', ', 0.1)'),
-                    borderWidth: 2,
-                    fill: false,
-                    tension: 0.1,
-                    pointRadius: 0,
-                    pointHoverRadius: 5
-                });
-            })();
+            {% for dataset in chart_data.datasets %}
+            {% set dataset_idx = loop.index0 %}
+            datasets.push({
+                label: '{{ dataset.label }}',
+                data: {{ dataset.data | tojson }},
+                borderColor: colors[{{ dataset_idx }} % colors.length],
+                backgroundColor: colors[{{ dataset_idx }} % colors.length].replace('rgb', 'rgba').replace(')', ', 0.1)'),
+                borderWidth: 2,
+                fill: false,
+                tension: 0.1,
+                pointRadius: 0,
+                pointHoverRadius: 5
+            });
             {% endfor %}
 
             // Create the chart
@@ -628,8 +604,65 @@ class HTMLOutput:
 
     def render_comparison(self, results: List[TaxResult], output_file: Optional[str] = None):
         """Render comparison of multiple calculations to HTML."""
-        html_content = self.template.render(results=results)
+        # Generate chart data for accurate visualization
+        chart_data = self._generate_chart_data(results)
+        html_content = self.template.render(results=results, chart_data=chart_data)
         self._write_html(html_content, output_file)
+
+    def _generate_chart_data(self, results: List[TaxResult]) -> Dict:
+        """Generate accurate chart data by recalculating net salary at different gross levels."""
+        if len(results) < 2:
+            return {}
+
+        # Find max gross salary and create x-axis points
+        max_gross = max(float(r.gross_salary) for r in results)
+        max_x = max_gross * 2
+        step = 10000
+        x_values = list(range(0, int(max_x) + step, step))
+
+        # For each result, we need to recalculate using the same calculator type
+        # We'll extract calculator info from the result
+        datasets = []
+
+        for result in results:
+            calculator_name = f"{result.country} {result.employment_type}"
+
+            # Get the calculator class based on country and employment type
+            from ..calculators import (
+                SalariedEmployeeCzechia,
+                FreelancerCzechia,
+                SalariedEmployeeGermany,
+                SalariedEmployeeIsrael,
+            )
+
+            calculator_map = {
+                ("Czechia", "Salaried Employee"): SalariedEmployeeCzechia,
+                ("Czechia", "Freelancer"): FreelancerCzechia,
+                ("Germany", "Salaried Employee"): SalariedEmployeeGermany,
+                ("Israel", "Salaried Employee"): SalariedEmployeeIsrael,
+            }
+
+            calculator_class = calculator_map.get((result.country, result.employment_type))
+
+            if calculator_class:
+                # Calculate net salary for each x value
+                y_values = []
+                for x in x_values:
+                    if x == 0:
+                        y_values.append(0)
+                    else:
+                        try:
+                            calc = calculator_class(Decimal(str(x)))
+                            calc_result = calc.calculate_net_salary()
+                            y_values.append(float(calc_result.net_salary))
+                        except Exception:
+                            # Fallback to linear approximation if calculation fails
+                            net_percentage = float(result.net_salary) / float(result.gross_salary)
+                            y_values.append(x * net_percentage)
+
+                datasets.append({"label": calculator_name, "data": y_values})
+
+        return {"x_values": x_values, "datasets": datasets}
 
     def _write_html(self, html_content: str, output_file: Optional[str] = None):
         """Write HTML content to file."""
