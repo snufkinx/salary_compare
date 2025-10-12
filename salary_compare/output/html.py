@@ -119,6 +119,27 @@ class HTMLOutput:
             height: 400px;
             margin-bottom: 20px;
         }
+        .chart-controls {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .toggle-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .toggle-button:hover {
+            background: #764ba2;
+        }
+        .toggle-button:active {
+            transform: scale(0.98);
+        }
         .detail-section {
             margin: 30px 0;
             padding: 20px;
@@ -315,6 +336,11 @@ class HTMLOutput:
                 <!-- Salary Comparison Chart -->
                 <div class="chart-container">
                     <h3>Net Salary vs Gross Salary</h3>
+                    <div class="chart-controls">
+                        <button class="toggle-button" onclick="toggleChartMode()">
+                            Switch to Percentage View
+                        </button>
+                    </div>
                     <div class="chart-wrapper">
                         <canvas id="salaryChart"></canvas>
                     </div>
@@ -486,6 +512,9 @@ class HTMLOutput:
 
         // Generate salary comparison chart
         {% if results|length > 1 and chart_data %}
+        var salaryChart;
+        var chartMode = 'absolute'; // 'absolute' or 'percentage'
+
         window.addEventListener('DOMContentLoaded', function() {
             // Use pre-calculated accurate chart data
             var xValues = {{ chart_data.x_values | tojson }};
@@ -501,11 +530,11 @@ class HTMLOutput:
                 'rgb(255, 159, 64)',   // Orange
             ];
 
-            // Prepare datasets from pre-calculated data
-            var datasets = [];
+            // Store original absolute data
+            var absoluteDatasets = [];
             {% for dataset in chart_data.datasets %}
             {% set dataset_idx = loop.index0 %}
-            datasets.push({
+            absoluteDatasets.push({
                 label: '{{ dataset.label }}',
                 data: {{ dataset.data | tojson }},
                 borderColor: colors[{{ dataset_idx }} % colors.length],
@@ -518,9 +547,30 @@ class HTMLOutput:
             });
             {% endfor %}
 
+            // Calculate percentage datasets
+            var percentageDatasets = absoluteDatasets.map(function(dataset) {
+                return {
+                    label: dataset.label,
+                    data: dataset.data.map(function(netSalary, index) {
+                        var grossSalary = xValues[index];
+                        return grossSalary > 0 ? (netSalary / grossSalary * 100) : 0;
+                    }),
+                    borderColor: dataset.borderColor,
+                    backgroundColor: dataset.backgroundColor,
+                    borderWidth: dataset.borderWidth,
+                    fill: dataset.fill,
+                    tension: dataset.tension,
+                    pointRadius: dataset.pointRadius,
+                    pointHoverRadius: dataset.pointHoverRadius
+                };
+            });
+
+            // Start with absolute view
+            var datasets = absoluteDatasets;
+
             // Create the chart
             var ctx = document.getElementById('salaryChart').getContext('2d');
-            new Chart(ctx, {
+            salaryChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: xValues,
@@ -545,7 +595,11 @@ class HTMLOutput:
                                     if (label) {
                                         label += ': ';
                                     }
-                                    label += '€' + context.parsed.y.toLocaleString('en-US', {maximumFractionDigits: 0});
+                                    if (chartMode === 'absolute') {
+                                        label += '€' + context.parsed.y.toLocaleString('en-US', {maximumFractionDigits: 0});
+                                    } else {
+                                        label += context.parsed.y.toFixed(1) + '%';
+                                    }
                                     return label;
                                 },
                                 title: function(context) {
@@ -582,14 +636,53 @@ class HTMLOutput:
                             },
                             ticks: {
                                 callback: function(value) {
-                                    return '€' + (value / 1000) + 'k';
+                                    if (chartMode === 'absolute') {
+                                        return '€' + (value / 1000) + 'k';
+                                    } else {
+                                        return value.toFixed(0) + '%';
+                                    }
                                 }
                             }
                         }
                     }
                 }
             });
+
+            // Store datasets globally for toggle function
+            window.chartData = {
+                xValues: xValues,
+                absoluteDatasets: absoluteDatasets,
+                percentageDatasets: percentageDatasets
+            };
         });
+
+        function toggleChartMode() {
+            if (!salaryChart || !window.chartData) return;
+
+            // Toggle mode
+            chartMode = chartMode === 'absolute' ? 'percentage' : 'absolute';
+
+            // Update button text
+            var button = document.querySelector('.toggle-button');
+            if (chartMode === 'absolute') {
+                button.textContent = 'Switch to Percentage View';
+            } else {
+                button.textContent = 'Switch to Absolute View';
+            }
+
+            // Update chart data
+            salaryChart.data.datasets = chartMode === 'absolute'
+                ? window.chartData.absoluteDatasets
+                : window.chartData.percentageDatasets;
+
+            // Update Y-axis title and scale
+            salaryChart.options.scales.y.title.text = chartMode === 'absolute'
+                ? 'Net Salary (€)'
+                : 'Net Salary (%)';
+
+            // Update chart
+            salaryChart.update();
+        }
         {% endif %}
     </script>
 </body>
