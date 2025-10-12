@@ -304,9 +304,16 @@ class HTMLOutput:
                             {% set gross_local = result.gross_salary * result.local_currency_rate %}
                             {% set net_annual_local = result.net_salary * result.local_currency_rate %}
                             {% set net_monthly_local = monthly_net * result.local_currency_rate %}
-                            {% set gross_display = "{:,.2f}".format(result.gross_salary) + " € (" + "{:,.0f}".format(gross_local) + " " + result.local_currency + ")" %}
-                            {% set net_annual_display = "{:,.2f}".format(result.net_salary) + " € (" + "{:,.0f}".format(net_annual_local) + " " + result.local_currency + ")" %}
-                            {% set net_monthly_display = "{:,.2f}".format(monthly_net) + " € (" + "{:,.0f}".format(net_monthly_local) + " " + result.local_currency + ")" %}
+                            {% if result.local_currency == "CZK" %}
+                                {% set currency_symbol = "Kč" %}
+                            {% elif result.local_currency == "ILS" %}
+                                {% set currency_symbol = "₪" %}
+                            {% else %}
+                                {% set currency_symbol = result.local_currency %}
+                            {% endif %}
+                            {% set gross_display = "{:,.2f}".format(result.gross_salary) + " € (" + "{:,.0f}".format(gross_local) + " " + currency_symbol + ")" %}
+                            {% set net_annual_display = "{:,.2f}".format(result.net_salary) + " € (" + "{:,.0f}".format(net_annual_local) + " " + currency_symbol + ")" %}
+                            {% set net_monthly_display = "{:,.2f}".format(monthly_net) + " € (" + "{:,.0f}".format(net_monthly_local) + " " + currency_symbol + ")" %}
                         {% else %}
                             {% set gross_display = "{:,.2f}".format(result.gross_salary) + " €" %}
                             {% set net_annual_display = "{:,.2f}".format(result.net_salary) + " €" %}
