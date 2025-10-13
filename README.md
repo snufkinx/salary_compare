@@ -78,7 +78,7 @@ poetry run salary compare 100,000 czechia-freelancer germany-salaried
 poetry run salary compare 100,000 romania-freelancer-micro portugal-freelancer bulgaria-freelancer czechia-freelancer
 
 # Compare Spanish regional rates
-poetry run salary compare 100,000 spain-madrid spain-barcelona spain-valencia
+poetry run salary compare 100,000 madrid-salaried barcelona-salaried valencia-salaried
 
 # Compare multiple scenarios
 poetry run salary compare 100,000 czechia-freelancer czechia-salaried germany-salaried
