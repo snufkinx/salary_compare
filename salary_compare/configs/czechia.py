@@ -31,6 +31,7 @@ def create_czechia_salaried_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.SALARIED,
         local_currency=Currency.CZK,
         threshold_currency=Currency.CZK,
+        title="Czechia Salaried Employee",
         description="""
         Czechia Salaried Employee Tax Regime:
 
@@ -113,6 +114,7 @@ def create_czechia_freelancer_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.FREELANCER,
         local_currency=Currency.CZK,
         threshold_currency=Currency.CZK,
+        title="Czechia Freelancer",
         description=f"""
         Czechia Freelancer Tax Regime (60/40 Rule):
 

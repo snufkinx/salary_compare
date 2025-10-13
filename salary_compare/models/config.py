@@ -37,6 +37,9 @@ class TaxRegimeConfig:
     local_currency: Currency
     threshold_currency: Currency  # Currency used for defining thresholds/brackets
 
+    # Display title for this specific regime (e.g., "Madrid Salaried Employee")
+    title: str = ""
+
     # Optional region identifier (e.g., "Madrid", "Barcelona" for Spain)
     region: Optional[str] = None
 

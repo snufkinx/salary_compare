@@ -26,6 +26,7 @@ def create_madrid_salaried_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.SALARIED,
         local_currency=Currency.EUR,
         threshold_currency=Currency.EUR,
+        title="Madrid Salaried Employee",
         region="Madrid",
         description="""
         Madrid Salaried Employee Tax Regime (Spain):
@@ -102,6 +103,7 @@ def create_barcelona_salaried_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.SALARIED,
         local_currency=Currency.EUR,
         threshold_currency=Currency.EUR,
+        title="Barcelona Salaried Employee",
         region="Barcelona",
         description="""
         Barcelona Salaried Employee Tax Regime (Spain - Catalonia):
@@ -173,6 +175,7 @@ def create_valencia_salaried_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.SALARIED,
         local_currency=Currency.EUR,
         threshold_currency=Currency.EUR,
+        title="Valencia Salaried Employee",
         region="Valencia",
         description="""
         Valencia Salaried Employee Tax Regime (Spain - Valencian Community):

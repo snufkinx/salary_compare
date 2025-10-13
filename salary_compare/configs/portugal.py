@@ -33,6 +33,7 @@ def create_portugal_salaried_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.SALARIED,
         local_currency=Currency.EUR,
         threshold_currency=Currency.EUR,
+        title="Portugal Salaried Employee",
         description="""
         Portugal Salaried Employee Tax Regime (Standard IRS):
 
@@ -115,6 +116,7 @@ def create_portugal_freelancer_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.FREELANCER,
         local_currency=Currency.EUR,
         threshold_currency=Currency.EUR,
+        title="Portugal Freelancer",
         description="""
         Portugal Freelancer Tax Regime (Simplified Regime - Recibos Verdes):
 

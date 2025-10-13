@@ -33,6 +33,7 @@ def create_germany_salaried_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.SALARIED,
         local_currency=Currency.EUR,
         threshold_currency=Currency.EUR,
+        title="Germany Salaried Employee",
         description="""
         German Salaried Employee Tax Regime (Tax Class 1):
 

@@ -39,13 +39,17 @@ class UniversalTaxCalculator:
             Complete tax calculation result
         """
         # Create base result
+        # Use title if available, otherwise fallback to country + employment_type
+        display_country = self.regime.title or f"{self.regime.country.value}"
+        display_employment = "" if self.regime.title else self.regime.employment_type.value
+        
         result = TaxResult(
             gross_salary=self.gross_salary,
             tax_base=Decimal("0"),  # Will be set later
             net_salary=Decimal("0"),  # Will be set later
             total_deductions=Decimal("0"),  # Calculated from deductions
-            country=self.regime.country.value,
-            employment_type=self.regime.employment_type.value,
+            country=display_country,
+            employment_type=display_employment,
             description=self.regime.description,
         )
 

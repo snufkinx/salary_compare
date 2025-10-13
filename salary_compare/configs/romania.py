@@ -23,6 +23,7 @@ def create_romania_freelancer_micro_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.FREELANCER,
         local_currency=Currency.RON,
         threshold_currency=Currency.RON,
+        title="Romania Freelancer",
         description=f"""
         Romania Freelancer Tax Regime (Microenterprise - 1% Revenue Tax):
 

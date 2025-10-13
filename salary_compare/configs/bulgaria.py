@@ -24,6 +24,7 @@ def create_bulgaria_freelancer_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.FREELANCER,
         local_currency=Currency.BGN,
         threshold_currency=Currency.BGN,
+        title="Bulgaria Freelancer",
         description="""
         Bulgaria Freelancer Tax Regime (Self-Employed - Едноличен търговец):
 

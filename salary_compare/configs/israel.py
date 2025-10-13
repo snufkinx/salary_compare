@@ -46,6 +46,7 @@ def create_israel_salaried_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.SALARIED,
         local_currency=Currency.ILS,
         threshold_currency=Currency.ILS,
+        title="Israel Salaried Employee",
         description=f"""
         Israeli Salaried Employee Tax Regime:
 
