@@ -7,7 +7,7 @@ from ..models.enums import Country, Currency, DeductionBase, EmploymentType
 from ..strategies import FlatRateDeduction, ProgressiveTaxDeduction, StandardTaxBase
 
 
-def create_spain_madrid_config() -> TaxRegimeConfig:
+def create_madrid_salaried_config() -> TaxRegimeConfig:
     """Create configuration for Madrid salaried employee."""
 
     # Spanish tax brackets (state + Madrid regional rates combined)
@@ -26,8 +26,9 @@ def create_spain_madrid_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.SALARIED,
         local_currency=Currency.EUR,
         threshold_currency=Currency.EUR,
+        region="Madrid",
         description="""
-        Spain Salaried Employee Tax Regime (Madrid):
+        Madrid Salaried Employee Tax Regime (Spain):
 
         This calculation applies to salaried employees working in the Community of Madrid.
 
@@ -83,7 +84,7 @@ def create_spain_madrid_config() -> TaxRegimeConfig:
     return config
 
 
-def create_spain_barcelona_config() -> TaxRegimeConfig:
+def create_barcelona_salaried_config() -> TaxRegimeConfig:
     """Create configuration for Barcelona (Catalonia) salaried employee."""
 
     # Catalonia applies higher regional rates than Madrid
@@ -101,8 +102,9 @@ def create_spain_barcelona_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.SALARIED,
         local_currency=Currency.EUR,
         threshold_currency=Currency.EUR,
+        region="Barcelona",
         description="""
-        Spain Salaried Employee Tax Regime (Barcelona/Catalonia):
+        Barcelona Salaried Employee Tax Regime (Spain - Catalonia):
 
         This calculation applies to salaried employees working in Catalonia (Barcelona).
 
@@ -153,7 +155,7 @@ def create_spain_barcelona_config() -> TaxRegimeConfig:
     return config
 
 
-def create_spain_valencia_config() -> TaxRegimeConfig:
+def create_valencia_salaried_config() -> TaxRegimeConfig:
     """Create configuration for Valencia salaried employee."""
 
     # Valencia (Valencian Community) has moderate regional rates
@@ -171,8 +173,9 @@ def create_spain_valencia_config() -> TaxRegimeConfig:
         employment_type=EmploymentType.SALARIED,
         local_currency=Currency.EUR,
         threshold_currency=Currency.EUR,
+        region="Valencia",
         description="""
-        Spain Salaried Employee Tax Regime (Valencia/Valencian Community):
+        Valencia Salaried Employee Tax Regime (Spain - Valencian Community):
 
         This calculation applies to salaried employees working in the Valencian Community (Valencia).
 
@@ -223,6 +226,6 @@ def create_spain_valencia_config() -> TaxRegimeConfig:
 
 
 # Export configs
-SPAIN_MADRID = create_spain_madrid_config()
-SPAIN_BARCELONA = create_spain_barcelona_config()
-SPAIN_VALENCIA = create_spain_valencia_config()
+MADRID_SALARIED = create_madrid_salaried_config()
+BARCELONA_SALARIED = create_barcelona_salaried_config()
+VALENCIA_SALARIED = create_valencia_salaried_config()

@@ -3,17 +3,17 @@
 from typing import Dict
 
 from .configs import (
+    BARCELONA_SALARIED,
     BULGARIA_FREELANCER,
     CZECHIA_FREELANCER,
     CZECHIA_SALARIED,
     GERMANY_SALARIED,
     ISRAEL_SALARIED,
+    MADRID_SALARIED,
     PORTUGAL_FREELANCER,
     PORTUGAL_SALARIED,
     ROMANIA_FREELANCER_MICRO,
-    SPAIN_BARCELONA,
-    SPAIN_MADRID,
-    SPAIN_VALENCIA,
+    VALENCIA_SALARIED,
 )
 from .models.config import TaxRegimeConfig
 
@@ -74,9 +74,9 @@ TaxRegimeRegistry.register("germany-salaried", GERMANY_SALARIED)
 TaxRegimeRegistry.register("czechia-salaried", CZECHIA_SALARIED)
 TaxRegimeRegistry.register("czechia-freelancer", CZECHIA_FREELANCER)
 TaxRegimeRegistry.register("israel-salaried", ISRAEL_SALARIED)
-TaxRegimeRegistry.register("spain-madrid", SPAIN_MADRID)
-TaxRegimeRegistry.register("spain-barcelona", SPAIN_BARCELONA)
-TaxRegimeRegistry.register("spain-valencia", SPAIN_VALENCIA)
+TaxRegimeRegistry.register("madrid-salaried", MADRID_SALARIED)
+TaxRegimeRegistry.register("barcelona-salaried", BARCELONA_SALARIED)
+TaxRegimeRegistry.register("valencia-salaried", VALENCIA_SALARIED)
 TaxRegimeRegistry.register("romania-freelancer-micro", ROMANIA_FREELANCER_MICRO)
 TaxRegimeRegistry.register("bulgaria-freelancer", BULGARIA_FREELANCER)
 TaxRegimeRegistry.register("portugal-salaried", PORTUGAL_SALARIED)

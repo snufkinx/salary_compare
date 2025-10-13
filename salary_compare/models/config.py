@@ -37,8 +37,11 @@ class TaxRegimeConfig:
     local_currency: Currency
     threshold_currency: Currency  # Currency used for defining thresholds/brackets
 
+    # Optional region identifier (e.g., "Madrid", "Barcelona" for Spain)
+    region: Optional[str] = None
+
     # Description of the tax regime
-    description: str
+    description: str = ""
 
     # Note: Strategies are set separately to avoid circular imports
     tax_base_strategy: Optional[object] = None
