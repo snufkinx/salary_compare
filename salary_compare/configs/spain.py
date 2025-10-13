@@ -4,7 +4,11 @@ from decimal import Decimal
 
 from ..models.config import DeductionConfig, TaxBracketConfig, TaxRegimeConfig
 from ..models.enums import Country, Currency, DeductionBase, EmploymentType
-from ..strategies import FlatRateDeduction, ProgressiveTaxDeduction, StandardTaxBase
+from ..strategies import (
+    FlatRateDeduction,
+    ProgressiveTaxDeduction,
+    SpanishEmploymentIncomeTaxBase,
+)
 
 
 def create_madrid_salaried_config() -> TaxRegimeConfig:
@@ -47,26 +51,35 @@ def create_madrid_salaried_config() -> TaxRegimeConfig:
         - 45% on income €60,000 - €300,000
         - 47% on income above €300,000
 
-        Social Security Contributions (Employee, 2024):
-        - General regime: ~6.35% of gross salary
-        - Unemployment insurance: ~1.55%
-        - Vocational training: ~0.10%
-        - Total: ~6.35% (capped at contribution bases)
+        Social Security Contributions (Employee, 2025):
+        - Pension: 4.70%
+        - Unemployment: 1.55%
+        - Vocational training: 0.10%
+        - MEI (Intergenerational Equity): 0.13%
+        - Total: 6.48% (capped at €58,914/year)
 
-        Note: Madrid is known for competitive tax rates compared to other Spanish regions.
+        Employment Income Reduction (2025):
+        - €6,498 for net income up to €14,047.50
+        - Gradual reduction between €14,047.50 and €19,747.50
+        - €2,000 minimum for all employment income
+
+        Note: Madrid has the lowest regional tax rates in Spain. Calculations represent
+        base case (single, no dependents). Actual tax may vary with personal allowances.
         """,
     )
 
-    config.tax_base_strategy = StandardTaxBase()
+    config.tax_base_strategy = SpanishEmploymentIncomeTaxBase()
 
     config.deduction_strategies = [
-        # Social security (simplified as single deduction)
+        # Social security contributions (2025: max base €58,914/year)
+        # Includes: Pension (4.70%), Unemployment (1.55%), Vocational Training (0.10%)
+        # Plus MEI - Intergenerational Equity Mechanism (0.13%)
         FlatRateDeduction(
             DeductionConfig(
                 name="Social Security",
-                description="Social security contributions (employee portion)",
-                rate=Decimal("0.0635"),
-                ceiling=Decimal("53400"),  # Approximate ceiling
+                description="Social security contributions (employee portion) + MEI",
+                rate=Decimal("0.0648"),  # 6.35% SS + 0.13% MEI
+                ceiling=Decimal("58914"),  # 2025 max contribution base
                 applies_to=DeductionBase.GROSS,
             )
         ),
@@ -131,15 +144,15 @@ def create_barcelona_salaried_config() -> TaxRegimeConfig:
         """,
     )
 
-    config.tax_base_strategy = StandardTaxBase()
+    config.tax_base_strategy = SpanishEmploymentIncomeTaxBase()
 
     config.deduction_strategies = [
         FlatRateDeduction(
             DeductionConfig(
                 name="Social Security",
-                description="Social security contributions (employee portion)",
-                rate=Decimal("0.0635"),
-                ceiling=Decimal("53400"),
+                description="Social security contributions (employee portion) + MEI",
+                rate=Decimal("0.0648"),  # 6.35% SS + 0.13% MEI
+                ceiling=Decimal("58914"),  # 2025 max contribution base
                 applies_to=DeductionBase.GROSS,
             )
         ),
@@ -202,15 +215,15 @@ def create_valencia_salaried_config() -> TaxRegimeConfig:
         """,
     )
 
-    config.tax_base_strategy = StandardTaxBase()
+    config.tax_base_strategy = SpanishEmploymentIncomeTaxBase()
 
     config.deduction_strategies = [
         FlatRateDeduction(
             DeductionConfig(
                 name="Social Security",
-                description="Social security contributions (employee portion)",
-                rate=Decimal("0.0635"),
-                ceiling=Decimal("53400"),
+                description="Social security contributions (employee portion) + MEI",
+                rate=Decimal("0.0648"),  # 6.35% SS + 0.13% MEI
+                ceiling=Decimal("58914"),  # 2025 max contribution base
                 applies_to=DeductionBase.GROSS,
             )
         ),

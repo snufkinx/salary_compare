@@ -11,6 +11,7 @@ from .deductions import (
 from .tax_base import (
     AfterSocialSecurityTaxBase,
     FlatRateExpenseTaxBase,
+    SpanishEmploymentIncomeTaxBase,
     StandardTaxBase,
 )
 
@@ -25,4 +26,5 @@ __all__ = [
     "StandardTaxBase",
     "AfterSocialSecurityTaxBase",
     "FlatRateExpenseTaxBase",
+    "SpanishEmploymentIncomeTaxBase",
 ]

@@ -61,14 +61,14 @@ class UniversalTaxCalculator:
         # Context for sharing data between strategies
         context: Dict = {}
 
-        # Track which deductions have been calculated (for Germany special case)
+        # Track which deductions have been calculated (for special cases)
         calculated_deductions = set()
 
         # Step 1: Pre-calculate social security if needed for tax base
-        # (For AfterSocialSecurityTaxBase strategy)
-        from .strategies.tax_base import AfterSocialSecurityTaxBase
+        # (For AfterSocialSecurityTaxBase and SpanishEmploymentIncomeTaxBase strategies)
+        from .strategies.tax_base import AfterSocialSecurityTaxBase, SpanishEmploymentIncomeTaxBase
 
-        if isinstance(self.regime.tax_base_strategy, AfterSocialSecurityTaxBase):
+        if isinstance(self.regime.tax_base_strategy, (AfterSocialSecurityTaxBase, SpanishEmploymentIncomeTaxBase)):
             # Calculate social security deductions first
             for i, strategy in enumerate(self.regime.deduction_strategies):
                 if strategy.config.applies_to.value == "gross":

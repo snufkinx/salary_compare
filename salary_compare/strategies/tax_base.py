@@ -60,3 +60,62 @@ class FlatRateExpenseTaxBase(TaxBaseStrategy):
         context["expense_cap_applied"] = gross_salary > self.expense_cap
 
         return taxable_income
+
+
+class SpanishEmploymentIncomeTaxBase(TaxBaseStrategy):
+    """
+    Tax base for Spanish employment income with standard reduction.
+
+    Spanish tax law provides a reduction for employment income (reducción por rendimientos del trabajo):
+    - €6,498 for net income up to €14,047.50
+    - Gradual reduction between €14,047.50 and €19,747.50
+    - €2,000 minimum for all employment income
+
+    Tax base = Gross - Social Security - Employment Income Reduction
+    """
+
+    def calculate(self, gross_salary: Decimal, context: Dict) -> Decimal:
+        """Calculate Spanish tax base with employment income reduction."""
+        # First deduct social security
+        social_security_total = context.get("social_security_total", Decimal("0"))
+        net_income = gross_salary - social_security_total
+
+        # Calculate employment income reduction
+        reduction = self._calculate_employment_reduction(net_income)
+
+        # Store for transparency
+        context["employment_income_reduction"] = reduction
+        context["net_income_before_tax"] = net_income
+
+        # Tax base = Net income - Employment reduction
+        return net_income - reduction
+
+    def _calculate_employment_reduction(self, net_income: Decimal) -> Decimal:
+        """
+        Calculate the Spanish employment income reduction.
+
+        For 2024-2025:
+        - Full reduction (€6,498) if net income ≤ €14,047.50
+        - Gradual reduction if €14,047.50 < net income < €19,747.50
+        - Minimum €2,000 for all employment income
+        """
+        max_reduction = Decimal("6498")
+        min_reduction = Decimal("2000")
+        lower_threshold = Decimal("14047.50")
+        upper_threshold = Decimal("19747.50")
+
+        if net_income <= lower_threshold:
+            # Full reduction
+            return max_reduction
+        elif net_income >= upper_threshold:
+            # Minimum reduction
+            return min_reduction
+        else:
+            # Gradual phase-out
+            # reduction = 6498 - ((net_income - 14047.50) × (4498 / 5700))
+            phase_out_range = upper_threshold - lower_threshold
+            reduction_range = max_reduction - min_reduction
+            excess = net_income - lower_threshold
+
+            reduction = max_reduction - (excess * reduction_range / phase_out_range)
+            return max(reduction, min_reduction)
