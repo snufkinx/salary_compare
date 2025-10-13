@@ -136,10 +136,10 @@ class ProgressiveTaxDeduction(DeductionStrategy):
 
 
 class CappedPercentageDeduction(DeductionStrategy):
-    """Percentage deduction with a cap (e.g., Keren Hishtalmut)."""
+    """Percentage deduction with optional floor and ceiling (e.g., Keren Hishtalmut, French pension brackets)."""
 
     def __init__(self, config: DeductionConfig):
-        """Initialize with configuration including ceiling."""
+        """Initialize with configuration including optional ceiling and floor."""
         self.config = config
         if not config.ceiling:
             raise ValueError("CappedPercentageDeduction requires a ceiling")
@@ -153,16 +153,40 @@ class CappedPercentageDeduction(DeductionStrategy):
         return gross_salary
 
     def calculate(self, base_amount: Decimal, context: Dict) -> Deduction:
-        """Calculate percentage deduction with cap."""
-        # Apply cap to base amount
-        capped_base = min(base_amount, self.config.ceiling)
-        amount = capped_base * self.config.rate
+        """
+        Calculate percentage deduction with optional floor and ceiling.
+        
+        If floor is set, only the amount between floor and ceiling is taxed.
+        For example: floor=€47,100, ceiling=€376,800, rate=8.64%
+        On €100,000 gross: (€100,000 - €47,100) × 8.64% = €4,570.56
+        """
+        floor = self.config.floor or Decimal("0")
+        ceiling = self.config.ceiling
+        
+        # Calculate the portion subject to this deduction
+        if base_amount <= floor:
+            # Below floor, no deduction
+            taxable_portion = Decimal("0")
+        elif base_amount >= ceiling:
+            # Above ceiling, deduction applies to (ceiling - floor)
+            taxable_portion = ceiling - floor
+        else:
+            # Between floor and ceiling, deduction applies to (amount - floor)
+            taxable_portion = base_amount - floor
+        
+        amount = taxable_portion * self.config.rate
 
         # Build calculation details
-        cap_note = (
-            f" (capped at €{self.config.ceiling:,.0f})" if base_amount > self.config.ceiling else ""
-        )
-        details = f"{capped_base:,.0f} × {self.config.rate:.1%} = {amount:,.0f}{cap_note}"
+        if floor > 0:
+            if base_amount > ceiling:
+                details = f"({ceiling:,.0f} - {floor:,.0f}) × {self.config.rate:.1%} = {amount:,.0f}"
+            else:
+                details = f"({base_amount:,.0f} - {floor:,.0f}) × {self.config.rate:.1%} = {amount:,.0f}"
+        else:
+            cap_note = (
+                f" (capped at €{ceiling:,.0f})" if base_amount > ceiling else ""
+            )
+            details = f"{taxable_portion:,.0f} × {self.config.rate:.1%} = {amount:,.0f}{cap_note}"
 
         return Deduction(
             name=self.config.name,

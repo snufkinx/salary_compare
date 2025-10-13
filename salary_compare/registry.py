@@ -7,6 +7,7 @@ from .configs import (
     BULGARIA_FREELANCER,
     CZECHIA_FREELANCER,
     CZECHIA_SALARIED,
+    FRANCE_SALARIED,
     GERMANY_SALARIED,
     ISRAEL_SALARIED,
     MADRID_SALARIED,
@@ -74,6 +75,7 @@ TaxRegimeRegistry.register("germany-salaried", GERMANY_SALARIED)
 TaxRegimeRegistry.register("czechia-salaried", CZECHIA_SALARIED)
 TaxRegimeRegistry.register("czechia-freelancer", CZECHIA_FREELANCER)
 TaxRegimeRegistry.register("israel-salaried", ISRAEL_SALARIED)
+TaxRegimeRegistry.register("france-salaried", FRANCE_SALARIED)
 TaxRegimeRegistry.register("madrid-salaried", MADRID_SALARIED)
 TaxRegimeRegistry.register("barcelona-salaried", BARCELONA_SALARIED)
 TaxRegimeRegistry.register("valencia-salaried", VALENCIA_SALARIED)

@@ -2,6 +2,7 @@
 
 from .bulgaria import BULGARIA_FREELANCER
 from .czechia import CZECHIA_FREELANCER, CZECHIA_SALARIED
+from .france import FRANCE_SALARIED
 from .germany import GERMANY_SALARIED
 from .israel import ISRAEL_SALARIED
 from .portugal import PORTUGAL_FREELANCER, PORTUGAL_SALARIED
@@ -13,6 +14,7 @@ __all__ = [
     "CZECHIA_SALARIED",
     "CZECHIA_FREELANCER",
     "ISRAEL_SALARIED",
+    "FRANCE_SALARIED",
     "MADRID_SALARIED",
     "BARCELONA_SALARIED",
     "VALENCIA_SALARIED",

@@ -43,5 +43,6 @@ class Country(str, Enum):
     ROMANIA = "Romania"
     BULGARIA = "Bulgaria"
     PORTUGAL = "Portugal"
+    FRANCE = "France"
     USA = "USA"
     UK = "UK"
