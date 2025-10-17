@@ -340,3 +340,40 @@ msgstr "ביטוח לאומי על 70% מההכנסה ברוטו (שיעור פ�
 
 msgid "Progressive income tax on 25% of income (75% deemed expenses)"
 msgstr "מס הכנסה פרוגרסיבי על 25% מההכנסה (75% הוצאות מונחות)"
+
+# Tax regime titles
+msgid "Germany Salaried Employee"
+msgstr "עובד שכיר גרמניה"
+
+msgid "France Salaried Employee"
+msgstr "עובד שכיר צרפת"
+
+msgid "Madrid Salaried Employee"
+msgstr "עובד שכיר מדריד"
+
+msgid "Barcelona Salaried Employee"
+msgstr "עובד שכיר ברצלונה"
+
+msgid "Valencia Salaried Employee"
+msgstr "עובד שכיר ולנסיה"
+
+msgid "Portugal Salaried Employee"
+msgstr "עובד שכיר פורטוגל"
+
+msgid "Portugal Freelancer"
+msgstr "פרילנסר פורטוגל"
+
+msgid "Israel Salaried Employee"
+msgstr "עובד שכיר ישראל"
+
+msgid "Bulgaria Freelancer"
+msgstr "פרילנסר בולגריה"
+
+msgid "Romania Freelancer"
+msgstr "פרילנסר רומניה"
+
+msgid "Czechia Salaried Employee"
+msgstr "עובד שכיר צ'כיה"
+
+msgid "Czechia Freelancer"
+msgstr "פרילנסר צ'כיה"

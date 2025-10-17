@@ -341,3 +341,40 @@ msgstr "Социальное обеспечение с 70% валового до
 
 msgid "Progressive income tax on 25% of income (75% deemed expenses)"
 msgstr "Прогрессивный подоходный налог с 25% дохода (75% предполагаемых расходов)"
+
+# Tax regime titles
+msgid "Germany Salaried Employee"
+msgstr "Наемный работник Германии"
+
+msgid "France Salaried Employee"
+msgstr "Наемный работник Франции"
+
+msgid "Madrid Salaried Employee"
+msgstr "Наемный работник Мадрида"
+
+msgid "Barcelona Salaried Employee"
+msgstr "Наемный работник Барселоны"
+
+msgid "Valencia Salaried Employee"
+msgstr "Наемный работник Валенсии"
+
+msgid "Portugal Salaried Employee"
+msgstr "Наемный работник Португалии"
+
+msgid "Portugal Freelancer"
+msgstr "Фрилансер Португалии"
+
+msgid "Israel Salaried Employee"
+msgstr "Наемный работник Израиля"
+
+msgid "Bulgaria Freelancer"
+msgstr "Фрилансер Болгарии"
+
+msgid "Romania Freelancer"
+msgstr "Фрилансер Румынии"
+
+msgid "Czechia Salaried Employee"
+msgstr "Наемный работник Чехии"
+
+msgid "Czechia Freelancer"
+msgstr "Фрилансер Чехии"

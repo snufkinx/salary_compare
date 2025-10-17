@@ -94,7 +94,7 @@ with st.sidebar:
         country = regime.country.value
         if country not in regimes_by_country:
             regimes_by_country[country] = []
-        regimes_by_country[country].append((regime_key, regime.title))
+        regimes_by_country[country].append((regime_key, t(regime.title)))
     
     # Create checkboxes grouped by country
     selected_regimes = []
