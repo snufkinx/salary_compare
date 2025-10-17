@@ -43,24 +43,177 @@ def apply_rtl_support():
         
         /* RTL for table cells - ensure text aligns right within cells */
         .stTable td, .stTable th {
-            direction: rtl;
-            text-align: right;
+            direction: rtl !important;
+            text-align: right !important;
         }
         
         /* RTL for table data specifically */
         .stTable tbody td {
-            direction: rtl;
-            text-align: right;
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for table headers */
+        .stTable thead th {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for section headers (h1, h2, h3, etc.) */
+        h1, h2, h3, h4, h5, h6 {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for subheaders and markdown headers */
+        .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, 
+        .stMarkdown h4, .stMarkdown h5, .stMarkdown h6 {
+            direction: rtl !important;
+            text-align: right !important;
         }
         
         /* RTL for expanders */
         .streamlit-expander {
-            direction: rtl;
+            direction: rtl !important;
+        }
+        
+        /* RTL for expander headers */
+        .streamlit-expanderHeader {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for expander header content */
+        .streamlit-expanderHeader > div {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for expander header text */
+        .streamlit-expanderHeader p {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for expander header span elements */
+        .streamlit-expanderHeader span {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for expander header button elements */
+        .streamlit-expanderHeader button {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for all elements within expander header */
+        .streamlit-expanderHeader * {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* More specific targeting for expander header content */
+        .streamlit-expanderHeader .streamlit-expanderHeaderContent {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* Target expander header text more specifically */
+        .streamlit-expanderHeader .streamlit-expanderHeaderContent p,
+        .streamlit-expanderHeader .streamlit-expanderHeaderContent div,
+        .streamlit-expanderHeader .streamlit-expanderHeaderContent span {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* Force RTL for all text elements */
+        .streamlit-expanderHeader p,
+        .streamlit-expanderHeader div,
+        .streamlit-expanderHeader span,
+        .streamlit-expanderHeader strong,
+        .streamlit-expanderHeader em {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for table headers within expanders */
+        .streamlit-expanderContent table th {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for table headers in detailed breakdowns */
+        .streamlit-expanderContent .stTable th {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for all table elements within expanders */
+        .streamlit-expanderContent table {
+            direction: rtl !important;
+        }
+        
+        /* RTL for table cells within expanders */
+        .streamlit-expanderContent table td {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* More specific targeting for all table elements */
+        .streamlit-expanderContent .stTable th,
+        .streamlit-expanderContent .stTable td,
+        .streamlit-expanderContent .stTable thead th,
+        .streamlit-expanderContent .stTable tbody td {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* Force RTL for all content within expanders */
+        .streamlit-expanderContent * {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* Specific targeting for table headers in detailed breakdowns */
+        .streamlit-expanderContent h1,
+        .streamlit-expanderContent h2,
+        .streamlit-expanderContent h3,
+        .streamlit-expanderContent h4,
+        .streamlit-expanderContent h5,
+        .streamlit-expanderContent h6 {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for expander content */
+        .streamlit-expanderContent {
+            direction: rtl !important;
+            text-align: right !important;
         }
         
         /* RTL for metrics */
         .metric-container {
-            direction: rtl;
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for metric labels and values */
+        .metric-label, .metric-value {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for st.metric components */
+        .stMetric {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for st.metric label and value */
+        .stMetric > div {
+            direction: rtl !important;
+            text-align: right !important;
         }
         
         /* RTL for selectbox and other inputs */
