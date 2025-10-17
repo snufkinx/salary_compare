@@ -319,10 +319,10 @@ if selected_regimes:
                 # Convert deduction amount to selected currency
                 deduction_converted, _ = convert_amount(deduction.amount, selected_currency)
                 deduction_data.append({
-                    t("Deduction"): deduction.name,
+                    t("Deduction"): t(deduction.name),
                     t("Amount"): f"{symbol}{deduction_converted:,.2f}",
                     t("Rate"): f"{float(deduction.rate)*100:.1f}%",
-                    t("Details"): deduction.description
+                    t("Details"): t(deduction.description)
                 })
             
             st.table(deduction_data)

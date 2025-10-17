@@ -169,3 +169,175 @@ msgstr "lei Румынский лей"
 
 msgid "лв Bulgarian Lev"
 msgstr "лв Болгарский лев"
+
+# Deduction names and descriptions
+msgid "Pension Insurance"
+msgstr "Пенсионное страхование"
+
+msgid "Mandatory pension insurance contribution"
+msgstr "Обязательный взнос в пенсионное страхование"
+
+msgid "Health Insurance"
+msgstr "Медицинское страхование"
+
+msgid "Mandatory health insurance contribution"
+msgstr "Обязательный взнос в медицинское страхование"
+
+msgid "Unemployment Insurance"
+msgstr "Страхование от безработицы"
+
+msgid "Mandatory unemployment insurance contribution"
+msgstr "Обязательный взнос в страхование от безработицы"
+
+msgid "Long_Term_Care Insurance"
+msgstr "Страхование долгосрочного ухода"
+
+msgid "Mandatory long_term_care insurance contribution"
+msgstr "Обязательный взнос в страхование долгосрочного ухода"
+
+msgid "Income Tax"
+msgstr "Подоходный налог"
+
+msgid "Progressive income tax"
+msgstr "Прогрессивный подоходный налог"
+
+msgid "Solidarity Surcharge"
+msgstr "Солидарный взнос"
+
+msgid "Solidarity surcharge on income tax"
+msgstr "Солидарный взнос с подоходного налога"
+
+msgid "Social Security"
+msgstr "Социальное обеспечение"
+
+msgid "Social security contributions (employee portion) + MEI"
+msgstr "Взносы в социальное обеспечение (доля работника) + MEI"
+
+msgid "Social security contributions (self-declared income basis)"
+msgstr "Взносы в социальное обеспечение (на основе самостоятельно заявленного дохода)"
+
+msgid "Health insurance contributions (self-declared income basis)"
+msgstr "Взносы в медицинское страхование (на основе самостоятельно заявленного дохода)"
+
+msgid "Flat 10% income tax on profit"
+msgstr "Плоский 10% подоходный налог с прибыли"
+
+msgid "National Insurance"
+msgstr "Национальное страхование"
+
+msgid "Mandatory national insurance contribution (Bituach Leumi)"
+msgstr "Обязательный взнос в национальное страхование (Битуах Леуми)"
+
+msgid "Health Tax"
+msgstr "Налог на здравоохранение"
+
+msgid "Mandatory health tax contribution (Mas Briut)"
+msgstr "Обязательный взнос в налог на здравоохранение (Мас Бриут)"
+
+msgid "Pension"
+msgstr "Пенсия"
+
+msgid "Pension fund contribution (Gemel Pensia)"
+msgstr "Взнос в пенсионный фонд (Гемель Пенсия)"
+
+msgid "Keren Hishtalmut"
+msgstr "Керен Хиштальмут"
+
+msgid "Advanced training fund contribution (Keren Hishtalmut)"
+msgstr "Взнос в фонд повышения квалификации (Керен Хиштальмут)"
+
+msgid "Old-Age Insurance (Base)"
+msgstr "Страхование по старости (базовое)"
+
+msgid "Pension contributions up to SS ceiling"
+msgstr "Пенсионные взносы до потолка социального страхования"
+
+msgid "Old-Age Insurance (Supplementary)"
+msgstr "Страхование по старости (дополнительное)"
+
+msgid "Pension contributions on full salary"
+msgstr "Пенсионные взносы с полной зарплаты"
+
+msgid "CSG (General Social Contribution)"
+msgstr "CSG (Общий социальный взнос)"
+
+msgid "Funds social security (partially tax-deductible)"
+msgstr "Финансирует социальное обеспечение (частично вычитается из налогов)"
+
+msgid "CRDS (Social Debt Repayment)"
+msgstr "CRDS (Погашение социального долга)"
+
+msgid "Repayment of social security debt"
+msgstr "Погашение долга социального обеспечения"
+
+msgid "Supplementary Pension (Bracket 1)"
+msgstr "Дополнительная пенсия (скобка 1)"
+
+msgid "Agirc-Arrco pension - up to ceiling"
+msgstr "Пенсия Agirc-Arrco - до потолка"
+
+msgid "Supplementary Pension (Bracket 2)"
+msgstr "Дополнительная пенсия (скобка 2)"
+
+msgid "Agirc-Arrco pension - above ceiling"
+msgstr "Пенсия Agirc-Arrco - выше потолка"
+
+msgid "CEG (Balance Contribution - B1)"
+msgstr "CEG (Взнос баланса - B1)"
+
+msgid "Contribution for pension balance"
+msgstr "Взнос для пенсионного баланса"
+
+msgid "CEG (Balance Contribution - B2)"
+msgstr "CEG (Взнос баланса - B2)"
+
+msgid "Contribution for pension balance - above ceiling"
+msgstr "Взнос для пенсионного баланса - выше потолка"
+
+msgid "Two-tier income tax"
+msgstr "Двухуровневый подоходный налог"
+
+msgid "Income tax on 40% of gross income with standard discount"
+msgstr "Подоходный налог с 40% валового дохода со стандартной скидкой"
+
+msgid "Social security contribution on 50% of taxable income"
+msgstr "Взнос в социальное обеспечение с 50% налогооблагаемого дохода"
+
+msgid "Health insurance contribution on 50% of taxable income"
+msgstr "Взнос в медицинское страхование с 50% налогооблагаемого дохода"
+
+msgid "Microenterprise Tax"
+msgstr "Налог на микропредприятие"
+
+msgid "1% tax on gross revenue (microenterprise regime)"
+msgstr "1% налог с валовой выручки (режим микропредприятия)"
+
+msgid "Dividend Tax (8%)"
+msgstr "Налог на дивиденды (8%)"
+
+msgid "8% tax on dividend distribution (when extracting profits)"
+msgstr "8% налог на распределение дивидендов (при извлечении прибыли)"
+
+msgid "Mandatory health insurance (minimum basis ~€720/year)"
+msgstr "Обязательное медицинское страхование (минимальная база ~€720/год)"
+
+msgid "Social Security (Optional)"
+msgstr "Социальное обеспечение (добровольное)"
+
+msgid "Optional social security for pension rights (~€4,000/year recommended)"
+msgstr "Добровольное социальное обеспечение для пенсионных прав (~€4,000/год рекомендуется)"
+
+msgid "Social Security (TSU)"
+msgstr "Социальное обеспечение (TSU)"
+
+msgid "Social security contributions (employee portion)"
+msgstr "Взносы в социальное обеспечение (доля работника)"
+
+msgid "Income Tax (IRS)"
+msgstr "Подоходный налог (IRS)"
+
+msgid "Social security on 70% of gross income (freelancer rate)"
+msgstr "Социальное обеспечение с 70% валового дохода (ставка фрилансера)"
+
+msgid "Progressive income tax on 25% of income (75% deemed expenses)"
+msgstr "Прогрессивный подоходный налог с 25% дохода (75% предполагаемых расходов)"

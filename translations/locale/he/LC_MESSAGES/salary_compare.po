@@ -168,3 +168,175 @@ msgstr "lei לאו רומני"
 
 msgid "лв Bulgarian Lev"
 msgstr "лв לב בולגרי"
+
+# Deduction names and descriptions
+msgid "Pension Insurance"
+msgstr "ביטוח פנסיה"
+
+msgid "Mandatory pension insurance contribution"
+msgstr "תרומה חובה לביטוח פנסיה"
+
+msgid "Health Insurance"
+msgstr "ביטוח בריאות"
+
+msgid "Mandatory health insurance contribution"
+msgstr "תרומה חובה לביטוח בריאות"
+
+msgid "Unemployment Insurance"
+msgstr "ביטוח אבטלה"
+
+msgid "Mandatory unemployment insurance contribution"
+msgstr "תרומה חובה לביטוח אבטלה"
+
+msgid "Long_Term_Care Insurance"
+msgstr "ביטוח סיעוד"
+
+msgid "Mandatory long_term_care insurance contribution"
+msgstr "תרומה חובה לביטוח סיעוד"
+
+msgid "Income Tax"
+msgstr "מס הכנסה"
+
+msgid "Progressive income tax"
+msgstr "מס הכנסה פרוגרסיבי"
+
+msgid "Solidarity Surcharge"
+msgstr "תוספת סולידריות"
+
+msgid "Solidarity surcharge on income tax"
+msgstr "תוספת סולידריות על מס הכנסה"
+
+msgid "Social Security"
+msgstr "ביטוח לאומי"
+
+msgid "Social security contributions (employee portion) + MEI"
+msgstr "תרומות ביטוח לאומי (חלק העובד) + MEI"
+
+msgid "Social security contributions (self-declared income basis)"
+msgstr "תרומות ביטוח לאומי (בסיס הכנסה מוצהר עצמית)"
+
+msgid "Health insurance contributions (self-declared income basis)"
+msgstr "תרומות ביטוח בריאות (בסיס הכנסה מוצהר עצמית)"
+
+msgid "Flat 10% income tax on profit"
+msgstr "מס הכנסה שטוח 10% על רווח"
+
+msgid "National Insurance"
+msgstr "ביטוח לאומי"
+
+msgid "Mandatory national insurance contribution (Bituach Leumi)"
+msgstr "תרומה חובה לביטוח לאומי (ביטוח לאומי)"
+
+msgid "Health Tax"
+msgstr "מס בריאות"
+
+msgid "Mandatory health tax contribution (Mas Briut)"
+msgstr "תרומה חובה למס בריאות (מס בריאות)"
+
+msgid "Pension"
+msgstr "פנסיה"
+
+msgid "Pension fund contribution (Gemel Pensia)"
+msgstr "תרומה לקרן פנסיה (גמל פנסיה)"
+
+msgid "Keren Hishtalmut"
+msgstr "קרן השתלמות"
+
+msgid "Advanced training fund contribution (Keren Hishtalmut)"
+msgstr "תרומה לקרן השתלמות (קרן השתלמות)"
+
+msgid "Old-Age Insurance (Base)"
+msgstr "ביטוח זקנה (בסיסי)"
+
+msgid "Pension contributions up to SS ceiling"
+msgstr "תרומות פנסיה עד תקרת ביטוח לאומי"
+
+msgid "Old-Age Insurance (Supplementary)"
+msgstr "ביטוח זקנה (משלים)"
+
+msgid "Pension contributions on full salary"
+msgstr "תרומות פנסיה על משכורת מלאה"
+
+msgid "CSG (General Social Contribution)"
+msgstr "CSG (תרומה חברתית כללית)"
+
+msgid "Funds social security (partially tax-deductible)"
+msgstr "מממן ביטוח לאומי (ניתן לניכוי חלקי במס)"
+
+msgid "CRDS (Social Debt Repayment)"
+msgstr "CRDS (פירעון חוב חברתי)"
+
+msgid "Repayment of social security debt"
+msgstr "פירעון חוב ביטוח לאומי"
+
+msgid "Supplementary Pension (Bracket 1)"
+msgstr "פנסיה משלימה (סוגר 1)"
+
+msgid "Agirc-Arrco pension - up to ceiling"
+msgstr "פנסיה Agirc-Arrco - עד תקרה"
+
+msgid "Supplementary Pension (Bracket 2)"
+msgstr "פנסיה משלימה (סוגר 2)"
+
+msgid "Agirc-Arrco pension - above ceiling"
+msgstr "פנסיה Agirc-Arrco - מעל תקרה"
+
+msgid "CEG (Balance Contribution - B1)"
+msgstr "CEG (תרומת איזון - B1)"
+
+msgid "Contribution for pension balance"
+msgstr "תרומה לאיזון פנסיה"
+
+msgid "CEG (Balance Contribution - B2)"
+msgstr "CEG (תרומת איזון - B2)"
+
+msgid "Contribution for pension balance - above ceiling"
+msgstr "תרומה לאיזון פנסיה - מעל תקרה"
+
+msgid "Two-tier income tax"
+msgstr "מס הכנסה דו-שלבי"
+
+msgid "Income tax on 40% of gross income with standard discount"
+msgstr "מס הכנסה על 40% מההכנסה ברוטו עם הנחה סטנדרטית"
+
+msgid "Social security contribution on 50% of taxable income"
+msgstr "תרומה לביטוח לאומי על 50% מההכנסה החייבת במס"
+
+msgid "Health insurance contribution on 50% of taxable income"
+msgstr "תרומה לביטוח בריאות על 50% מההכנסה החייבת במס"
+
+msgid "Microenterprise Tax"
+msgstr "מס מיקרו-עסק"
+
+msgid "1% tax on gross revenue (microenterprise regime)"
+msgstr "מס 1% על הכנסה ברוטו (משטר מיקרו-עסק)"
+
+msgid "Dividend Tax (8%)"
+msgstr "מס דיבידנד (8%)"
+
+msgid "8% tax on dividend distribution (when extracting profits)"
+msgstr "מס 8% על חלוקת דיבידנדים (בעת משיכת רווחים)"
+
+msgid "Mandatory health insurance (minimum basis ~€720/year)"
+msgstr "ביטוח בריאות חובה (בסיס מינימלי ~€720/שנה)"
+
+msgid "Social Security (Optional)"
+msgstr "ביטוח לאומי (אופציונלי)"
+
+msgid "Optional social security for pension rights (~€4,000/year recommended)"
+msgstr "ביטוח לאומי אופציונלי לזכויות פנסיה (~€4,000/שנה מומלץ)"
+
+msgid "Social Security (TSU)"
+msgstr "ביטוח לאומי (TSU)"
+
+msgid "Social security contributions (employee portion)"
+msgstr "תרומות ביטוח לאומי (חלק העובד)"
+
+msgid "Income Tax (IRS)"
+msgstr "מס הכנסה (IRS)"
+
+msgid "Social security on 70% of gross income (freelancer rate)"
+msgstr "ביטוח לאומי על 70% מההכנסה ברוטו (שיעור פרילנסר)"
+
+msgid "Progressive income tax on 25% of income (75% deemed expenses)"
+msgstr "מס הכנסה פרוגרסיבי על 25% מההכנסה (75% הוצאות מונחות)"
