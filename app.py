@@ -299,6 +299,16 @@ def apply_rtl_support():
         .stColumns > div {
             direction: rtl;
         }
+        
+        /* Fix Hebrew sidebar country name alignment */
+        .stSidebar .country-name {
+            text-align: right !important;
+            direction: rtl !important;
+            width: 100% !important;
+            margin: 4px 0 !important;
+            padding: 8px 12px !important;
+            box-sizing: border-box !important;
+        }
         </style>
         """, unsafe_allow_html=True)
 
