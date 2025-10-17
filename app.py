@@ -73,7 +73,7 @@ with st.sidebar:
         index=0  # Default to EUR
     )
     
-    st.markdown(f"### {_('Select Tax Regimes')}")
+    st.markdown(f"### {t('Select Tax Regimes')}")
     
     # Get available regimes and group by country
     available_regimes = TaxRegimeRegistry.get_keys()
@@ -121,7 +121,7 @@ if selected_regimes:
     regime_keys = [item[1] for item in results_with_keys]
     
     # Summary comparison table
-    st.subheader(f"📊 {_('Summary Comparison')}")
+    st.subheader(f"📊 {t('Summary Comparison')}")
     summary_data = []
     for result in results:
         effective_tax = (1 - float(result.net_salary/result.gross_salary)) * 100
@@ -147,10 +147,10 @@ if selected_regimes:
     
     # Comparison chart
     if len(results) > 1:
-        st.subheader(f"📈 {_('Comparison Chart')}")
+        st.subheader(f"📈 {t('Comparison Chart')}")
         
         # Create tabs for different chart views
-        tab1, tab2 = st.tabs([f"📊 {_('Country Comparison')}", f"📈 {_('Salary Progression')}"])
+        tab1, tab2 = st.tabs([f"📊 {t('Country Comparison')}", f"📈 {t('Salary Progression')}"])
         
         with tab1:
             # Country comparison (existing bars + tax rates)
@@ -276,7 +276,7 @@ if selected_regimes:
             st.plotly_chart(fig2, use_container_width=True)
     
     # Detailed breakdowns
-    st.subheader(f"🔍 {_('Detailed Breakdowns')}")
+    st.subheader(f"🔍 {t('Detailed Breakdowns')}")
     
     for i, result in enumerate(results):
         with st.expander(f"📊 {result.country}", expanded=True):
@@ -300,10 +300,10 @@ if selected_regimes:
                 st.metric(t("Effective Tax"), f"{effective_tax:.1f}%")
             
             # Tax base
-            st.markdown(f"**{_('Tax Base')}:** {symbol}{tax_base_converted:,.2f}")
+            st.markdown(f"**{t('Tax Base')}:** {symbol}{tax_base_converted:,.2f}")
             
             # Deductions breakdown
-            st.markdown(f"**{_('Deductions')}:**")
+            st.markdown(f"**{t('Deductions')}:**")
             deduction_data = []
             for deduction in result.deductions:
                 # Convert deduction amount to selected currency
@@ -319,7 +319,7 @@ if selected_regimes:
             
             # Tax brackets if available
             if hasattr(result, 'income_tax_brackets') and result.income_tax_brackets:
-                st.markdown(f"**{_('Income Tax Brackets')}:**")
+                st.markdown(f"**{t('Income Tax Brackets')}:**")
                 bracket_data = []
                 for bracket in result.income_tax_brackets:
                     # Convert bracket amounts to selected currency
@@ -337,8 +337,8 @@ if selected_regimes:
                 st.table(bracket_data)
 
 else:
-    st.info(f"👈 {_('Please select at least one tax regime from the sidebar to see calculations.')}")
+    st.info(f"👈 {t('Please select at least one tax regime from the sidebar to see calculations.')}")
 
 # Footer
 st.markdown("---")
-st.markdown(f"*{_('Change inputs in the sidebar to see real-time updates')}*")
+st.markdown(f"*{t('Change inputs in the sidebar to see real-time updates')}*")
