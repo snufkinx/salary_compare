@@ -409,3 +409,25 @@ msgstr "עובד שכיר"
 
 msgid "Freelancer"
 msgstr "פרילנסר"
+
+# Chart elements
+msgid "Country Comparison"
+msgstr "השוואת מדינות"
+
+msgid "Salary Progression"
+msgstr "התקדמות משכורת"
+
+msgid "Net Salary"
+msgstr "משכורת נטו"
+
+msgid "Tax Rate %"
+msgstr "שיעור מס %"
+
+msgid "Countries"
+msgstr "מדינות"
+
+msgid "Net Salary vs Gross Salary Progression"
+msgstr "התקדמות משכורת נטו מול ברוטו"
+
+msgid "Gross Salary"
+msgstr "משכורת ברוטו"

@@ -410,3 +410,25 @@ msgstr "Наемный работник"
 
 msgid "Freelancer"
 msgstr "Фрилансер"
+
+# Chart elements
+msgid "Country Comparison"
+msgstr "Сравнение стран"
+
+msgid "Salary Progression"
+msgstr "Прогрессия зарплаты"
+
+msgid "Net Salary"
+msgstr "Чистая зарплата"
+
+msgid "Tax Rate %"
+msgstr "Налоговая ставка %"
+
+msgid "Countries"
+msgstr "Страны"
+
+msgid "Net Salary vs Gross Salary Progression"
+msgstr "Прогрессия чистой зарплаты против валовой зарплаты"
+
+msgid "Gross Salary"
+msgstr "Валовая зарплата"

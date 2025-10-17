@@ -178,7 +178,7 @@ if selected_regimes:
             
             # Net salary bars
             fig1.add_trace(go.Bar(
-                name='Net Salary',
+                name=t('Net Salary'),
                 x=countries,
                 y=net_salaries_converted,
                 yaxis='y',
@@ -190,7 +190,7 @@ if selected_regimes:
             
             # Tax rate line
             fig1.add_trace(go.Scatter(
-                name='Tax Rate %',
+                name=t('Tax Rate %'),
                 x=countries,
                 y=tax_rates,
                 yaxis='y2',
@@ -205,10 +205,10 @@ if selected_regimes:
             _, currency_symbol = convert_amount(1, selected_currency)
             
             fig1.update_layout(
-                title=f'Country Comparison ({currency_symbol}{salary:,} Gross)',
-                xaxis_title='Countries',
-                yaxis=dict(title=f'Net Salary ({currency_symbol})', side='left'),
-                yaxis2=dict(title='Tax Rate (%)', side='right', overlaying='y'),
+                title=f"{t('Country Comparison')} ({currency_symbol}{salary:,} {t('Gross Salary')})",
+                xaxis_title=t('Countries'),
+                yaxis=dict(title=f"{t('Net Salary')} ({currency_symbol})", side='left'),
+                yaxis2=dict(title=f"{t('Tax Rate %')} (%)", side='right', overlaying='y'),
                 hovermode='x unified',
                 height=500
             )
@@ -265,9 +265,9 @@ if selected_regimes:
                 ))
             
             fig2.update_layout(
-                title='Net Salary vs Gross Salary Progression',
-                xaxis_title=f'Gross Salary ({currency_symbol})',
-                yaxis_title=f'Net Salary ({currency_symbol})',
+                title=t('Net Salary vs Gross Salary Progression'),
+                xaxis_title=f"{t('Gross Salary')} ({currency_symbol})",
+                yaxis_title=f"{t('Net Salary')} ({currency_symbol})",
                 hovermode='x unified',
                 height=500,
                 showlegend=True
