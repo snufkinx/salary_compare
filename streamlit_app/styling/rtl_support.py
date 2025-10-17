@@ -177,25 +177,6 @@ def apply_rtl_support():
             text-align: right !important;
         }
         
-        /* RTL for sidebar - move to right side */
-        .css-1d391kg {
-            order: 2 !important;
-        }
-        
-        /* RTL for main content - move to left side */
-        .main .block-container {
-            order: 1 !important;
-        }
-        
-        /* RTL for sidebar positioning */
-        .stSidebar {
-            order: 2 !important;
-        }
-        
-        /* RTL for main content positioning */
-        .main {
-            order: 1 !important;
-        }
         
         /* RTL for metrics */
         .metric-container {
