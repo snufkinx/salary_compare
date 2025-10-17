@@ -44,15 +44,20 @@ poetry install
 
 **Easy Commands:**
 ```bash
-# Option 1: Using Make (recommended)
+# Option 1: Using Poetry scripts (recommended)
+poetry run app
+# or
+poetry run salary-compare
+
+# Option 2: Using Make
 make run
 # or
 make app
 
-# Option 2: Using the run script
+# Option 3: Using the run script
 python run_app.py
 
-# Option 3: Direct Poetry command
+# Option 4: Direct Streamlit command
 poetry run streamlit run streamlit_app/main.py
 ```
 

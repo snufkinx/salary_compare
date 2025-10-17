@@ -23,8 +23,8 @@ def initialize_session_state():
         st.session_state.selected_regimes = []
 
 
-def main():
-    """Main application entry point."""
+def streamlit_app():
+    """Streamlit application logic."""
     # Page configuration
     st.set_page_config(
         page_title="Salary Comparison Tool",
@@ -67,5 +67,40 @@ def main():
     st.markdown(f"*{t('Change inputs in the sidebar to see real-time updates')}*")
 
 
+def main():
+    """Script entry point - runs the Streamlit app."""
+    import subprocess
+    import sys
+    import os
+    
+    print("🚀 Starting Salary Comparison Tool...")
+    print("📱 Opening in your default browser...")
+    print("🌍 Available languages: English, Русский, עברית, العربية")
+    print("💡 Tip: Use Ctrl+C to stop the app")
+    print("-" * 50)
+    
+    try:
+        # Get the directory of this file
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        app_path = os.path.join(current_dir, "main.py")
+        
+        # Run the streamlit app
+        subprocess.run([
+            sys.executable, "-m", "streamlit", "run", 
+            app_path,
+            "--server.port", "8501",
+            "--server.address", "localhost"
+        ], check=True)
+    except KeyboardInterrupt:
+        print("\n👋 App stopped by user")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Error running app: {e}")
+        sys.exit(1)
+    except FileNotFoundError:
+        print("❌ Streamlit not found. Please install dependencies:")
+        print("   poetry install")
+        sys.exit(1)
+
+
 if __name__ == "__main__":
-    main()
+    streamlit_app()
