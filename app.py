@@ -308,10 +308,13 @@ if 'selected_language' not in st.session_state:
 if 'selected_regimes' not in st.session_state:
     st.session_state.selected_regimes = []
 
+# Create a local translation function
+def t(message: str) -> str:
+    """Get translated message."""
+    return get_translation_manager()._(message)
+
 # Sidebar for inputs - MUST be first to set language before any content
 with st.sidebar:
-    st.header("⚙️ Configuration")
-    
     # Language selector
     available_languages = get_translation_manager().get_available_languages()
     selected_language = st.selectbox(
@@ -328,19 +331,7 @@ with st.sidebar:
     
     set_language(selected_language)
 
-# Apply RTL support for Hebrew
-apply_rtl_support()
-
-# Create a local translation function
-def t(message: str) -> str:
-    """Get translated message."""
-    return get_translation_manager()._(message)
-
-# Title
-st.title(f"🌍 {t('Salary Comparison Tool')}")
-st.markdown(t("Compare net salaries across different countries and employment types"))
-
-# Sidebar for inputs
+# Now we can use translations
 with st.sidebar:
     # Salary input
     salary = st.number_input(
@@ -353,7 +344,6 @@ with st.sidebar:
     )
     
     # Currency selection
-    st.markdown(f"### 💱 {t('Display Currency')}")
     available_currencies = {
         "EUR": "€ Euro",
         "USD": "$ US Dollar", 
@@ -401,6 +391,13 @@ with st.sidebar:
     
     # Update selected_regimes from session state
     selected_regimes = st.session_state.selected_regimes.copy()
+
+# Apply RTL support for Hebrew
+apply_rtl_support()
+
+# Title
+st.title(f"🌍 {t('Salary Comparison Tool')}")
+st.markdown(t("Compare net salaries across different countries and employment types"))
 
 # Currency conversion helper
 def convert_amount(amount, currency):

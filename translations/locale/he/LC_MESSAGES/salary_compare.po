@@ -35,6 +35,12 @@ msgstr "מטבע תצוגה"
 msgid "Choose display currency:"
 msgstr "בחר מטבע תצוגה:"
 
+msgid "Configuration"
+msgstr "תצורה"
+
+msgid "Language"
+msgstr "שפה"
+
 msgid "Select Tax Regimes"
 msgstr "בחר משטרי מס"
 
