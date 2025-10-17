@@ -32,6 +32,9 @@ msgstr "Валовая зарплата (€)"
 msgid "Display Currency"
 msgstr "Валюта отображения"
 
+msgid "Choose display currency:"
+msgstr "Выберите валюту отображения:"
+
 msgid "Select Tax Regimes"
 msgstr "Выберите налоговые режимы"
 

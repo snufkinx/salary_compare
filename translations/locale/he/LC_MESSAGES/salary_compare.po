@@ -32,6 +32,9 @@ msgstr "משכורת ברוטו (€)"
 msgid "Display Currency"
 msgstr "מטבע תצוגה"
 
+msgid "Choose display currency:"
+msgstr "בחר מטבע תצוגה:"
+
 msgid "Select Tax Regimes"
 msgstr "בחר משטרי מס"
 
