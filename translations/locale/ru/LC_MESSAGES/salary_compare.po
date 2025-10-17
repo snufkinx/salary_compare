@@ -432,3 +432,74 @@ msgstr "Прогрессия чистой зарплаты против вало
 
 msgid "Gross Salary"
 msgstr "Валовая зарплата"
+
+# Additional deduction names and descriptions
+msgid "Old-Age Insurance (Base)"
+msgstr "Пенсионное страхование (базовое)"
+
+msgid "Old-Age Insurance (Supplementary)"
+msgstr "Пенсионное страхование (дополнительное)"
+
+msgid "CSG (General Social Contribution)"
+msgstr "CSG (Общий социальный взнос)"
+
+msgid "CRDS (Social Debt Repayment)"
+msgstr "CRDS (Погашение социального долга)"
+
+msgid "Supplementary Pension (Bracket 1)"
+msgstr "Дополнительная пенсия (скобка 1)"
+
+msgid "Supplementary Pension (Bracket 2)"
+msgstr "Дополнительная пенсия (скобка 2)"
+
+msgid "CEG (Balance Contribution - B1)"
+msgstr "CEG (Балансовый взнос - B1)"
+
+msgid "CEG (Balance Contribution - B2)"
+msgstr "CEG (Балансовый взнос - B2)"
+
+msgid "Social Security (TSU)"
+msgstr "Социальное обеспечение (TSU)"
+
+msgid "Income Tax (IRS)"
+msgstr "Подоходный налог (IRS)"
+
+msgid "National Insurance"
+msgstr "Национальное страхование"
+
+msgid "Health Tax"
+msgstr "Налог на здравоохранение"
+
+msgid "Keren Hishtalmut"
+msgstr "Керен Хиштальмут"
+
+msgid "Microenterprise Tax"
+msgstr "Налог на микропредприятие"
+
+msgid "Dividend Tax (8%)"
+msgstr "Налог на дивиденды (8%)"
+
+msgid "Social Security (Optional)"
+msgstr "Социальное обеспечение (добровольное)"
+
+msgid "Pension Insurance"
+msgstr "Пенсионное страхование"
+
+msgid "Unemployment Insurance"
+msgstr "Страхование от безработицы"
+
+msgid "Long_Term_Care Insurance"
+msgstr "Страхование долгосрочного ухода"
+
+msgid "Solidarity Surcharge"
+msgstr "Солидарный взнос"
+
+msgid "Mandatory social security contribution"
+msgstr "Обязательный взнос в социальное обеспечение"
+
+# Chart hover labels
+msgid "Gross:"
+msgstr "Валовая:"
+
+msgid "Net:"
+msgstr "Чистая:"

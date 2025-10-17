@@ -259,8 +259,8 @@ if selected_regimes:
                     line=dict(color=colors[i % len(colors)], width=3),
                     marker=dict(size=6),
                     hovertemplate=f'<b>{t(result.country)} {t(result.employment_type)}</b><br>' +
-                                f'Gross: {currency_symbol}%{{x:,.0f}}<br>' +
-                                f'Net: {currency_symbol}%{{y:,.0f}}<br>' +
+                                f'{t("Gross:")} {currency_symbol}%{{x:,.0f}}<br>' +
+                                f'{t("Net:")} {currency_symbol}%{{y:,.0f}}<br>' +
                                 '<extra></extra>'
                 ))
             

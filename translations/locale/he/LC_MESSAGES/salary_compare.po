@@ -431,3 +431,74 @@ msgstr "התקדמות משכורת נטו מול ברוטו"
 
 msgid "Gross Salary"
 msgstr "משכורת ברוטו"
+
+# Additional deduction names and descriptions
+msgid "Old-Age Insurance (Base)"
+msgstr "ביטוח זקנה (בסיסי)"
+
+msgid "Old-Age Insurance (Supplementary)"
+msgstr "ביטוח זקנה (משלים)"
+
+msgid "CSG (General Social Contribution)"
+msgstr "CSG (תרומה חברתית כללית)"
+
+msgid "CRDS (Social Debt Repayment)"
+msgstr "CRDS (פירעון חוב חברתי)"
+
+msgid "Supplementary Pension (Bracket 1)"
+msgstr "פנסיה משלימה (סוגר 1)"
+
+msgid "Supplementary Pension (Bracket 2)"
+msgstr "פנסיה משלימה (סוגר 2)"
+
+msgid "CEG (Balance Contribution - B1)"
+msgstr "CEG (תרומת איזון - B1)"
+
+msgid "CEG (Balance Contribution - B2)"
+msgstr "CEG (תרומת איזון - B2)"
+
+msgid "Social Security (TSU)"
+msgstr "ביטוח לאומי (TSU)"
+
+msgid "Income Tax (IRS)"
+msgstr "מס הכנסה (IRS)"
+
+msgid "National Insurance"
+msgstr "ביטוח לאומי"
+
+msgid "Health Tax"
+msgstr "מס בריאות"
+
+msgid "Keren Hishtalmut"
+msgstr "קרן השתלמות"
+
+msgid "Microenterprise Tax"
+msgstr "מס מיקרו-עסק"
+
+msgid "Dividend Tax (8%)"
+msgstr "מס דיבידנד (8%)"
+
+msgid "Social Security (Optional)"
+msgstr "ביטוח לאומי (אופציונלי)"
+
+msgid "Pension Insurance"
+msgstr "ביטוח פנסיה"
+
+msgid "Unemployment Insurance"
+msgstr "ביטוח אבטלה"
+
+msgid "Long_Term_Care Insurance"
+msgstr "ביטוח סיעוד"
+
+msgid "Solidarity Surcharge"
+msgstr "תשלום סולידריות"
+
+msgid "Mandatory social security contribution"
+msgstr "תרומה חובה לביטוח לאומי"
+
+# Chart hover labels
+msgid "Gross:"
+msgstr "ברוטו:"
+
+msgid "Net:"
+msgstr "נטו:"
