@@ -204,12 +204,12 @@ if selected_regimes:
             ))
             
             # Get currency symbol for display
-            _, currency_symbol = convert_amount(1, selected_currency)
+            _, symbol = convert_amount(1, selected_currency)
             
             fig1.update_layout(
-                title=f"{t('Country Comparison')} ({currency_symbol}{salary:,} {t('Gross Salary')})",
+                title=f"{t('Country Comparison')} ({symbol}{salary:,} {t('Gross Salary')})",
                 xaxis_title=t('Countries'),
-                yaxis=dict(title=f"{t('Net Salary')} ({currency_symbol})", side='left'),
+                yaxis=dict(title=f"{t('Net Salary')} ({symbol})", side='left'),
                 yaxis2=dict(title=f"{t('Tax Rate %')} (%)", side='right', overlaying='y'),
                 hovermode='x unified',
                 height=500
@@ -235,7 +235,7 @@ if selected_regimes:
             colors = ['#667eea', '#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff', '#ff9f40']
             
             # Get currency symbol for display
-            _, currency_symbol = convert_amount(1, selected_currency)
+            _, symbol = convert_amount(1, selected_currency)
             
             for i, result in enumerate(results):
                 # Calculate net salary for each gross salary point
