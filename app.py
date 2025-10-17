@@ -253,14 +253,18 @@ if selected_regimes:
                         net_values.append(0)
                 
                 # Add line for this country/employment type
+                country_name = t(result.country)
+                employment_name = t(result.employment_type)
+                legend_name = f'{country_name} {employment_name}'
+                
                 fig2.add_trace(go.Scatter(
-                    name=f'{t(result.country)} {t(result.employment_type)}',
+                    name=legend_name,
                     x=x_values_converted,
                     y=net_values,
                     mode='lines+markers',
                     line=dict(color=colors[i % len(colors)], width=3),
                     marker=dict(size=6),
-                    hovertemplate=f'<b>{t(result.country)} {t(result.employment_type)}</b><br>' +
+                    hovertemplate=f'<b>{country_name} {employment_name}</b><br>' +
                                 f'{t("Gross:")} {currency_symbol}%{{x:,.0f}}<br>' +
                                 f'{t("Net:")} {currency_symbol}%{{y:,.0f}}<br>' +
                                 '<extra></extra>'
@@ -272,7 +276,15 @@ if selected_regimes:
                 yaxis_title=f"{t('Net Salary')} ({currency_symbol})",
                 hovermode='x unified',
                 height=500,
-                showlegend=True
+                showlegend=True,
+                legend=dict(
+                    orientation="v",
+                    yanchor="top",
+                    y=1,
+                    xanchor="left",
+                    x=1.02
+                ),
+                margin=dict(r=150)  # Add right margin for legend
             )
             
             # Add current salary point as vertical line
