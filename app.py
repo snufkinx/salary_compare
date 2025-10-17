@@ -353,7 +353,12 @@ def get_country_with_emoji(country_name: str, translated_name: str = None) -> st
     emoji = COUNTRY_EMOJIS.get(country_name, "🌍")
     # Use translated name if provided, otherwise use original
     display_name = translated_name if translated_name else country_name
-    return f"{emoji} {display_name}"
+    
+    # For Hebrew (RTL), put emoji on the right side
+    if st.session_state.selected_language == 'he':
+        return f"{display_name} {emoji}"
+    else:
+        return f"{emoji} {display_name}"
 
 # Sidebar for inputs - MUST be first to set language before any content
 with st.sidebar:
