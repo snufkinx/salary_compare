@@ -12,11 +12,6 @@ from salary_compare.universal_calculator import UniversalTaxCalculator
 from salary_compare.services.currency import CurrencyConverter
 from translations.translation_manager import set_language, get_translation_manager
 
-# Create a local translation function
-def t(message: str) -> str:
-    """Get translated message."""
-    return get_translation_manager()._(message)
-
 # Page configuration
 st.set_page_config(
     page_title="Salary Comparison Tool",
@@ -24,11 +19,11 @@ st.set_page_config(
     layout="wide"
 )
 
-# Title
-st.title(f"🌍 {t('Salary Comparison Tool')}")
-st.markdown(t("Compare net salaries across different countries and employment types"))
+# Initialize session state for language
+if 'selected_language' not in st.session_state:
+    st.session_state.selected_language = 'en'
 
-# Sidebar for inputs
+# Sidebar for inputs - MUST be first to set language before any content
 with st.sidebar:
     st.header("⚙️ Configuration")
     
@@ -38,12 +33,27 @@ with st.sidebar:
         "🌍 Language",
         options=list(available_languages.keys()),
         format_func=lambda x: available_languages[x],
-        index=0
+        index=list(available_languages.keys()).index(st.session_state.selected_language) if st.session_state.selected_language in available_languages else 0
     )
     
-    # Set the language
-    set_language(selected_language)
+    # Update session state and set language
+    if selected_language != st.session_state.selected_language:
+        st.session_state.selected_language = selected_language
+        st.rerun()
     
+    set_language(selected_language)
+
+# Create a local translation function
+def t(message: str) -> str:
+    """Get translated message."""
+    return get_translation_manager()._(message)
+
+# Title
+st.title(f"🌍 {t('Salary Comparison Tool')}")
+st.markdown(t("Compare net salaries across different countries and employment types"))
+
+# Sidebar for inputs
+with st.sidebar:
     # Salary input
     salary = st.number_input(
         t("Gross Salary (€)"),
