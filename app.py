@@ -19,9 +19,11 @@ st.set_page_config(
     layout="wide"
 )
 
-# Initialize session state for language
+# Initialize session state for language and selected regimes
 if 'selected_language' not in st.session_state:
     st.session_state.selected_language = 'en'
+if 'selected_regimes' not in st.session_state:
+    st.session_state.selected_regimes = []
 
 # Sidebar for inputs - MUST be first to set language before any content
 with st.sidebar:
@@ -101,8 +103,18 @@ with st.sidebar:
     for country, regimes in regimes_by_country.items():
         st.markdown(f"**{country}**")
         for regime_key, title in regimes:
-            if st.checkbox(title, key=regime_key):
+            # Use session state to preserve selections across language changes
+            is_selected = regime_key in st.session_state.selected_regimes
+            if st.checkbox(title, value=is_selected, key=regime_key):
+                if regime_key not in st.session_state.selected_regimes:
+                    st.session_state.selected_regimes.append(regime_key)
                 selected_regimes.append(regime_key)
+            else:
+                if regime_key in st.session_state.selected_regimes:
+                    st.session_state.selected_regimes.remove(regime_key)
+    
+    # Update selected_regimes from session state
+    selected_regimes = st.session_state.selected_regimes.copy()
 
 # Currency conversion helper
 def convert_amount(amount, currency):
