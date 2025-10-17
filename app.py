@@ -164,7 +164,7 @@ if selected_regimes:
         
         with tab1:
             # Country comparison (existing bars + tax rates)
-            countries = [r.country for r in results]
+            countries = [t(r.country) for r in results]
             net_salaries = [float(r.net_salary) for r in results]
             tax_rates = [(1 - float(r.net_salary/r.gross_salary))*100 for r in results]
             
@@ -185,7 +185,8 @@ if selected_regimes:
                 offsetgroup=1,
                 marker_color='#2E8B57',
                 text=[f"{symbol}{s:,.0f}" for s in net_salaries_converted],
-                textposition='auto'
+                textposition='auto',
+                hovertemplate=f'<b>%{{x}}</b><br>{t("Net Salary")}: {currency_symbol}%{{y:,.0f}}<br><extra></extra>'
             ))
             
             # Tax rate line
@@ -198,7 +199,8 @@ if selected_regimes:
                 line=dict(color='#DC143C', width=3),
                 marker=dict(size=8),
                 text=[f"{t:.1f}%" for t in tax_rates],
-                textposition='top center'
+                textposition='top center',
+                hovertemplate=f'<b>%{{x}}</b><br>{t("Tax Rate %")}: %{{y:.1f}}%<br><extra></extra>'
             ))
             
             # Get currency symbol for display
