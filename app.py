@@ -255,7 +255,8 @@ if selected_regimes:
                 # Add line for this country/employment type
                 country_name = t(result.country)
                 employment_name = t(result.employment_type)
-                legend_name = f'{country_name} {employment_name}'
+                # Create a simple legend name to avoid any translation issues
+                legend_name = f'{country_name} - {employment_name}'
                 
                 fig2.add_trace(go.Scatter(
                     name=legend_name,
@@ -265,15 +266,15 @@ if selected_regimes:
                     line=dict(color=colors[i % len(colors)], width=3),
                     marker=dict(size=6),
                     hovertemplate=f'<b>{country_name} {employment_name}</b><br>' +
-                                f'{t("Gross:")} {currency_symbol}%{{x:,.0f}}<br>' +
-                                f'{t("Net:")} {currency_symbol}%{{y:,.0f}}<br>' +
+                                f'{t("Gross:")} {symbol}%{{x:,.0f}}<br>' +
+                                f'{t("Net:")} {symbol}%{{y:,.0f}}<br>' +
                                 '<extra></extra>'
                 ))
             
             fig2.update_layout(
                 title=t('Net Salary vs Gross Salary Progression'),
-                xaxis_title=f"{t('Gross Salary')} ({currency_symbol})",
-                yaxis_title=f"{t('Net Salary')} ({currency_symbol})",
+                xaxis_title=f"{t('Gross Salary')} ({symbol})",
+                yaxis_title=f"{t('Net Salary')} ({symbol})",
                 hovermode='x unified',
                 height=500,
                 showlegend=True,
@@ -282,9 +283,9 @@ if selected_regimes:
                     yanchor="top",
                     y=1,
                     xanchor="left",
-                    x=1.02
+                    x=1.01
                 ),
-                margin=dict(r=150)  # Add right margin for legend
+                margin=dict(r=200, l=50, t=50, b=50)  # Better margins for layout
             )
             
             # Add current salary point as vertical line
@@ -293,7 +294,7 @@ if selected_regimes:
                 x=float(current_salary_converted), 
                 line_dash="dash", 
                 line_color="red",
-                annotation_text=f"Current: {currency_symbol}{current_salary_converted:,.0f}",
+                annotation_text=f"Current: {symbol}{current_salary_converted:,.0f}",
                 annotation_position="top"
             )
             
