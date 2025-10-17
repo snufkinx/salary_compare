@@ -500,10 +500,8 @@ if selected_regimes:
     
     # Display the table with better formatting
     if summary_data:
-        # Create a DataFrame for better display
-        import pandas as pd
-        df = pd.DataFrame(summary_data)
-        st.dataframe(df, use_container_width=True)
+        # Use st.table for better RTL support
+        st.table(summary_data)
     
     # Comparison chart
     if len(results) > 1:
