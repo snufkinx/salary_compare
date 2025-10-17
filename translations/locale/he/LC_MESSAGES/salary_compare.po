@@ -1,0 +1,170 @@
+# Hebrew translations for Salary Comparison Tool
+# Copyright (C) 2024 Salary Comparison Tool
+# This file is distributed under the same license as the Salary Comparison Tool package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Salary Comparison Tool 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 12:00+0000\n"
+"PO-Revision-Date: 2024-01-01 12:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Hebrew\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# App title and description
+msgid "Salary Comparison Tool"
+msgstr "כלי השוואת משכורות"
+
+msgid "Compare net salaries across different countries and employment types"
+msgstr "השווה משכורות נטו בין מדינות שונות וסוגי תעסוקה"
+
+# Configuration
+msgid "Configuration"
+msgstr "הגדרות"
+
+msgid "Gross Salary (€)"
+msgstr "משכורת ברוטו (€)"
+
+msgid "Display Currency"
+msgstr "מטבע תצוגה"
+
+msgid "Select Tax Regimes"
+msgstr "בחר משטרי מס"
+
+msgid "Summary Comparison"
+msgstr "השוואה סיכומית"
+
+msgid "Comparison Chart"
+msgstr "תרשים השוואה"
+
+msgid "Detailed Breakdowns"
+msgstr "פירוט מפורט"
+
+msgid "Country Comparison"
+msgstr "השוואה לפי מדינות"
+
+msgid "Salary Progression"
+msgstr "התקדמות משכורת"
+
+msgid "Calculating salaries..."
+msgstr "מחשב משכורות..."
+
+msgid "Please select at least one tax regime from the sidebar to see calculations."
+msgstr "אנא בחר לפחות משטר מס אחד מהסרגל הצדדי כדי לראות חישובים."
+
+msgid "Change inputs in the sidebar to see real-time updates"
+msgstr "שנה קלטים בסרגל הצדדי כדי לראות עדכונים בזמן אמת"
+
+# Table headers
+msgid "Country"
+msgstr "מדינה"
+
+msgid "Gross Annual"
+msgstr "שנתי ברוטו"
+
+msgid "Net Annual"
+msgstr "שנתי נטו"
+
+msgid "Gross Monthly"
+msgstr "חודשי ברוטו"
+
+msgid "Net Monthly"
+msgstr "חודשי נטו"
+
+msgid "Tax %"
+msgstr "מס %"
+
+# Metrics
+msgid "Gross Salary"
+msgstr "משכורת ברוטו"
+
+msgid "Net Salary"
+msgstr "משכורת נטו"
+
+msgid "Monthly Net"
+msgstr "נטו חודשי"
+
+msgid "Effective Tax"
+msgstr "מס אפקטיבי"
+
+msgid "Tax Base"
+msgstr "בסיס מס"
+
+# Deductions
+msgid "Deductions"
+msgstr "ניכויים"
+
+msgid "Deduction"
+msgstr "ניכוי"
+
+msgid "Amount"
+msgstr "סכום"
+
+msgid "Rate"
+msgstr "שיעור"
+
+msgid "Details"
+msgstr "פרטים"
+
+msgid "Income Tax Brackets"
+msgstr "מדרגות מס הכנסה"
+
+msgid "Bracket"
+msgstr "מדרגה"
+
+msgid "Taxable Amount"
+msgstr "סכום חייב במס"
+
+msgid "Tax Amount"
+msgstr "סכום מס"
+
+# Chart labels
+msgid "Net Salary"
+msgstr "משכורת נטו"
+
+msgid "Tax Rate %"
+msgstr "שיעור מס %"
+
+msgid "Countries"
+msgstr "מדינות"
+
+msgid "Net Salary (€)"
+msgstr "משכורת נטו (€)"
+
+msgid "Tax Rate (%)"
+msgstr "שיעור מס (%)"
+
+msgid "Gross Salary (€)"
+msgstr "משכורת ברוטו (€)"
+
+msgid "Net Salary vs Gross Salary Progression"
+msgstr "התקדמות משכורת נטו מול ברוטו"
+
+msgid "Current"
+msgstr "נוכחי"
+
+# Currency names
+msgid "€ Euro"
+msgstr "€ יורו"
+
+msgid "$ US Dollar"
+msgstr "$ דולר אמריקאי"
+
+msgid "£ British Pound"
+msgstr "£ לירה שטרלינג"
+
+msgid "Kč Czech Koruna"
+msgstr "Kč קורונה צ'כית"
+
+msgid "₪ Israeli Shekel"
+msgstr "₪ שקל ישראלי"
+
+msgid "lei Romanian Leu"
+msgstr "lei לאו רומני"
+
+msgid "лв Bulgarian Lev"
+msgstr "лв לב בולגרי"

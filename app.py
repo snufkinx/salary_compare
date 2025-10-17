@@ -10,6 +10,12 @@ from decimal import Decimal
 from salary_compare.registry import TaxRegimeRegistry
 from salary_compare.universal_calculator import UniversalTaxCalculator
 from salary_compare.services.currency import CurrencyConverter
+from translations.translation_manager import set_language, get_translation_manager
+
+# Create a local translation function
+def t(message: str) -> str:
+    """Get translated message."""
+    return get_translation_manager()._(message)
 
 # Page configuration
 st.set_page_config(
@@ -19,16 +25,28 @@ st.set_page_config(
 )
 
 # Title
-st.title("🌍 Salary Comparison Tool")
-st.markdown("Compare net salaries across different countries and employment types")
+st.title(f"🌍 {t('Salary Comparison Tool')}")
+st.markdown(t("Compare net salaries across different countries and employment types"))
 
 # Sidebar for inputs
 with st.sidebar:
     st.header("⚙️ Configuration")
     
+    # Language selector
+    available_languages = get_translation_manager().get_available_languages()
+    selected_language = st.selectbox(
+        "🌍 Language",
+        options=list(available_languages.keys()),
+        format_func=lambda x: available_languages[x],
+        index=0
+    )
+    
+    # Set the language
+    set_language(selected_language)
+    
     # Salary input
     salary = st.number_input(
-        "Gross Salary (€)",
+        t("Gross Salary (€)"),
         min_value=1000,
         max_value=1000000,
         value=100000,
@@ -55,7 +73,7 @@ with st.sidebar:
         index=0  # Default to EUR
     )
     
-    st.markdown("### Select Tax Regimes")
+    st.markdown(f"### {_('Select Tax Regimes')}")
     
     # Get available regimes and group by country
     available_regimes = TaxRegimeRegistry.get_keys()
@@ -88,7 +106,7 @@ def convert_amount(amount, currency):
 if selected_regimes:
     # Calculate results
     results_with_keys = []
-    with st.spinner("Calculating salaries..."):
+    with st.spinner(t("Calculating salaries...")):
         for regime_key in selected_regimes:
             regime = TaxRegimeRegistry.get(regime_key)
             calc = UniversalTaxCalculator(Decimal(str(salary)), regime)
@@ -103,7 +121,7 @@ if selected_regimes:
     regime_keys = [item[1] for item in results_with_keys]
     
     # Summary comparison table
-    st.subheader("📊 Summary Comparison")
+    st.subheader(f"📊 {_('Summary Comparison')}")
     summary_data = []
     for result in results:
         effective_tax = (1 - float(result.net_salary/result.gross_salary)) * 100
@@ -116,12 +134,12 @@ if selected_regimes:
         tax_base_converted, _ = convert_amount(result.tax_base, selected_currency)
         
         summary_data.append({
-            "Country": result.country,
-            "Gross Annual": f"{symbol}{gross_converted:,.0f}",
-            "Net Annual": f"{symbol}{net_converted:,.0f}",
-            "Gross Monthly": f"{symbol}{gross_monthly_converted:,.0f}",
-            "Net Monthly": f"{symbol}{net_monthly_converted:,.0f}",
-            "Tax %": f"{effective_tax:.1f}%"
+            t("Country"): result.country,
+            t("Gross Annual"): f"{symbol}{gross_converted:,.0f}",
+            t("Net Annual"): f"{symbol}{net_converted:,.0f}",
+            t("Gross Monthly"): f"{symbol}{gross_monthly_converted:,.0f}",
+            t("Net Monthly"): f"{symbol}{net_monthly_converted:,.0f}",
+            t("Tax %"): f"{effective_tax:.1f}%"
         })
     
     # Use st.table for better font control
@@ -129,10 +147,10 @@ if selected_regimes:
     
     # Comparison chart
     if len(results) > 1:
-        st.subheader("📈 Comparison Chart")
+        st.subheader(f"📈 {_('Comparison Chart')}")
         
         # Create tabs for different chart views
-        tab1, tab2 = st.tabs(["📊 Country Comparison", "📈 Salary Progression"])
+        tab1, tab2 = st.tabs([f"📊 {_('Country Comparison')}", f"📈 {_('Salary Progression')}"])
         
         with tab1:
             # Country comparison (existing bars + tax rates)
@@ -258,10 +276,10 @@ if selected_regimes:
             st.plotly_chart(fig2, use_container_width=True)
     
     # Detailed breakdowns
-    st.subheader("🔍 Detailed Breakdowns")
+    st.subheader(f"🔍 {_('Detailed Breakdowns')}")
     
     for i, result in enumerate(results):
-        with st.expander(f"📊 {result.country}", expanded=(i == 0)):
+        with st.expander(f"📊 {result.country}", expanded=True):
             # Convert amounts to selected currency
             gross_converted, symbol = convert_amount(result.gross_salary, selected_currency)
             net_converted, _ = convert_amount(result.net_salary, selected_currency)
@@ -272,36 +290,36 @@ if selected_regimes:
             col1, col2, col3, col4 = st.columns(4)
             
             with col1:
-                st.metric("Gross Salary", f"{symbol}{gross_converted:,.0f}")
+                st.metric(t("Gross Salary"), f"{symbol}{gross_converted:,.0f}")
             with col2:
-                st.metric("Net Salary", f"{symbol}{net_converted:,.0f}")
+                st.metric(t("Net Salary"), f"{symbol}{net_converted:,.0f}")
             with col3:
-                st.metric("Monthly Net", f"{symbol}{monthly_converted:,.0f}")
+                st.metric(t("Monthly Net"), f"{symbol}{monthly_converted:,.0f}")
             with col4:
                 effective_tax = (1 - float(result.net_salary/result.gross_salary)) * 100
-                st.metric("Effective Tax", f"{effective_tax:.1f}%")
+                st.metric(t("Effective Tax"), f"{effective_tax:.1f}%")
             
             # Tax base
-            st.markdown(f"**Tax Base:** {symbol}{tax_base_converted:,.2f}")
+            st.markdown(f"**{_('Tax Base')}:** {symbol}{tax_base_converted:,.2f}")
             
             # Deductions breakdown
-            st.markdown("**Deductions:**")
+            st.markdown(f"**{_('Deductions')}:**")
             deduction_data = []
             for deduction in result.deductions:
                 # Convert deduction amount to selected currency
                 deduction_converted, _ = convert_amount(deduction.amount, selected_currency)
                 deduction_data.append({
-                    "Deduction": deduction.name,
-                    "Amount": f"{symbol}{deduction_converted:,.2f}",
-                    "Rate": f"{float(deduction.rate)*100:.1f}%",
-                    "Details": deduction.description
+                    t("Deduction"): deduction.name,
+                    t("Amount"): f"{symbol}{deduction_converted:,.2f}",
+                    t("Rate"): f"{float(deduction.rate)*100:.1f}%",
+                    t("Details"): deduction.description
                 })
             
             st.table(deduction_data)
             
             # Tax brackets if available
             if hasattr(result, 'income_tax_brackets') and result.income_tax_brackets:
-                st.markdown("**Income Tax Brackets:**")
+                st.markdown(f"**{_('Income Tax Brackets')}:**")
                 bracket_data = []
                 for bracket in result.income_tax_brackets:
                     # Convert bracket amounts to selected currency
@@ -311,16 +329,16 @@ if selected_regimes:
                     tax_converted, _ = convert_amount(bracket.tax_amount, selected_currency)
                     
                     bracket_data.append({
-                        "Bracket": f"{symbol}{lower_converted:,.0f} - {symbol}{upper_converted:,.0f}",
-                        "Rate": f"{float(bracket.rate)*100:.1f}%",
-                        "Taxable Amount": f"{symbol}{taxable_converted:,.2f}",
-                        "Tax Amount": f"{symbol}{tax_converted:,.2f}"
+                        t("Bracket"): f"{symbol}{lower_converted:,.0f} - {symbol}{upper_converted:,.0f}",
+                        t("Rate"): f"{float(bracket.rate)*100:.1f}%",
+                        t("Taxable Amount"): f"{symbol}{taxable_converted:,.2f}",
+                        t("Tax Amount"): f"{symbol}{tax_converted:,.2f}"
                     })
                 st.table(bracket_data)
 
 else:
-    st.info("👈 Please select at least one tax regime from the sidebar to see calculations.")
+    st.info(f"👈 {_('Please select at least one tax regime from the sidebar to see calculations.')}")
 
 # Footer
 st.markdown("---")
-st.markdown("*Change inputs in the sidebar to see real-time updates*")
+st.markdown(f"*{_('Change inputs in the sidebar to see real-time updates')}*")
