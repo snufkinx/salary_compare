@@ -302,6 +302,26 @@ def apply_rtl_support():
         </style>
         """, unsafe_allow_html=True)
 
+# Add CSS for country name styling with darker gray background
+def apply_country_styling():
+    """Apply styling for country names with emojis and darker background."""
+    st.markdown("""
+    <style>
+    /* Country name styling with darker gray background - ONLY for sidebar */
+    .stSidebar .country-name {
+        background-color: #4a4a4a;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-weight: bold;
+        display: block;
+        width: 100%;
+        margin: 4px 0;
+        box-sizing: border-box;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # Initialize session state for language and selected regimes
 if 'selected_language' not in st.session_state:
     st.session_state.selected_language = 'en'
@@ -312,6 +332,28 @@ if 'selected_regimes' not in st.session_state:
 def t(message: str) -> str:
     """Get translated message."""
     return get_translation_manager()._(message)
+
+# Country emoji mapping
+COUNTRY_EMOJIS = {
+    "Germany": "🇩🇪",
+    "Czechia": "🇨🇿", 
+    "Israel": "🇮🇱",
+    "Bulgaria": "🇧🇬",
+    "France": "🇫🇷",
+    "Portugal": "🇵🇹",
+    "Romania": "🇷🇴",
+    "Spain": "🇪🇸",
+    "USA": "🇺🇸",
+    "UK": "🇬🇧"
+}
+
+def get_country_with_emoji(country_name: str, translated_name: str = None) -> str:
+    """Get country name with emoji."""
+    # Use the original country name for emoji lookup
+    emoji = COUNTRY_EMOJIS.get(country_name, "🌍")
+    # Use translated name if provided, otherwise use original
+    display_name = translated_name if translated_name else country_name
+    return f"{emoji} {display_name}"
 
 # Sidebar for inputs - MUST be first to set language before any content
 with st.sidebar:
@@ -377,7 +419,8 @@ with st.sidebar:
     # Create checkboxes grouped by country
     selected_regimes = []
     for country, regimes in regimes_by_country.items():
-        st.markdown(f"**{t(country)}**")
+        country_with_emoji = get_country_with_emoji(country, t(country))
+        st.markdown(f'<span class="country-name">{country_with_emoji}</span>', unsafe_allow_html=True)
         for regime_key, title in regimes:
             # Use session state to preserve selections across language changes
             is_selected = regime_key in st.session_state.selected_regimes
@@ -394,6 +437,9 @@ with st.sidebar:
 
 # Apply RTL support for Hebrew
 apply_rtl_support()
+
+# Apply country styling
+apply_country_styling()
 
 # Title
 st.title(f"🌍 {t('Salary Comparison Tool')}")
@@ -428,7 +474,7 @@ if selected_regimes:
     # Summary comparison table
     st.subheader(f"📊 {t('Summary Comparison')}")
     summary_data = []
-    for result in results:
+    for i, result in enumerate(results):
         effective_tax = (1 - float(result.net_salary/result.gross_salary)) * 100
         
         # Convert amounts to selected currency
@@ -438,8 +484,13 @@ if selected_regimes:
         net_monthly_converted, _ = convert_amount(result.net_salary/12, selected_currency)
         tax_base_converted, _ = convert_amount(result.tax_base, selected_currency)
         
+        # Get the regime to extract the actual country name
+        regime = TaxRegimeRegistry.get(regime_keys[i])
+        country_name = regime.country.value  # This gives us just "Germany", "Czechia", etc.
+        country_with_emoji = get_country_with_emoji(country_name, t(country_name))
         summary_data.append({
-            t("Country"): t(result.country),
+            t("Country"): country_with_emoji,
+            t("Tax Regime"): t(regime.title),
             t("Gross Annual"): f"{symbol}{gross_converted:,.0f}",
             t("Net Annual"): f"{symbol}{net_converted:,.0f}",
             t("Gross Monthly"): f"{symbol}{gross_monthly_converted:,.0f}",
@@ -447,8 +498,12 @@ if selected_regimes:
             t("Tax %"): f"{effective_tax:.1f}%"
         })
     
-    # Use st.table for better font control
-    st.table(summary_data)
+    # Display the table with better formatting
+    if summary_data:
+        # Create a DataFrame for better display
+        import pandas as pd
+        df = pd.DataFrame(summary_data)
+        st.dataframe(df, use_container_width=True)
     
     # Comparison chart
     if len(results) > 1:
@@ -459,7 +514,7 @@ if selected_regimes:
         
         with tab1:
             # Country comparison (existing bars + tax rates)
-            countries = [t(r.country) for r in results]
+            countries = [get_country_with_emoji(r.country, t(r.country)) for r in results]
         net_salaries = [float(r.net_salary) for r in results]
         tax_rates = [(1 - float(r.net_salary/r.gross_salary))*100 for r in results]
         
@@ -548,7 +603,7 @@ if selected_regimes:
                         net_values.append(0)
                 
                 # Add line for this country/employment type
-                country_name = t(result.country)
+                country_name = get_country_with_emoji(result.country, t(result.country))
                 employment_name = t(result.employment_type)
                 # Create a simple legend name to avoid any translation issues
                 legend_name = f'{country_name} - {employment_name}'
@@ -599,7 +654,8 @@ if selected_regimes:
     st.subheader(f"🔍 {t('Detailed Breakdowns')}")
     
     for i, result in enumerate(results):
-        with st.expander(f"📊 {t(result.country)}", expanded=True):
+        country_with_emoji = get_country_with_emoji(result.country, t(result.country))
+        with st.expander(f"📊 {country_with_emoji}", expanded=True):
             # Convert amounts to selected currency
             gross_converted, symbol = convert_amount(result.gross_salary, selected_currency)
             net_converted, _ = convert_amount(result.net_salary, selected_currency)
