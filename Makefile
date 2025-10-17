@@ -1,8 +1,10 @@
-.PHONY: help test lint format clean install
+.PHONY: help test lint format clean install run app
 
 help:
 	@echo "Available commands:"
 	@echo "  make install    - Install dependencies using Poetry"
+	@echo "  make run        - Run the Streamlit app"
+	@echo "  make app        - Run the Streamlit app (alias for run)"
 	@echo "  make test       - Run all tests with pytest"
 	@echo "  make lint       - Run all linters (flake8, mypy, pylint)"
 	@echo "  make format     - Format code with black and isort"
@@ -11,6 +13,13 @@ help:
 
 install:
 	poetry install
+
+run:
+	@echo "🚀 Starting Salary Comparison Tool..."
+	@echo "📱 Opening in your default browser..."
+	poetry run streamlit run streamlit_app/main.py
+
+app: run
 
 test:
 	poetry run pytest -v

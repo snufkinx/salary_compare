@@ -42,9 +42,18 @@ poetry install
 
 ### Running the Streamlit App
 
+**Easy Commands:**
 ```bash
-# Run the interactive web application
-poetry run streamlit run app.py
+# Option 1: Using Make (recommended)
+make run
+# or
+make app
+
+# Option 2: Using the run script
+python run_app.py
+
+# Option 3: Direct Poetry command
+poetry run streamlit run streamlit_app/main.py
 ```
 
 The app will open in your default browser at `http://localhost:8501`.
