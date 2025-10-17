@@ -186,7 +186,7 @@ if selected_regimes:
                 marker_color='#2E8B57',
                 text=[f"{symbol}{s:,.0f}" for s in net_salaries_converted],
                 textposition='auto',
-                hovertemplate=f'<b>%{{x}}</b><br>{t("Net Salary")}: {currency_symbol}%{{y:,.0f}}<br><extra></extra>'
+                hovertemplate=f'<b>%{{x}}</b><br>{t("Net Salary")}: {symbol}%{{y:,.0f}}<br><extra></extra>'
             ))
             
             # Tax rate line
