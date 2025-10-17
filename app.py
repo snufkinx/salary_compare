@@ -309,6 +309,24 @@ def apply_rtl_support():
             padding: 8px 12px !important;
             box-sizing: border-box !important;
         }
+        
+        /* Fix Hebrew checkbox spacing */
+        .stSidebar .stCheckbox > label {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        .stSidebar .stCheckbox > label > div {
+            direction: rtl !important;
+            text-align: right !important;
+            margin-right: 8px !important;
+        }
+        
+        .stSidebar .stCheckbox > label > div > p {
+            direction: rtl !important;
+            text-align: right !important;
+            margin-right: 8px !important;
+        }
         </style>
         """, unsafe_allow_html=True)
 
