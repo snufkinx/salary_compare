@@ -317,7 +317,7 @@ with st.sidebar:
     )
     
     # Currency selection
-    st.markdown("### 💱 Display Currency")
+    st.markdown(f"### 💱 {t('Display Currency')}")
     available_currencies = {
         "EUR": "€ Euro",
         "USD": "$ US Dollar", 
@@ -329,7 +329,7 @@ with st.sidebar:
     }
     
     selected_currency = st.selectbox(
-        "Choose display currency:",
+        t("Choose display currency:"),
         options=list(available_currencies.keys()),
         format_func=lambda x: available_currencies[x],
         index=0  # Default to EUR
@@ -351,7 +351,7 @@ with st.sidebar:
     # Create checkboxes grouped by country
     selected_regimes = []
     for country, regimes in regimes_by_country.items():
-        st.markdown(f"**{country}**")
+        st.markdown(f"**{t(country)}**")
         for regime_key, title in regimes:
             # Use session state to preserve selections across language changes
             is_selected = regime_key in st.session_state.selected_regimes
