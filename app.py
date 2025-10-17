@@ -41,6 +41,18 @@ def apply_rtl_support():
             direction: rtl;
         }
         
+        /* RTL for table cells - ensure text aligns right within cells */
+        .stTable td, .stTable th {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        /* RTL for table data specifically */
+        .stTable tbody td {
+            direction: rtl;
+            text-align: right;
+        }
+        
         /* RTL for expanders */
         .streamlit-expander {
             direction: rtl;
