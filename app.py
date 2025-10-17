@@ -19,13 +19,13 @@ st.set_page_config(
     layout="wide"
 )
 
-# RTL support for Hebrew
+# RTL support for Hebrew and Arabic
 def apply_rtl_support():
-    """Apply RTL styling for Hebrew language."""
-    if st.session_state.selected_language == 'he':
+    """Apply RTL styling for Hebrew and Arabic languages."""
+    if st.session_state.selected_language in ['he', 'ar']:
         st.markdown("""
         <style>
-        /* RTL support for Hebrew */
+        /* RTL support for Hebrew and Arabic */
         .main .block-container {
             direction: rtl;
             text-align: right;
@@ -288,6 +288,7 @@ def apply_rtl_support():
         .stCheckbox > label {
             direction: rtl;
             text-align: right;
+            width: 100%;
         }
         
         /* RTL for tabs */
@@ -300,7 +301,7 @@ def apply_rtl_support():
             direction: rtl;
         }
         
-        /* Fix Hebrew sidebar country name alignment */
+        /* Fix RTL sidebar country name alignment */
         .stSidebar .country-name {
             text-align: right !important;
             direction: rtl !important;
@@ -310,7 +311,7 @@ def apply_rtl_support():
             box-sizing: border-box !important;
         }
         
-        /* Fix Hebrew checkbox spacing */
+        /* Fix RTL checkbox spacing */
         .stSidebar .stCheckbox > label {
             direction: rtl !important;
             text-align: right !important;
@@ -382,8 +383,8 @@ def get_country_with_emoji(country_name: str, translated_name: str = None) -> st
     # Use translated name if provided, otherwise use original
     display_name = translated_name if translated_name else country_name
     
-    # For Hebrew (RTL), put emoji on the right side
-    if st.session_state.selected_language == 'he':
+    # For RTL languages (Hebrew and Arabic), put emoji on the right side
+    if st.session_state.selected_language in ['he', 'ar']:
         return f"{display_name} {emoji}"
     else:
         return f"{emoji} {display_name}"
@@ -457,7 +458,7 @@ with st.sidebar:
         for regime_key, title in regimes:
             # Use session state to preserve selections across language changes
             is_selected = regime_key in st.session_state.selected_regimes
-            if st.checkbox(title, value=is_selected, key=regime_key):
+            if st.checkbox(title, value=is_selected, key=regime_key, width="stretch"):
                 if regime_key not in st.session_state.selected_regimes:
                     st.session_state.selected_regimes.append(regime_key)
                 selected_regimes.append(regime_key)

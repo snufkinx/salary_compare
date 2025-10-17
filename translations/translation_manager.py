@@ -14,7 +14,8 @@ class TranslationManager:
     AVAILABLE_LANGUAGES = {
         'en': 'English',
         'ru': 'Русский',
-        'he': 'עברית'
+        'he': 'עברית',
+        'ar': 'العربية'
     }
     
     def __init__(self, language: str = 'en', domain: str = 'salary_compare'):

@@ -1,0 +1,418 @@
+# Arabic translations for Salary Comparison Tool
+# Copyright (C) 2024 Salary Comparison Tool
+# This file is distributed under the same license as the Salary Comparison Tool package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Salary Comparison Tool 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 12:00+0000\n"
+"PO-Revision-Date: 2024-01-01 12:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+
+# App title and description
+msgid "Salary Comparison Tool"
+msgstr "أداة مقارنة الرواتب"
+
+msgid "Compare net salaries across different countries and employment types"
+msgstr "قارن الرواتب الصافية عبر دول مختلفة وأنواع التوظيف"
+
+# Configuration
+msgid "Configuration"
+msgstr "الإعدادات"
+
+msgid "Gross Salary (€)"
+msgstr "الراتب الإجمالي (€)"
+
+msgid "Display Currency"
+msgstr "عملة العرض"
+
+msgid "Choose display currency:"
+msgstr "اختر عملة العرض:"
+
+msgid "Language"
+msgstr "اللغة"
+
+msgid "Select Tax Regimes"
+msgstr "اختر أنظمة الضرائب"
+
+msgid "Summary Comparison"
+msgstr "المقارنة الملخصة"
+
+msgid "Comparison Chart"
+msgstr "مخطط المقارنة"
+
+msgid "Detailed Breakdowns"
+msgstr "التفاصيل المفصلة"
+
+msgid "Country Comparison"
+msgstr "مقارنة الدول"
+
+msgid "Salary Progression"
+msgstr "تطور الراتب"
+
+msgid "Calculating salaries..."
+msgstr "حساب الرواتب..."
+
+msgid "Please select at least one tax regime from the sidebar to see calculations."
+msgstr "يرجى اختيار نظام ضريبي واحد على الأقل من الشريط الجانبي لرؤية الحسابات."
+
+msgid "Change inputs in the sidebar to see real-time updates"
+msgstr "غيّر المدخلات في الشريط الجانبي لرؤية التحديثات الفورية"
+
+# Table headers
+msgid "Country"
+msgstr "البلد"
+
+msgid "Tax Regime"
+msgstr "نظام الضرائب"
+
+msgid "Gross Annual"
+msgstr "سنوي إجمالي"
+
+msgid "Net Annual"
+msgstr "سنوي صافي"
+
+msgid "Gross Monthly"
+msgstr "شهري إجمالي"
+
+msgid "Net Monthly"
+msgstr "شهري صافي"
+
+msgid "Tax %"
+msgstr "ضريبة %"
+
+# Metrics
+msgid "Gross Salary"
+msgstr "الراتب الإجمالي"
+
+msgid "Net Salary"
+msgstr "الراتب الصافي"
+
+msgid "Monthly Net"
+msgstr "صافي شهري"
+
+msgid "Effective Tax"
+msgstr "الضريبة الفعالة"
+
+msgid "Tax Base"
+msgstr "قاعدة الضريبة"
+
+# Deductions
+msgid "Deductions"
+msgstr "الخصومات"
+
+msgid "Deduction"
+msgstr "خصم"
+
+msgid "Amount"
+msgstr "المبلغ"
+
+msgid "Rate"
+msgstr "المعدل"
+
+msgid "Details"
+msgstr "التفاصيل"
+
+msgid "Income Tax Brackets"
+msgstr "شرائح ضريبة الدخل"
+
+msgid "Bracket"
+msgstr "شريحة"
+
+msgid "Taxable Amount"
+msgstr "المبلغ الخاضع للضريبة"
+
+msgid "Tax Amount"
+msgstr "مبلغ الضريبة"
+
+# Chart labels
+msgid "Tax Rate %"
+msgstr "معدل الضريبة %"
+
+msgid "Countries"
+msgstr "الدول"
+
+msgid "Net Salary (€)"
+msgstr "الراتب الصافي (€)"
+
+msgid "Tax Rate (%)"
+msgstr "معدل الضريبة (%)"
+
+msgid "Net Salary vs Gross Salary Progression"
+msgstr "تطور الراتب الصافي مقابل الإجمالي"
+
+# Currency names
+msgid "€ Euro"
+msgstr "€ يورو"
+
+msgid "$ US Dollar"
+msgstr "$ دولار أمريكي"
+
+msgid "£ British Pound"
+msgstr "£ جنيه إسترليني"
+
+msgid "Kč Czech Koruna"
+msgstr "Kč كرونة تشيكية"
+
+msgid "₪ Israeli Shekel"
+msgstr "₪ شيكل إسرائيلي"
+
+msgid "lei Romanian Leu"
+msgstr "lei ليو روماني"
+
+msgid "лв Bulgarian Lev"
+msgstr "лв ليف بلغاري"
+
+# Country names
+msgid "Germany"
+msgstr "ألمانيا"
+
+msgid "France"
+msgstr "فرنسا"
+
+msgid "Spain"
+msgstr "إسبانيا"
+
+msgid "Portugal"
+msgstr "البرتغال"
+
+msgid "Israel"
+msgstr "إسرائيل"
+
+msgid "Bulgaria"
+msgstr "بلغاريا"
+
+msgid "Romania"
+msgstr "رومانيا"
+
+msgid "Czechia"
+msgstr "التشيك"
+
+# Employment types
+msgid "Salaried"
+msgstr "موظف"
+
+msgid "Freelancer"
+msgstr "مستقل"
+
+# Tax regime titles
+msgid "Germany Salaried Employee"
+msgstr "موظف ألماني"
+
+msgid "France Salaried Employee"
+msgstr "موظف فرنسي"
+
+msgid "Madrid Salaried Employee"
+msgstr "موظف مدريد"
+
+msgid "Barcelona Salaried Employee"
+msgstr "موظف برشلونة"
+
+msgid "Valencia Salaried Employee"
+msgstr "موظف فالنسيا"
+
+msgid "Portugal Salaried Employee"
+msgstr "موظف برتغالي"
+
+msgid "Portugal Freelancer"
+msgstr "مستقل برتغالي"
+
+msgid "Israel Salaried Employee"
+msgstr "موظف إسرائيلي"
+
+msgid "Bulgaria Freelancer"
+msgstr "مستقل بلغاري"
+
+msgid "Romania Freelancer"
+msgstr "مستقل روماني"
+
+msgid "Czechia Salaried Employee"
+msgstr "موظف تشيكي"
+
+msgid "Czechia Freelancer"
+msgstr "مستقل تشيكي"
+
+# Deduction names and descriptions
+msgid "Pension Insurance"
+msgstr "بيمو التأمين على التقاعد"
+
+msgid "Mandatory pension insurance contribution"
+msgstr "مساهمة إجبارية في التأمين على التقاعد"
+
+msgid "Health Insurance"
+msgstr "التأمين الصحي"
+
+msgid "Mandatory health insurance contribution"
+msgstr "مساهمة إجبارية في التأمين الصحي"
+
+msgid "Unemployment Insurance"
+msgstr "تأمين البطالة"
+
+msgid "Mandatory unemployment insurance contribution"
+msgstr "مساهمة إجبارية في تأمين البطالة"
+
+msgid "Long_Term_Care Insurance"
+msgstr "تأمين الرعاية طويلة الأمد"
+
+msgid "Mandatory long_term_care insurance contribution"
+msgstr "مساهمة إجبارية في تأمين الرعاية طويلة الأمد"
+
+msgid "Income Tax"
+msgstr "ضريبة الدخل"
+
+msgid "Progressive income tax"
+msgstr "ضريبة دخل تصاعدية"
+
+msgid "Solidarity Surcharge"
+msgstr "رسوم التضامن"
+
+msgid "Solidarity surcharge on income tax"
+msgstr "رسوم التضامن على ضريبة الدخل"
+
+msgid "Social Security"
+msgstr "التأمينات الاجتماعية"
+
+msgid "Social security contributions (employee portion) + MEI"
+msgstr "مساهمات التأمينات الاجتماعية (جزء الموظف) + MEI"
+
+msgid "Social security contributions (self-declared income basis)"
+msgstr "مساهمات التأمينات الاجتماعية (على أساس الدخل المعلن ذاتياً)"
+
+msgid "Health insurance contributions (self-declared income basis)"
+msgstr "مساهمات التأمين الصحي (على أساس الدخل المعلن ذاتياً)"
+
+msgid "Flat 10% income tax on profit"
+msgstr "ضريبة دخل ثابتة 10% على الربح"
+
+msgid "National Insurance"
+msgstr "التأمين الوطني"
+
+msgid "Mandatory national insurance contribution (Bituach Leumi)"
+msgstr "مساهمة إجبارية في التأمين الوطني (بيتواح لئومي)"
+
+msgid "Health Tax"
+msgstr "ضريبة الصحة"
+
+msgid "Mandatory health tax contribution (Mas Briut)"
+msgstr "مساهمة إجبارية في ضريبة الصحة (ماس بريوت)"
+
+msgid "Pension"
+msgstr "التقاعد"
+
+msgid "Pension fund contribution (Gemel Pensia)"
+msgstr "مساهمة في صندوق التقاعد (جمل بنسيا)"
+
+msgid "Keren Hishtalmut"
+msgstr "كيرين هشتالموت"
+
+msgid "Advanced training fund contribution (Keren Hishtalmut)"
+msgstr "مساهمة في صندوق التدريب المتقدم (كيرين هشتالموت)"
+
+msgid "Old-Age Insurance (Base)"
+msgstr "تأمين الشيخوخة (أساسي)"
+
+msgid "Pension contributions up to SS ceiling"
+msgstr "مساهمات التقاعد حتى سقف التأمينات الاجتماعية"
+
+msgid "Old-Age Insurance (Supplementary)"
+msgstr "تأمين الشيخوخة (مكمل)"
+
+msgid "Pension contributions on full salary"
+msgstr "مساهمات التقاعد على الراتب الكامل"
+
+msgid "CSG (General Social Contribution)"
+msgstr "CSG (المساهمة الاجتماعية العامة)"
+
+msgid "Funds social security (partially tax-deductible)"
+msgstr "يمول التأمينات الاجتماعية (قابل للخصم جزئياً من الضريبة)"
+
+msgid "CRDS (Social Debt Repayment)"
+msgstr "CRDS (سداد الدين الاجتماعي)"
+
+msgid "Repayment of social security debt"
+msgstr "سداد دين التأمينات الاجتماعية"
+
+msgid "Supplementary Pension (Bracket 1)"
+msgstr "تقاعد مكمل (شريحة 1)"
+
+msgid "Agirc-Arrco pension - up to ceiling"
+msgstr "تقاعد Agirc-Arrco - حتى السقف"
+
+msgid "Supplementary Pension (Bracket 2)"
+msgstr "تقاعد مكمل (شريحة 2)"
+
+msgid "Agirc-Arrco pension - above ceiling"
+msgstr "تقاعد Agirc-Arrco - فوق السقف"
+
+msgid "CEG (Balance Contribution - B1)"
+msgstr "CEG (مساهمة التوازن - B1)"
+
+msgid "Contribution for pension balance"
+msgstr "مساهمة لتوازن التقاعد"
+
+msgid "CEG (Balance Contribution - B2)"
+msgstr "CEG (مساهمة التوازن - B2)"
+
+msgid "Contribution for pension balance - above ceiling"
+msgstr "مساهمة لتوازن التقاعد - فوق السقف"
+
+msgid "Two-tier income tax"
+msgstr "ضريبة دخل ثنائية المستوى"
+
+msgid "Income tax on 40% of gross income with standard discount"
+msgstr "ضريبة دخل على 40% من الدخل الإجمالي مع خصم قياسي"
+
+msgid "Social security contribution on 50% of taxable income"
+msgstr "مساهمة التأمينات الاجتماعية على 50% من الدخل الخاضع للضريبة"
+
+msgid "Health insurance contribution on 50% of taxable income"
+msgstr "مساهمة التأمين الصحي على 50% من الدخل الخاضع للضريبة"
+
+msgid "Microenterprise Tax"
+msgstr "ضريبة المؤسسات الصغيرة"
+
+msgid "1% tax on gross revenue (microenterprise regime)"
+msgstr "ضريبة 1% على الإيرادات الإجمالية (نظام المؤسسات الصغيرة)"
+
+msgid "Dividend Tax (8%)"
+msgstr "ضريبة الأرباح (8%)"
+
+msgid "8% tax on dividend distribution (when extracting profits)"
+msgstr "ضريبة 8% على توزيع الأرباح (عند استخراج الأرباح)"
+
+msgid "Mandatory health insurance (minimum basis ~€720/year)"
+msgstr "تأمين صحي إجباري (أساس أدنى ~€720/سنة)"
+
+msgid "Social Security (Optional)"
+msgstr "التأمينات الاجتماعية (اختياري)"
+
+msgid "Optional social security for pension rights (~€4,000/year recommended)"
+msgstr "تأمينات اجتماعية اختيارية لحقوق التقاعد (~€4,000/سنة موصى بها)"
+
+msgid "Social Security (TSU)"
+msgstr "التأمينات الاجتماعية (TSU)"
+
+msgid "Social security contributions (employee portion)"
+msgstr "مساهمات التأمينات الاجتماعية (جزء الموظف)"
+
+msgid "Income Tax (IRS)"
+msgstr "ضريبة الدخل (IRS)"
+
+msgid "Social security on 70% of gross income (freelancer rate)"
+msgstr "تأمينات اجتماعية على 70% من الدخل الإجمالي (معدل المستقل)"
+
+msgid "Progressive income tax on 25% of income (75% deemed expenses)"
+msgstr "ضريبة دخل تصاعدية على 25% من الدخل (75% نفقات مفترضة)"
+
+# Chart hover labels
+msgid "Gross:"
+msgstr "إجمالي:"
+
+msgid "Net:"
+msgstr "صافي:"
