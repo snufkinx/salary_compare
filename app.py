@@ -19,6 +19,68 @@ st.set_page_config(
     layout="wide"
 )
 
+# RTL support for Hebrew
+def apply_rtl_support():
+    """Apply RTL styling for Hebrew language."""
+    if st.session_state.selected_language == 'he':
+        st.markdown("""
+        <style>
+        /* RTL support for Hebrew */
+        .main .block-container {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        /* RTL for sidebar */
+        .css-1d391kg {
+            direction: rtl;
+        }
+        
+        /* RTL for tables */
+        .stTable {
+            direction: rtl;
+        }
+        
+        /* RTL for expanders */
+        .streamlit-expander {
+            direction: rtl;
+        }
+        
+        /* RTL for metrics */
+        .metric-container {
+            direction: rtl;
+        }
+        
+        /* RTL for selectbox and other inputs */
+        .stSelectbox > div > div {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        /* RTL for number input */
+        .stNumberInput > div > div > input {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        /* RTL for checkboxes */
+        .stCheckbox > label {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        /* RTL for tabs */
+        .stTabs > div > div > div {
+            direction: rtl;
+        }
+        
+        /* RTL for columns */
+        .stColumns > div {
+            direction: rtl;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
 # Initialize session state for language and selected regimes
 if 'selected_language' not in st.session_state:
     st.session_state.selected_language = 'en'
@@ -44,6 +106,9 @@ with st.sidebar:
         st.rerun()
     
     set_language(selected_language)
+
+# Apply RTL support for Hebrew
+apply_rtl_support()
 
 # Create a local translation function
 def t(message: str) -> str:
