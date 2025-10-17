@@ -144,7 +144,7 @@ if selected_regimes:
         tax_base_converted, _ = convert_amount(result.tax_base, selected_currency)
         
         summary_data.append({
-            t("Country"): result.country,
+            t("Country"): t(result.country),
             t("Gross Annual"): f"{symbol}{gross_converted:,.0f}",
             t("Net Annual"): f"{symbol}{net_converted:,.0f}",
             t("Gross Monthly"): f"{symbol}{gross_monthly_converted:,.0f}",
@@ -252,13 +252,13 @@ if selected_regimes:
                 
                 # Add line for this country/employment type
                 fig2.add_trace(go.Scatter(
-                    name=f'{result.country} {result.employment_type}',
+                    name=f'{t(result.country)} {t(result.employment_type)}',
                     x=x_values_converted,
                     y=net_values,
                     mode='lines+markers',
                     line=dict(color=colors[i % len(colors)], width=3),
                     marker=dict(size=6),
-                    hovertemplate=f'<b>{result.country} {result.employment_type}</b><br>' +
+                    hovertemplate=f'<b>{t(result.country)} {t(result.employment_type)}</b><br>' +
                                 f'Gross: {currency_symbol}%{{x:,.0f}}<br>' +
                                 f'Net: {currency_symbol}%{{y:,.0f}}<br>' +
                                 '<extra></extra>'
@@ -289,7 +289,7 @@ if selected_regimes:
     st.subheader(f"🔍 {t('Detailed Breakdowns')}")
     
     for i, result in enumerate(results):
-        with st.expander(f"📊 {result.country}", expanded=True):
+        with st.expander(f"📊 {t(result.country)}", expanded=True):
             # Convert amounts to selected currency
             gross_converted, symbol = convert_amount(result.gross_salary, selected_currency)
             net_converted, _ = convert_amount(result.net_salary, selected_currency)

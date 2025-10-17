@@ -377,3 +377,35 @@ msgstr "עובד שכיר צ'כיה"
 
 msgid "Czechia Freelancer"
 msgstr "פרילנסר צ'כיה"
+
+# Country names
+msgid "Germany"
+msgstr "גרמניה"
+
+msgid "France"
+msgstr "צרפת"
+
+msgid "Spain"
+msgstr "ספרד"
+
+msgid "Portugal"
+msgstr "פורטוגל"
+
+msgid "Israel"
+msgstr "ישראל"
+
+msgid "Bulgaria"
+msgstr "בולגריה"
+
+msgid "Romania"
+msgstr "רומניה"
+
+msgid "Czechia"
+msgstr "צ'כיה"
+
+# Employment types
+msgid "Salaried"
+msgstr "עובד שכיר"
+
+msgid "Freelancer"
+msgstr "פרילנסר"

@@ -378,3 +378,35 @@ msgstr "Наемный работник Чехии"
 
 msgid "Czechia Freelancer"
 msgstr "Фрилансер Чехии"
+
+# Country names
+msgid "Germany"
+msgstr "Германия"
+
+msgid "France"
+msgstr "Франция"
+
+msgid "Spain"
+msgstr "Испания"
+
+msgid "Portugal"
+msgstr "Португалия"
+
+msgid "Israel"
+msgstr "Израиль"
+
+msgid "Bulgaria"
+msgstr "Болгария"
+
+msgid "Romania"
+msgstr "Румыния"
+
+msgid "Czechia"
+msgstr "Чехия"
+
+# Employment types
+msgid "Salaried"
+msgstr "Наемный работник"
+
+msgid "Freelancer"
+msgstr "Фрилансер"
