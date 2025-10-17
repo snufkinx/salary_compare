@@ -236,6 +236,42 @@ def apply_rtl_support():
             text-align: right !important;
         }
         
+        /* RTL for form labels and input labels */
+        .stSelectbox label,
+        .stNumberInput label,
+        .stTextInput label,
+        .stTextArea label,
+        .stDateInput label,
+        .stTimeInput label,
+        .stFileUploader label {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for form label text specifically */
+        .stSelectbox label p,
+        .stNumberInput label p,
+        .stTextInput label p,
+        .stTextArea label p,
+        .stDateInput label p,
+        .stTimeInput label p,
+        .stFileUploader label p {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
+        /* RTL for form label spans */
+        .stSelectbox label span,
+        .stNumberInput label span,
+        .stTextInput label span,
+        .stTextArea label span,
+        .stDateInput label span,
+        .stTimeInput label span,
+        .stFileUploader label span {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+        
         /* RTL for selectbox and other inputs */
         .stSelectbox > div > div {
             direction: rtl;
@@ -427,57 +463,57 @@ if selected_regimes:
         with tab1:
             # Country comparison (existing bars + tax rates)
             countries = [t(r.country) for r in results]
-            net_salaries = [float(r.net_salary) for r in results]
-            tax_rates = [(1 - float(r.net_salary/r.gross_salary))*100 for r in results]
+        net_salaries = [float(r.net_salary) for r in results]
+        tax_rates = [(1 - float(r.net_salary/r.gross_salary))*100 for r in results]
+        
+        # Convert net salaries to selected currency
+        net_salaries_converted = []
+        for net_salary in net_salaries:
+            converted, symbol = convert_amount(net_salary, selected_currency)
+            net_salaries_converted.append(float(converted))
             
-            # Convert net salaries to selected currency
-            net_salaries_converted = []
-            for net_salary in net_salaries:
-                converted, symbol = convert_amount(net_salary, selected_currency)
-                net_salaries_converted.append(float(converted))
-            
-            fig1 = go.Figure()
-            
-            # Net salary bars
-            fig1.add_trace(go.Bar(
-                name=t('Net Salary'),
-                x=countries,
-                y=net_salaries_converted,
-                yaxis='y',
-                offsetgroup=1,
-                marker_color='#2E8B57',
-                text=[f"{symbol}{s:,.0f}" for s in net_salaries_converted],
-                textposition='auto',
-                hovertemplate=f'<b>%{{x}}</b><br>{t("Net Salary")}: {symbol}%{{y:,.0f}}<br><extra></extra>'
-            ))
-            
-            # Tax rate line
-            fig1.add_trace(go.Scatter(
-                name=t('Tax Rate %'),
-                x=countries,
-                y=tax_rates,
-                yaxis='y2',
-                mode='lines+markers',
-                line=dict(color='#DC143C', width=3),
-                marker=dict(size=8),
-                text=[f"{t:.1f}%" for t in tax_rates],
-                textposition='top center',
-                hovertemplate=f'<b>%{{x}}</b><br>{t("Tax Rate %")}: %{{y:.1f}}%<br><extra></extra>'
-            ))
-            
-            # Get currency symbol for display
-            _, symbol = convert_amount(1, selected_currency)
-            
-            fig1.update_layout(
-                title=f"{t('Country Comparison')} ({symbol}{salary:,} {t('Gross Salary')})",
-                xaxis_title=t('Countries'),
-                yaxis=dict(title=f"{t('Net Salary')} ({symbol})", side='left'),
-                yaxis2=dict(title=f"{t('Tax Rate %')} (%)", side='right', overlaying='y'),
-                hovermode='x unified',
-                height=500
-            )
-            
-            st.plotly_chart(fig1, use_container_width=True)
+        fig1 = go.Figure()
+        
+        # Net salary bars
+        fig1.add_trace(go.Bar(
+            name=t('Net Salary'),
+            x=countries,
+            y=net_salaries_converted,
+            yaxis='y',
+            offsetgroup=1,
+            marker_color='#2E8B57',
+            text=[f"{symbol}{s:,.0f}" for s in net_salaries_converted],
+            textposition='auto',
+            hovertemplate=f'<b>%{{x}}</b><br>{t("Net Salary")}: {symbol}%{{y:,.0f}}<br><extra></extra>'
+        ))
+        
+        # Tax rate line
+        fig1.add_trace(go.Scatter(
+            name=t('Tax Rate %'),
+            x=countries,
+            y=tax_rates,
+            yaxis='y2',
+            mode='lines+markers',
+            line=dict(color='#DC143C', width=3),
+            marker=dict(size=8),
+            text=[f"{t:.1f}%" for t in tax_rates],
+            textposition='top center',
+            hovertemplate=f'<b>%{{x}}</b><br>{t("Tax Rate %")}: %{{y:.1f}}%<br><extra></extra>'
+        ))
+        
+        # Get currency symbol for display
+        _, symbol = convert_amount(1, selected_currency)
+        
+        fig1.update_layout(
+            title=f"{t('Country Comparison')} ({symbol}{salary:,} {t('Gross Salary')})",
+            xaxis_title=t('Countries'),
+            yaxis=dict(title=f"{t('Net Salary')} ({symbol})", side='left'),
+            yaxis2=dict(title=f"{t('Tax Rate %')} (%)", side='right', overlaying='y'),
+            hovermode='x unified',
+            height=500
+        )
+        
+        st.plotly_chart(fig1, use_container_width=True)
         
         with tab2:
             # Salary progression chart (like HTML report)
