@@ -72,6 +72,9 @@ msgstr "שנה קלטים בסרגל הצדדי כדי לראות עדכונים
 msgid "Country"
 msgstr "מדינה"
 
+msgid "Tax Regime"
+msgstr "משטר מס"
+
 msgid "Gross Annual"
 msgstr "שנתי ברוטו"
 
