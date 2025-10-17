@@ -1,29 +1,15 @@
 # Salary Compare
 
-A command-line tool for calculating net salaries across different countries and employment types.
-
-## Preview
-
-### Console Output
-![CLI Output Example](docs/images/cli.png)
-
-### HTML Report with Interactive Charts
-<img src="docs/images/html.png" alt="HTML Report with Charts" width="800"/>
+An interactive web application for comparing net salaries across different countries and employment types.
 
 ## Features
 
-- Calculate net salary for various employment types (Salaried Employee, Freelancer)
-- Support for multiple countries with accurate tax calculations
-- **Dynamic currency conversion**: Automatically fetches current EUR/CZK exchange rates
-- **Flexible salary input**: Supports comma-separated thousands (e.g., 100,000 or 100000)
-- Detailed breakdown of deductions including:
-  - Income Tax (with bracket calculations)
-  - Social Security Tax
-  - Health Insurance
-  - Pension Contributions (where applicable)
-- Multiple output formats: console table, HTML report, CSV export
-- Interactive HTML reports with detailed calculation popups
-- Comprehensive unit tests with mocked currency conversion for stability
+- **Interactive Web Interface**: Modern Streamlit-based UI with real-time calculations
+- **Multi-Country Support**: Calculate net salary for various employment types across multiple countries
+- **Visual Comparisons**: Interactive charts and tables to compare different scenarios
+- **Detailed Breakdowns**: Comprehensive tax and deduction calculations
+- **Dynamic Currency Conversion**: Automatically fetches current exchange rates
+- **Real-time Updates**: Instant recalculation as you change inputs
 
 ## Supported Countries and Employment Types
 
@@ -50,63 +36,31 @@ curl -sSL https://install.python-poetry.org | python3 -
 
 # Install dependencies and create virtual environment
 poetry install
-
-# Activate the virtual environment
-poetry shell
 ```
 
 ## Usage
 
-### Single Calculation
+### Running the Streamlit App
+
 ```bash
-# Basic calculation
-poetry run salary calculate czechia-freelancer 100000
-
-# With comma-separated thousands
-poetry run salary calculate czechia-freelancer 100,000
-
-# Generate HTML report
-poetry run salary calculate czechia-freelancer 100,000 -o HTML
+# Run the interactive web application
+poetry run streamlit run app.py
 ```
 
-### Comparison
-```bash
-# Compare different employment types with a single salary
-poetry run salary compare 100,000 czechia-freelancer germany-salaried
+The app will open in your default browser at `http://localhost:8501`.
 
-# Compare low-tax freelancer regimes
-poetry run salary compare 100,000 romania-freelancer-micro portugal-freelancer bulgaria-freelancer czechia-freelancer
+### Using the Web Interface
 
-# Compare Spanish regional rates
-poetry run salary compare 100,000 madrid-salaried barcelona-salaried valencia-salaried
-
-# Compare multiple scenarios
-poetry run salary compare 100,000 czechia-freelancer czechia-salaried germany-salaried
-
-# Generate HTML comparison report
-poetry run salary compare 75,500 czechia-freelancer germany-salaried -o HTML
-```
-
-### Output Formats
-```bash
-# Console output (default)
-poetry run salary calculate czechia-freelancer 100000
-
-# CSV export
-poetry run salary calculate czechia-freelancer 100000 -o CSV
-
-# HTML report
-poetry run salary calculate czechia-freelancer 100000 -o HTML
-```
-
-### List Available Types
-```bash
-poetry run salary list-types
-```
+1. **Enter your gross salary** in the sidebar
+2. **Select countries and employment types** you want to compare
+3. **View real-time results** with:
+   - Summary comparison table
+   - Interactive charts
+   - Detailed breakdowns for each scenario
 
 ## Testing
 
-The project includes comprehensive unit tests for all calculators. Tests are organized within each module:
+The project includes comprehensive unit tests for all calculators:
 
 ```bash
 # Run all tests
@@ -119,12 +73,6 @@ poetry run pytest salary_compare/calculators/tests/test_czechia.py -v
 # Run tests with coverage
 poetry run pytest --cov=salary_compare
 ```
-
-### Test Structure
-- `salary_compare/calculators/tests/` - Calculator-specific tests
-  - `test_germany.py` - German salaried employee tests
-  - `test_czechia.py` - Czechia salaried and freelancer tests
-- `tests/conftest.py` - Pytest configuration with mocked currency conversion (1 EUR = 25 CZK)
 
 ### Currency Conversion
 - **Live rates**: Uses exchangerate-api.com to fetch current EUR/CZK rates
