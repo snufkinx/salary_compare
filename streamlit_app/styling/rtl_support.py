@@ -21,17 +21,19 @@ def apply_rtl_support():
             direction: ltr;
         }
         
-        /* Force sidebar to right side */
-        .stSidebar {
-            position: fixed !important;
-            right: 0 !important;
-            left: auto !important;
+        /* Use flexbox to reverse the layout for RTL */
+        .stApp > div:first-child {
+            display: flex !important;
+            flex-direction: row-reverse !important;
         }
         
-        /* Adjust main content for RTL sidebar */
+        /* Ensure sidebar and main content take proper space */
+        .stSidebar {
+            flex: 0 0 auto !important;
+        }
+        
         .main {
-            margin-right: 21rem !important;
-            margin-left: 0 !important;
+            flex: 1 1 auto !important;
         }
         
         /* RTL for sidebar */
