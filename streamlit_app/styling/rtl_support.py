@@ -10,10 +10,28 @@ def apply_rtl_support():
     if st.session_state.selected_language in ['he', 'ar']:
         st.markdown("""
         <style>
-        /* RTL support for Hebrew and Arabic */
-        .main .block-container {
+        /* RTL support for Hebrew and Arabic - removed main container RTL to preserve layout */
+        
+        /* RTL layout: Move sidebar to right side for RTL languages */
+        .stApp {
             direction: rtl;
-            text-align: right;
+        }
+        
+        .stApp .main {
+            direction: ltr;
+        }
+        
+        /* Force sidebar to right side */
+        .stSidebar {
+            position: fixed !important;
+            right: 0 !important;
+            left: auto !important;
+        }
+        
+        /* Adjust main content for RTL sidebar */
+        .main {
+            margin-right: 21rem !important;
+            margin-left: 0 !important;
         }
         
         /* RTL for sidebar */
