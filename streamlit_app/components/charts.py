@@ -26,10 +26,11 @@ def render_comparison_charts(results, regime_keys, selected_currency, salary):
     
     def convert_amount(amount, currency):
         """Convert amount to selected currency."""
+        from decimal import Decimal
         converter = CurrencyConverter(from_currency="EUR", to_currency=currency)
-        converted = converter.convert(amount)
+        converted = converter.convert(Decimal(str(amount)))
         symbol = converter.symbol
-        return converted, symbol
+        return float(converted), symbol
     
     if len(results) <= 1:
         return
