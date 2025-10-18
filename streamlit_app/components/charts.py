@@ -67,6 +67,7 @@ def render_comparison_charts(results, regime_keys, selected_currency, salary):
             marker_color='#2E8B57',
             text=[f"{symbol}{s:,.0f}" for s in net_salaries_converted],
             textposition='auto',
+            textfont=dict(size=18),  # Increased salary values on bars
             hovertemplate=f'<b>%{{x}}</b><br>{t("Net Salary")}: {symbol}%{{y:,.0f}}<br><extra></extra>'
         ))
         
@@ -81,6 +82,7 @@ def render_comparison_charts(results, regime_keys, selected_currency, salary):
             marker=dict(size=8),
             text=[f"{t:.1f}%" for t in tax_rates],
             textposition='top center',
+            textfont=dict(size=14),
             hovertemplate=f'<b>%{{x}}</b><br>{t("Tax Rate %")}: %{{y:.1f}}%<br><extra></extra>'
         ))
         
@@ -89,11 +91,17 @@ def render_comparison_charts(results, regime_keys, selected_currency, salary):
         
         fig1.update_layout(
             title=f"{t('Country Comparison')} ({symbol}{salary:,} {t('Gross Salary')})",
+            title_font=dict(size=18),
             xaxis_title=t('Countries'),
-            yaxis=dict(title=f"{t('Net Salary')} ({symbol})", side='left'),
-            yaxis2=dict(title=f"{t('Tax Rate %')} (%)", side='right', overlaying='y'),
+            xaxis=dict(title_font=dict(size=16), tickfont=dict(size=18)),  # Increased country names under bars
+            yaxis=dict(title=f"{t('Net Salary')} ({symbol})", side='left', title_font=dict(size=16), tickfont=dict(size=14)),
+            yaxis2=dict(title=f"{t('Tax Rate %')} (%)", side='right', overlaying='y', title_font=dict(size=16), tickfont=dict(size=14)),
             hovermode='x unified',
-            height=500
+            height=500,
+            font=dict(size=16),  # Increased global font for legend
+            legend=dict(
+                font=dict(size=18)  # Increased legend text size
+            )
         )
         
         st.plotly_chart(fig1, use_container_width=True)
@@ -154,8 +162,11 @@ def render_comparison_charts(results, regime_keys, selected_currency, salary):
         
         fig2.update_layout(
             title=t('Net Salary vs Gross Salary Progression'),
+            title_font=dict(size=18),
             xaxis_title=f"{t('Gross Salary')} ({symbol})",
+            xaxis=dict(title_font=dict(size=16), tickfont=dict(size=14)),
             yaxis_title=f"{t('Net Salary')} ({symbol})",
+            yaxis=dict(title_font=dict(size=16), tickfont=dict(size=14)),
             hovermode='x unified',
             height=500,
             showlegend=True,
@@ -164,9 +175,11 @@ def render_comparison_charts(results, regime_keys, selected_currency, salary):
                 yanchor="top",
                 y=1,
                 xanchor="left",
-                x=1.01
+                x=1.01,
+                font=dict(size=18)  # Increased legend text size
             ),
-            margin=dict(r=200, l=50, t=50, b=50)
+            margin=dict(r=200, l=50, t=50, b=50),
+            font=dict(size=16)  # Increased global font for hover text
         )
         
         # Add current salary point as vertical line
