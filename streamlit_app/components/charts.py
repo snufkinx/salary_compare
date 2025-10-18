@@ -22,6 +22,9 @@ def render_comparison_charts(results, regime_keys, selected_currency, salary):
     """
     def t(message: str) -> str:
         """Get translated message."""
+        # Avoid passing empty strings to gettext as it returns metadata
+        if not message or not message.strip():
+            return message
         return get_translation_manager()._(message)
     
     def convert_amount(amount, currency):

@@ -44,6 +44,9 @@ class TranslationManager:
     
     def _(self, message: str) -> str:
         """Get translated message."""
+        # Avoid passing empty strings to gettext as it returns metadata
+        if not message or not message.strip():
+            return message
         if self._translator:
             return self._translator.gettext(message)
         return message
@@ -90,4 +93,7 @@ def set_language(language: str):
 
 def _(message: str) -> str:
     """Get translated message (convenience function)."""
+    # Avoid passing empty strings to gettext as it returns metadata
+    if not message or not message.strip():
+        return message
     return get_translation_manager()._(message)

@@ -20,6 +20,9 @@ def render_detailed_breakdowns(results, regime_keys, selected_currency):
     """
     def t(message: str) -> str:
         """Get translated message."""
+        # Avoid passing empty strings to gettext as it returns metadata
+        if not message or not message.strip():
+            return message
         return get_translation_manager()._(message)
     
     def convert_amount(amount, currency):
@@ -83,10 +86,15 @@ def render_detailed_breakdowns(results, regime_keys, selected_currency):
                     taxable_converted, _ = convert_amount(bracket.taxable_amount, selected_currency)
                     tax_converted, _ = convert_amount(bracket.tax_amount, selected_currency)
                     
+                    # Format upper bound display
+                    upper_display = f"{symbol}{upper_converted:,.0f}" if bracket.upper_bound != float('inf') else "∞"
+                    
                     bracket_data.append({
-                        t("Bracket"): f"{symbol}{lower_converted:,.0f} - {symbol}{upper_converted:,.0f}",
+                        t("Bracket"): f"{symbol}{lower_converted:,.0f} - {upper_display}",
                         t("Rate"): f"{float(bracket.rate)*100:.1f}%",
                         t("Taxable Amount"): f"{symbol}{taxable_converted:,.2f}",
                         t("Tax Amount"): f"{symbol}{tax_converted:,.2f}"
                     })
-                st.table(bracket_data)
+                
+                if bracket_data:  # Only show table if we have data
+                    st.table(bracket_data)
